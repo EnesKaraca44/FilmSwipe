@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "507921047817",
+    "firebase_url": "https://filmswipee-default-rtdb.firebaseio.com",
+    "project_id": "filmswipee",
+    "storage_bucket": "filmswipee.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:507921047817:android:5b58ff69e83ac2f9abb3d8",
+        "android_client_info": {
+          "package_name": "com.enes.movyswipe"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWOwQFQdWJKaoEjcEGEWGifwld0Sl2l8E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

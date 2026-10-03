@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- En dış layout'u RelativeLayout'tan FrameLayout'a çeviriyoruz.
+     Bu, ProgressBar'ı diğer her şeyin üstüne kolayca yerleştirmemizi sağlar. -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_light"
+    tools:context=".fragments.DuelloFragment">
+
+    <!-- ADIM 1: Yükleme bittiğinde görünecek olan tüm içeriği bu RelativeLayout'un içine alıyoruz. -->
+    <!-- Bu gruba "contentLayout" ID'sini veriyoruz ve başlangıçta görünmez yapıyoruz. -->
+    <RelativeLayout
+        android:id="@+id/contentLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <!-- Header -->
+        <LinearLayout
+            android:id="@+id/headerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/gradient_background"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="⚔️ Düello"
+                android:textColor="@color/text_white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvPartnerStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_accent"
+                android:elevation="2dp"
+                android:padding="8dp"
+                android:text="👤 Partner hazır"
+                android:textColor="@color/text_white"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvGenreName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_white"
+                android:textSize="14sp"
+                android:textStyle="italic"
+                tools:text="Tür: Komedi" />
+
+        </LinearLayout>
+
+        <!-- Action Buttons (Layout'un en altına hizalamak için önce tanımlıyoruz) -->
+        <LinearLayout
+            android:id="@+id/actionLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="24dp">
+
+            <!-- Beğenmeme Butonu -->
+            <Button
+                android:id="@+id/btnDislike"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginEnd="32dp"
+                android:background="@drawable/button_secondary"
+                android:elevation="8dp"
+                android:text="❌"
+                android:textSize="24sp" />
+
+            <!-- Beğenme Butonu -->
+            <Button
+                android:id="@+id/btnLike"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/button_accent"
+                android:elevation="8dp"
+                android:text="❤️"
+                android:textSize="24sp" />
+        </LinearLayout>
+
+        <!-- Film Kartı -->
+        <com.yuyakaido.android.cardstackview.CardStackView
+            android:id="@+id/cardStackView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_above="@id/actionLayout"
+            android:layout_below="@id/headerLayout"
+            android:layout_margin="24dp"
+            android:clipToPadding="false"
+            android:padding="8dp"
+            tools:listitem="@layout/item_film_card" />
+
+        <!-- Swipe İpucu (actionLayout'un üstüne hizalanmış) -->
+        <TextView
+            android:id="@+id/tvSwipeHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/actionLayout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="16dp"
+            android:alpha="0.8"
+            android:text="👆 Kaydır veya butonlara bas"
+            android:textColor="@color/text_hint"
+            android:textSize="12sp" />
+
+    </RelativeLayout>
+
+    <!-- ADIM 2: ProgressBar'ı, her şeyin üstünde ve ortada duracak şekilde buraya koyuyoruz. -->
+    <!-- Başlangıçta görünür olacak. -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/primary_light"
+        android:visibility="visible"
+        tools:visibility="gone" />
+
+</FrameLayout>

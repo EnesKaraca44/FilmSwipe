@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">FilmSwipe</string>
+    
+    <!-- Main Menu -->
+    <string name="app_title">FilmSwipe</string>
+    <string name="app_subtitle">Match movies with your friend!</string>
+    <string name="welcome_message">Welcome, %s!</string>
+    
+    <!-- Popular Movies -->
+    <string name="popular_matches_title">Popular Matches of the Week</string>
+    <string name="movie_name">Movie Name</string>
+    <string name="hot_badge">HOT</string>
+    
+    <!-- Buttons -->
+    <string name="create_room">Create Room</string>
+    <string name="create_room_description">Create a new duel room</string>
+    <string name="join_room">Join Room</string>
+    <string name="join_room_description">Join an existing room</string>
+    <string name="instant_match">Instant Match</string>
+    <string name="instant_match_description">Start immediately with a random user</string>
+    
+    <!-- Film Detail Dialog -->
+    <string name="film_overview">Movie overview will appear here...</string>
+    <string name="view_on_tmdb">View on TMDB</string>
+    <string name="add_to_watchlist">Add to My List</string>
+    
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_watchlist">My List</string>
+    <string name="nav_profile">My Profile</string>
+    
+    <!-- General -->
+    <string name="close">Close</string>
+    <string name="loading">Loading...</string>
+    <string name="error">Error</string>
+    <string name="retry">Retry</string>
+    
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
+
+

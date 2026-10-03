@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/light_gradient_background"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="24dp"
+    tools:context=".fragments.EslemeYokFragment">
+
+    <!-- Üzgün Emoji -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="😔"
+        android:textSize="80sp"
+        android:layout_marginBottom="24dp" />
+
+    <!-- Ana Mesaj -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/card_background"
+        android:elevation="8dp"
+        android:padding="32dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginBottom="32dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Eşleşme Bulunamadı"
+            android:textColor="@color/text_primary"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Maalesef bu sefer ortak bir film bulamadınız.\nBelki farklı filtrelerle tekrar deneyebilirsiniz?"
+            android:textColor="@color/text_secondary"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:lineSpacingExtra="4dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- İstatistik -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@color/bg_light"
+            android:padding="16dp"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📊 "
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvFilmSayisi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="25 film kontrol edildi"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Öneriler -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginBottom="32dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="💡 Öneriler"
+            android:textColor="@color/text_primary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="12dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="• Daha geniş film türleri seçin\n• Minimum yılı düşürün\n• Farklı bir partner ile deneyin"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp"
+            android:alpha="0.9"
+            android:lineSpacingExtra="6dp" />
+
+    </LinearLayout>
+
+    <!-- Action Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Tekrar Dene Button -->
+        <Button
+            android:id="@+id/btnTekrarDene"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/button_primary"
+            android:elevation="8dp"
+            android:text="🔄 Tekrar Deneyin"
+            android:textColor="@color/text_white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- Filtreleri Değiştir Button -->
+        <Button
+            android:id="@+id/btnFiltreleriDegistir"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/button_secondary"
+            android:elevation="6dp"
+            android:text="⚙️ Filtreleri Değiştir"
+            android:textColor="@color/text_white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- Hızlı Düello Button -->
+        <Button
+            android:id="@+id/btnHizliDuello"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/button_accent"
+            android:elevation="6dp"
+            android:text="⚡ Hızlı Düello Dene"
+            android:textColor="@color/text_white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- Ana Menü Button -->
+        <Button
+            android:id="@+id/btnAnaMenu"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@color/text_hint"
+            android:elevation="2dp"
+            android:text="🏠 Ana Menü"
+            android:textColor="@color/text_white"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

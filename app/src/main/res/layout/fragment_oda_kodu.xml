@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- En dıştaki layout'u, ProgressBar'ı ve içeriği üst üste koyabilmek için FrameLayout'a çeviriyoruz. -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/light_gradient_background"
+    tools:context=".fragments.OdaKoduFragment">
+
+    <!-- ADIM 1: Yükleme bittiğinde görünecek olan tüm içeriği bu LinearLayout'un içine alıyoruz. -->
+    <!-- Bu gruba "contentLayout" ID'sini veriyoruz. -->
+    <LinearLayout
+        android:id="@+id/contentLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <!-- Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/card_background"
+            android:elevation="8dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="32dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="🏠 Oda Kuruldu!"
+                android:textColor="@color/text_primary"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:text="Arkadaşına bu kodu göster"
+                android:textColor="@color/text_secondary"
+                android:textSize="16sp" />
+
+            <!-- Oda Kodu -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_primary"
+                android:elevation="4dp"
+                android:padding="20dp">
+
+                <TextView
+                    android:id="@+id/tvOdaKodu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:letterSpacing="0.2"
+                    android:textColor="@color/text_white"
+                    android:textSize="32sp"
+                    android:textStyle="bold"
+                    tools:text="K8F3T1" />
+
+            </LinearLayout>
+
+            <!-- Kopyala Button -->
+            <Button
+                android:id="@+id/btnKopyala"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/button_secondary"
+                android:elevation="4dp"
+                android:paddingHorizontal="24dp"
+                android:text="📋 Kopyala"
+                android:textColor="@color/text_white"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <!-- Bekleme Bölümü -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="⏳ Partnerin bekleniyor..."
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.9"
+                android:gravity="center"
+                android:lineSpacingExtra="4dp"
+                android:text="Arkadaşın kodu girip odaya katıldığında\ndüello otomatik başlayacak"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <!-- İptal Button -->
+        <Button
+            android:id="@+id/btnIptal"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="48dp"
+            android:background="@drawable/button_accent"
+            android:elevation="6dp"
+            android:text="❌ Odayı İptal Et"
+            android:textColor="@color/text_white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <!-- ADIM 2: ProgressBar'ı, her şeyin üstünde, ortada duracak şekilde buraya koyuyoruz. -->
+    <!-- Başlangıçta görünür olacak. -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/primary_light"
+        android:visibility="visible"
+        tools:visibility="gone" />
+
+</FrameLayout>

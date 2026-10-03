@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/light_gradient_background">
+
+    <!-- Ana Logo Container -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="40dp">
+
+        <!-- FilmSwipe Logo - Tam Diktörtgen Tasarım -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="@drawable/splash_logo_background"
+            android:elevation="8dp"
+            android:padding="40dp">
+
+            <!-- Film Klaketi - Büyütülmüş Boyut -->
+            <LinearLayout
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <!-- Klaket Ana Gövde -->
+                <View
+                    android:layout_width="150dp"
+                    android:layout_height="110dp"
+                    android:background="@drawable/splash_clapper_main" />
+
+                <!-- Klaket Üst Kol -->
+                <View
+                    android:layout_width="40dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="-20dp"
+                    android:background="@drawable/splash_clapper_handle" />
+
+                <!-- Kalp Simgesi -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="❤️"
+                    android:textSize="48sp"
+                    android:layout_marginTop="-70dp"
+                    android:layout_marginStart="60dp" />
+
+            </LinearLayout>
+
+            <!-- FilmSwipe Yazısı -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_title"
+                android:textColor="#FFFFFF"
+                android:textSize="36sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginTop="40dp"
+                android:shadowColor="#000000"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="4" />
+
+        </LinearLayout>
+
+        <!-- Loading Text -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/loading"
+            android:textColor="#CCCCCC"
+            android:textSize="24sp"
+            android:layout_marginTop="60dp"
+            android:fontFamily="sans-serif-light" />
+
+        <!-- Progress Bar -->
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:indeterminateTint="#FF4444" />
+
+    </LinearLayout>
+
+</FrameLayout>

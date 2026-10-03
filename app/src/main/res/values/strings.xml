@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_name">FilmSwipe</string>
+    
+    <!-- Ana Menü -->
+    <string name="app_title">FilmSwipe</string>
+    <string name="app_subtitle">Arkadaşınla film eşleştir!</string>
+    <string name="welcome_message">Hoş geldin, %s!</string>
+    
+    <!-- Popüler Filmler -->
+    <string name="popular_matches_title">Haftanın Popüler Eşleşmeleri</string>
+    <string name="movie_name">Film Adı</string>
+    <string name="hot_badge">HOT</string>
+    
+    <!-- Butonlar -->
+    <string name="create_room">Oda Kur</string>
+    <string name="create_room_description">Yeni bir düello odası oluştur</string>
+    <string name="join_room">Odaya Katıl</string>
+    <string name="join_room_description">Mevcut bir odaya katıl</string>
+    <string name="instant_match">Anında Eşleştir</string>
+    <string name="instant_match_description">Rastgele bir kullanıcıyla hemen başla</string>
+    
+    <!-- Film Detay Diyalogu -->
+    <string name="film_overview">Film özeti burada görünecek...</string>
+    <string name="view_on_tmdb">TMDB\'de Görüntüle</string>
+    <string name="add_to_watchlist">Listeme Ekle</string>
+    
+    <!-- Navigasyon -->
+    <string name="nav_home">Ana Menü</string>
+    <string name="nav_watchlist">Listem</string>
+    <string name="nav_profile">Profilim</string>
+    
+    <!-- Genel -->
+    <string name="close">Kapat</string>
+    <string name="loading">Yükleniyor...</string>
+    <string name="error">Hata</string>
+    <string name="retry">Tekrar Dene</string>
+    
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

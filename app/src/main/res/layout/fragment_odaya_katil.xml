@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/light_gradient_background"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="24dp"
+    tools:context=".fragments.OdayaKatilFragment">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/card_background"
+        android:elevation="8dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="32dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="🚪 Odaya Katıl"
+            android:textColor="@color/text_primary"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:gravity="center"
+            android:text="Arkadaşından aldığın 6 haneli kodu gir"
+            android:textColor="@color/text_secondary"
+            android:textSize="16sp" />
+
+        <!-- Kod Girme Alanı -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:text="Oda Kodu"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <!-- Kod Input -->
+            <EditText
+                android:id="@+id/etOdaKodu"
+                android:layout_width="200dp"
+                android:layout_height="60dp"
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/button_primary"
+                android:elevation="4dp"
+                android:gravity="center"
+                android:hint="K8F3T1"
+                android:inputType="textCapCharacters"
+                android:letterSpacing="0.2"
+                android:maxLength="6"
+                android:textColor="@color/text_white"
+                android:textColorHint="@color/text_white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <!-- Katıl Butonu ve ProgressBar'ı içeren grup -->
+            <!-- FrameLayout, elemanları üst üste bindirmek için kullanılır -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp">
+
+                <!-- Katıl Butonu. Başlangıçta görünür olacak. -->
+                <Button
+                    android:id="@+id/btnKatil"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/button_secondary"
+                    android:elevation="6dp"
+                    android:text="🎯 Katıl"
+                    android:textColor="@color/text_white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:visibility="visible" />
+
+                <!-- ProgressBar. Başlangıçta görünmez olacak ve butonun tam ortasında belirecek. -->
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    android:indeterminateTint="@color/text_white"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Bilgi Bölümü -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="💡 İpucu"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.9"
+            android:gravity="center"
+            android:lineSpacingExtra="4dp"
+            android:text="Kod 6 haneli ve büyük harflerden oluşur\n(Örnek: K8F3T1)"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <!-- Geri Button -->
+    <Button
+        android:id="@+id/btnGeri"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="48dp"
+        android:background="@drawable/button_accent"
+        android:elevation="6dp"
+        android:text="⬅️ Geri Dön"
+        android:textColor="@color/text_white"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+</LinearLayout>

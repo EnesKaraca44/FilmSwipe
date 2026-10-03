@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary Colors - Light and Modern -->
+    <color name="primary_light">#6366F1</color>
+    <color name="primary_medium">#4F46E5</color>
+    <color name="primary_dark">#3B82F6</color>
+    
+    <!-- Secondary Colors -->
+    <color name="secondary_light">#F472B6</color>
+    <color name="secondary_medium">#EC4899</color>
+    <color name="secondary_dark">#DB2777</color>
+    
+    <!-- Accent Colors -->
+    <color name="accent_light">#34D399</color>
+    <color name="accent_medium">#10B981</color>
+    <color name="accent_dark">#059669</color>
+    
+    <!-- Background Colors -->
+    <color name="bg_light">#F8FAFC</color>
+    <color name="bg_medium">#F1F5F9</color>
+    <color name="bg_dark">#E2E8F0</color>
+    
+    <!-- Card and Surface Colors -->
+    <color name="surface_light">#FFFFFF</color>
+    <color name="surface_medium">#F9FAFB</color>
+    <color name="surface_dark">#F3F4F6</color>
+    
+    <!-- Text Colors -->
+    <color name="text_primary">#1F2937</color>
+    <color name="text_secondary">#6B7280</color>
+    <color name="text_hint">#9CA3AF</color>
+    <color name="text_white">#FFFFFF</color>
+    
+    <!-- Warning and Error Colors -->
+    <color name="warning">#F59E0B</color>
+    <color name="error">#EF4444</color>
+    <color name="success">#10B981</color>
+    
+    <!-- Gradient Colors -->
+    <color name="gradient_start">#667EEA</color>
+    <color name="gradient_end">#764BA2</color>
+    
+    <!-- Traditional Colors -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>

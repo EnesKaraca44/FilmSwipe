@@ -1,0 +1,19 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.FilmSwipe" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- System navigation bar color and icon appearance for light theme -->
+        <item name="android:navigationBarColor">@color/primary_medium</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <item name="android:enforceNavigationBarContrast">false</item>
+        <item name="android:navigationBarDividerColor">@android:color/transparent</item>
+    </style>
+    <style name="Theme.App.Starting" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Bu komut, sistemin başlangıç penceresinin arkaplanını
+             doğrudan senin resminle kaplar. İkon, maske vb. eklemez. -->
+        <item name="android:windowBackground">@drawable/splash_center_logo</item>
+
+    </style>
+    <style name="Theme.FilmSwipe" parent="Base.Theme.FilmSwipe" />
+</resources>
