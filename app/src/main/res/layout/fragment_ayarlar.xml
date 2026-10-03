@@ -164,8 +164,17 @@
         <!-- Boşluk bırakmak için -->
         <Space
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_height="24dp" />
+
+        <!-- TMDB Atıf Metni -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="This product uses the TMDB API but is not endorsed or certified by TMDB."
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:layout_marginBottom="16dp" />
 
         <!-- Çıkış Yap Butonu -->
         <Button
