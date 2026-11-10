@@ -3,38 +3,24 @@ package com.enes.movyswipe.data.repository
 import android.util.Log
 import com.enes.movyswipe.data.WatchlistDao
 import com.enes.movyswipe.data.WatchlistMovie
-
-// Bu Repository, veritabanı işlemlerini yönetir.
-
 import javax.inject.Inject
+import javax.inject.Singleton
 
-// DAO'yu constructor'dan alır. Bu, daha sonra Dependency Injection için önemlidir.
+@Singleton
 class WatchlistRepository @Inject constructor(private val watchlistDao: WatchlistDao) {
 
-    // DAO'daki getAllMovies fonksiyonunu doğrudan dışarıya açıyoruz.
-    // Bu, tüm filmleri bir Flow olarak döndürür.
     fun getAllMovies() = watchlistDao.getAllMovies()
 
-    // Veritabanına yeni bir film ekler.
-    suspend fun insertMovie(movie: WatchlistMovie) {
-        try {
-            watchlistDao.insertMovie(movie)
-            // --- BAŞARI LOG'U ---
-            Log.e("WatchlistRepo_Insert", "BAŞARILI: Film (ID: ${movie.id}) veritabanına eklendi.")
-        } catch (e: Exception) {
-            // --- HATA LOG'U ---
-            Log.e("WatchlistRepo_Insert", "HATA: Film eklenirken hata oluştu!", e)
-        }
+    /** @return true ise kayıt başarılı. */
+    suspend fun insertMovie(movie: WatchlistMovie): Boolean = try {
+        watchlistDao.insertMovie(movie)
+        true
+    } catch (e: Exception) {
+        Log.e("WatchlistRepository", "Film eklenemedi", e)
+        false
     }
 
-    // izleme listesindeki liste temizleme
-    suspend fun clearWatchlist() {
-        watchlistDao.clearWatchlist()
-    }
+    suspend fun clearWatchlist() = watchlistDao.clearWatchlist()
 
-
-    // Veritabanından bir filmi siler.
-    suspend fun deleteMovie(movie: WatchlistMovie) {
-        watchlistDao.deleteMovie(movie)
-    }
+    suspend fun deleteMovie(movie: WatchlistMovie) = watchlistDao.deleteMovie(movie)
 }

@@ -8,20 +8,19 @@
     tools:context=".fragments.AnaMenuFragment">
 
     <!-- Reklamı en alta yerleştiriyoruz. -->
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/adView"
-        android:layout_width="wrap_content"
+    <!-- Banner reklam kodla eklenir (ID BuildConfig.ADMOB_BANNER_ID'den gelir, premium/onay kontrolü yapılır). -->
+    <FrameLayout
+        android:id="@+id/adContainer"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        app:adSize="BANNER"
-        app:adUnitId="ca-app-pub-1866391997261455~6254285958" /> <!-- GERÇEK ID'Nİ BURAYA YAPIŞTIR -->
+        android:visibility="gone" />
 
     <!-- Senin orijinal ScrollView'ın. 'layout_above' ile reklamın üstünde kalmasını sağlıyoruz. -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/adView"
+        android:layout_above="@id/adContainer"
         android:fillViewport="true">
 
         <LinearLayout

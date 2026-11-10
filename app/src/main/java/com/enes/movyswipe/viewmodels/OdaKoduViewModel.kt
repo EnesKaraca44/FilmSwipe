@@ -1,104 +1,77 @@
 package com.enes.movyswipe.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.enes.movyswipe.data.Result
 import androidx.lifecycle.viewModelScope
+import com.enes.movyswipe.data.MovieFilters
+import com.enes.movyswipe.data.Result
 import com.enes.movyswipe.data.repository.FirebaseRepository
 import com.enes.movyswipe.data.repository.MovieRepository
+import com.enes.movyswipe.util.AuthManager
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class OdaKoduViewModel : ViewModel() {
+@HiltViewModel
+class OdaKoduViewModel @Inject constructor(
+    private val movieRepository: MovieRepository,
+    private val firebaseRepository: FirebaseRepository
+) : ViewModel() {
 
-    // İki farklı veri kaynağıyla konuşacak olan temsilcilerimizi (Repository) oluşturuyoruz.
-    private val movieRepository = MovieRepository()
-    private val firebaseRepository = FirebaseRepository()
-
-    // --- Arayüze göndereceğimiz durumları (state) tutan değişkenler ---
-
-    // Yükleme durumunu tutar (ProgressBar göster/gizle)
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
-    // Oluşturulan oda kodunu tutar
     private val _roomCode = MutableStateFlow<String?>(null)
     val roomCode = _roomCode.asStateFlow()
 
-    // Odanın anlık durumunu ("waiting", "active" vb.) tutar.
-    private val _roomStatus = MutableStateFlow<String?>(null)
-    val roomStatus = _roomStatus.asStateFlow()
-
-    // Bir hata oluşursa, hata mesajını tutar
     private val _error = MutableStateFlow<String?>(null)
     val error = _error.asStateFlow()
 
+    private val _navigateToDuel = Channel<String>(Channel.BUFFERED)
+    val navigateToDuel = _navigateToDuel.receiveAsFlow()
+
+    private var started = false
+
     /**
-     * Filtrelerden yola çıkarak yeni bir düello odası oluşturma sürecini başlatır.
-     * @param genres Seçilen türlerin ID listesi.
-     * @param startYear Seçilen minimum çıkış yılı.
+     * Odayı SADECE BİR KEZ oluşturur. Ekran döndürme veya tema değişimi Fragment'ı yeniden
+     * oluştursa bile yeni oda açılmaz; arkadaşına verdiğin kod geçerli kalır.
      */
     fun createRoomFromFilters(genres: IntArray, startYear: Int) {
+        if (started) return
+        started = true
         viewModelScope.launch {
+            _isLoading.value = true
+            _error.value = null
             try {
-                _isLoading.value = true
-
-                // Tür ID'lerini ve yılı bir Map'e koyuyoruz
-                val genresString = genres.joinToString(separator = ",")
-                val filters = mapOf(
-                    "with_genres" to genresString,
-                    "primary_release_year.gte" to startYear.toString()
-                )
-
-                // 1. MovieRepository'den sonucu alıyoruz (Bu artık bir 'Result' nesnesi)
-                val movieResult = movieRepository.getMovies(filters)
-
-                // 2. 'when' ile gelen sonucu kontrol ediyoruz.
-                when (movieResult) {
-                    is Result.Success -> {
-                        // BAŞARILI DURUMU
-                        val movies = movieResult.data
-                        if (movies.isEmpty()) {
-                            throw Exception("Bu filtrelere uygun film bulunamadı.")
-                        }
-
-                        val movieDeck = movies.map { it.id }
-
-                        val firebaseFilters =
-                            mapOf("genres" to genres.toList(), "startYear" to startYear)
-
-                        // TODO: FirebaseRepository'yi de Result döndürecek şekilde güncelle
-                        val generatedRoomCode =
-                            firebaseRepository.createRoom(firebaseFilters, movieDeck)
-
-                        _roomCode.value = generatedRoomCode
-                        if (generatedRoomCode != null) {
-                            // Bu launch bloğu, dinlemeyi ayrı bir coroutine'de başlatır ki
-                            // ana işlem akışını engellemesin.
-                            viewModelScope.launch {
-                                firebaseRepository.listenToRoomStatus(generatedRoomCode).collect { status ->
-                                    // Dinleyiciden gelen her yeni 'status' değerini,
-                                    // StateFlow'umuza atıyoruz.
-                                    _roomStatus.value = status
-                                    Log.d("OdaKoduViewModel", "Yeni oda durumu alındı: $status")
-                                }
-                            }
-                        }
-                    }
-
-                    is Result.Error -> {
-                        // HATA DURUMU
-                        // Repository'den gelen hata mesajını doğrudan arayüze iletiyoruz.
-                        throw movieResult.exception
-                    }
-
-                    is Result.Loading -> {
-                        // Yükleniyor durumu (şimdilik bir şey yapmıyoruz)
-                    }
+                val hostId = AuthManager.getCurrentUserId()
+                    ?: throw IllegalStateException("Giriş yapılamadı. İnternet bağlantını kontrol et.")
+                val filters = MovieFilters.discover(genres.toList(), startYear)
+                val movies = when (val r = movieRepository.getMovies(filters)) {
+                    is Result.Success -> r.data
+                    is Result.Error -> throw IllegalStateException("Film listesi alınamadı. İnternet bağlantını kontrol et.")
+                    Result.Loading -> emptyList()
                 }
+                if (movies.isEmpty()) {
+                    throw IllegalStateException("Bu filtrelere uygun film bulunamadı. Filtreleri genişlet.")
+                }
+
+                val code = firebaseRepository.createRoom(
+                    hostId = hostId,
+                    filters = mapOf("genres" to genres.toList(), "startYear" to startYear),
+                    movieDeck = movies.map { it.id }
+                )
+                _roomCode.value = code
+                _isLoading.value = false
+
+                firebaseRepository.listenToRoomStatus(code).first { it == FirebaseRepository.STATUS_ACTIVE }
+                _navigateToDuel.send(code)
             } catch (e: Exception) {
-                _error.value = e.message ?: "Bilinmeyen bir hata oluştu."
+                _error.value = e.message ?: "Oda oluşturulamadı."
+                started = false // kullanıcı tekrar deneyebilsin
             } finally {
                 _isLoading.value = false
             }

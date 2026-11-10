@@ -1,0 +1,101 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+
+    "rooms": {
+      ".indexOn": ["createdAt", "timestamp"],
+      "$roomCode": {
+        ".read": "auth != null && (!data.exists() || data.child('status').val() === 'waiting' || data.child('hostId').val() === auth.uid || data.child('guestId').val() === auth.uid)",
+        ".write": "auth != null && ((!data.exists() && newData.child('hostId').val() === auth.uid) || (!newData.exists() && data.child('hostId').val() === auth.uid))",
+        ".validate": "newData.hasChildren(['status', 'hostId', 'movieDeck', 'createdAt']) && $roomCode.matches(/^[A-Z0-9]{6}$/)",
+
+        "status": {
+          ".write": "auth != null && data.val() === 'waiting' && newData.val() === 'active' && newData.parent().child('guestId').val() === auth.uid",
+          ".validate": "newData.isString() && (newData.val() === 'waiting' || newData.val() === 'active')"
+        },
+        "hostId": {
+          ".validate": "newData.isString()"
+        },
+        "guestId": {
+          ".write": "auth != null && !data.exists() && newData.val() === auth.uid && data.parent().child('status').val() === 'waiting' && data.parent().child('hostId').val() !== auth.uid",
+          ".validate": "newData.isString()"
+        },
+        "createdAt": {
+          ".validate": "newData.isNumber() && newData.val() <= now"
+        },
+        "filters": {
+          ".validate": "newData.hasChildren()"
+        },
+        "movieDeck": {
+          ".validate": "newData.hasChildren()"
+        },
+        "choices": {
+          "$movieId": {
+            "$uid": {
+              ".write": "auth != null && auth.uid === $uid && (root.child('rooms').child($roomCode).child('hostId').val() === auth.uid || root.child('rooms').child($roomCode).child('guestId').val() === auth.uid)",
+              ".validate": "newData.isString() && (newData.val() === 'like' || newData.val() === 'pass')"
+            }
+          }
+        },
+        "finished": {
+          "$uid": {
+            ".write": "auth != null && auth.uid === $uid && (root.child('rooms').child($roomCode).child('hostId').val() === auth.uid || root.child('rooms').child($roomCode).child('guestId').val() === auth.uid)",
+            ".validate": "newData.val() === true"
+          }
+        },
+        "match": {
+          ".write": false
+        },
+        "chat": {
+          "$messageId": {
+            ".write": "auth != null && !data.exists() && (root.child('rooms').child($roomCode).child('hostId').val() === auth.uid || root.child('rooms').child($roomCode).child('guestId').val() === auth.uid)",
+            ".validate": "newData.hasChildren(['senderId', 'senderNickname', 'text', 'timestamp']) && newData.child('senderId').val() === auth.uid && newData.child('text').isString() && newData.child('text').val().length > 0 && newData.child('text').val().length <= 500 && newData.child('senderNickname').isString() && newData.child('senderNickname').val().length <= 40 && newData.child('timestamp').val() === now",
+            "$other": {
+              ".validate": "$other === 'senderId' || $other === 'senderNickname' || $other === 'text' || $other === 'timestamp'"
+            }
+          }
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+
+    "queue": {
+      ".indexOn": ["ts"],
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$uid": {
+        ".validate": "($uid === auth.uid || data.exists()) && newData.child('ts').isNumber()",
+        "ts": {
+          ".validate": "newData.isNumber() && newData.val() <= now"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+
+    "matchmaking": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid",
+        "assignedRoom": {
+          ".write": "auth != null && newData.isString() && root.child('rooms').child(newData.val()).child('hostId').val() === auth.uid && root.child('rooms').child(newData.val()).child('guestId').val() === $uid",
+          ".validate": "newData.isString() && newData.val().matches(/^[A-Z0-9]{6}$/)"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+
+    "reports": {
+      "$reportId": {
+        ".write": "auth != null && !data.exists()",
+        ".validate": "newData.hasChildren(['roomCode', 'reporterId', 'reportedUserId', 'reason', 'createdAt']) && newData.child('reporterId').val() === auth.uid && newData.child('reason').isString() && newData.child('reason').val().length <= 100 && newData.child('createdAt').val() === now && (!newData.child('messageText').exists() || (newData.child('messageText').isString() && newData.child('messageText').val().length <= 500))"
+      }
+    }
+  }
+}

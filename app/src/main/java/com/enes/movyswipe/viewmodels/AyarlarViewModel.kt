@@ -1,25 +1,29 @@
 package com.enes.movyswipe.viewmodels
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import android.content.Context
+import androidx.lifecycle.ViewModel
+import com.enes.movyswipe.ads.AdsManager
+import com.enes.movyswipe.billing.BillingManager
 import com.enes.movyswipe.util.AuthManager
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
-class AyarlarViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class AyarlarViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
+    billingManager: BillingManager,
+    adsManager: AdsManager
+) : ViewModel() {
 
-    // Mevcut kullanıcı adını getirir.
-    fun getCurrentNickname(): String {
-        return AuthManager.getUserNickname(getApplication())
-    }
+    val isPremium = billingManager.isPremium
+    val privacyOptionsRequired = adsManager.privacyOptionsRequired
 
-    // Yeni kullanıcı adını kaydeder.
-    fun saveNewNickname(nickname: String) {
-        AuthManager.saveUserNickname(getApplication(), nickname)
-    }
+    fun getCurrentNickname(): String = AuthManager.getUserNickname(context)
 
-    /**
-    * AuthManager aracılığıyla kullanıcının oturumunu kapatır ve yerel verilerini temizler.
-    */
-    fun signOut() {
-        AuthManager.signOut(getApplication())
-    }
+    /** @return kaydedilen ad; geçersizse null */
+    fun saveNewNickname(raw: String): String? =
+        AuthManager.normalizeNickname(raw)?.also { AuthManager.saveUserNickname(context, it) }
+
+    fun signOut() = AuthManager.signOut(context)
 }
