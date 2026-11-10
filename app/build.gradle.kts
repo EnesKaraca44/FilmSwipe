@@ -104,7 +104,7 @@ kapt {
 
 // Gerçek AdMob banner ID'si olmadan release paketi üretilmesini engelle.
 tasks.configureEach {
-    val isReleasePackaging = name.matches(Regex("(assemble|bundle|package)Release.*"))
+    val isReleasePackaging = name in setOf("assembleRelease", "bundleRelease", "packageRelease")
     if (isReleasePackaging) {
         doFirst {
             val id = releaseBannerAdUnitId
@@ -162,6 +162,9 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
     testImplementation("org.json:json:20231013")
+    // Fragment UI testleri: manifest debug APK'ya, kütüphane sadece test APK'sına.
+    debugImplementation("androidx.fragment:fragment-testing-manifest:1.6.2")
+    androidTestImplementation("androidx.fragment:fragment-testing:1.6.2")
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }

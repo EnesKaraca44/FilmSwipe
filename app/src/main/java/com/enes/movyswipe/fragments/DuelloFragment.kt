@@ -125,7 +125,9 @@ class DuelloFragment : Fragment(), CardStackListener {
                     roomCode = args.roomCode
                 )
             )
-            MatchState.NO_MATCH -> nav.navigate(DuelloFragmentDirections.actionDuelloFragmentToEslemeYokFragment())
+            MatchState.NO_MATCH -> nav.navigate(
+                DuelloFragmentDirections.actionDuelloFragmentToEslemeYokFragment(checkedCount = cardStackAdapter.itemCount)
+            )
             MatchState.IDLE -> Unit
         }
     }

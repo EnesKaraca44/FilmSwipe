@@ -73,6 +73,10 @@
         android:name="com.enes.movyswipe.fragments.EslemeYokFragment"
         android:label="fragment_esleme_yok"
         tools:layout="@layout/fragment_esleme_yok" >
+        <argument
+            android:name="checkedCount"
+            app:argType="integer"
+            android:defaultValue="0" />
         <action
             android:id="@+id/action_eslemeYokFragment_to_anaMenuFragment"
             app:destination="@id/anaMenuFragment"
