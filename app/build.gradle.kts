@@ -19,6 +19,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("androidx.navigation.safeargs.kotlin")
     id("com.google.gms.google-services")
+    // Release derlemede R8 eşleme dosyasını da yükler; çökme kayıtları okunabilir kalır.
+    id("com.google.firebase.crashlytics")
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
 }
@@ -66,12 +68,15 @@ android {
                 "proguard-rules.pro"
             )
             signingConfig = signingConfigs.getByName("release")
+            manifestPlaceholders["crashlyticsCollectionEnabled"] = "true"
             buildConfigField("String", "ADMOB_BANNER_ID", "\"${releaseBannerAdUnitId ?: ""}\"")
         }
 
         debug {
             isMinifyEnabled = false
             isShrinkResources = false
+            // Geliştirirken oluşan çökmeler Crashlytics panosunu kirletmesin.
+            manifestPlaceholders["crashlyticsCollectionEnabled"] = "false"
             buildConfigField("String", "ADMOB_BANNER_ID", "\"$testBannerAdUnitId\"")
             val useEmulator = (project.findProperty("useFirebaseEmulator") as String?) == "true"
             buildConfigField("boolean", "USE_FIREBASE_EMULATOR", useEmulator.toString())
@@ -144,6 +149,7 @@ dependencies {
     implementation("com.google.firebase:firebase-database-ktx")
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-crashlytics-ktx")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.1")
     implementation("com.airbnb.android:lottie:6.1.0")

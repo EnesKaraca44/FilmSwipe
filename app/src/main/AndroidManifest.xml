@@ -24,6 +24,10 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-1866391997261455~6254285958"/>
+        <!-- Crashlytics yalnızca release derlemede veri toplar (bkz. app/build.gradle.kts). -->
+        <meta-data
+            android:name="firebase_crashlytics_collection_enabled"
+            android:value="${crashlyticsCollectionEnabled}" />
         <!-- Listem'den paylaşılan hikaye görseli için. -->
         <provider
             android:name="androidx.core.content.FileProvider"
