@@ -133,8 +133,8 @@ class AyarlarFragment : Fragment() {
         AlertDialog.Builder(requireContext())
             .setTitle("Çıkış Yap")
             .setMessage(
-                "Çıkış yapmak istediğinden emin misin? İzleme listen ve reklamsız sürüm bu cihazda kalır, " +
-                    "ancak yeni bir kimlikle devam edeceksin."
+                "Çıkış yapmak istediğinden emin misin? İzleme listen, istatistiklerin ve reklamsız sürüm " +
+                    "bu cihazda kalır; kullanıcı adın silinir ve yeni bir kimlikle devam edersin."
             )
             .setPositiveButton("Evet, Çıkış Yap") { _, _ ->
                 viewModel.signOut()
