@@ -125,6 +125,14 @@
 
     </LinearLayout>
 
+    <!-- Oda kurulamazsa: mesaj + "Tekrar dene". -->
+    <include
+        android:id="@+id/errorView"
+        layout="@layout/view_error_retry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
     <!-- ADIM 2: ProgressBar'ı, her şeyin üstünde, ortada duracak şekilde buraya koyuyoruz. -->
     <!-- Başlangıçta görünür olacak. -->
     <ProgressBar

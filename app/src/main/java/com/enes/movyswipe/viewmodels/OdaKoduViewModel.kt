@@ -85,11 +85,20 @@ class OdaKoduViewModel @Inject constructor(
                 firebaseRepository.keepRoomOnDisconnect(code)
                 _navigateToDuel.send(code)
             } catch (e: Exception) {
+                // started true kalır: ekran döndürmede kendiliğinden yeniden denenmez, "Tekrar dene" beklenir.
                 _error.value = e.message ?: "Oda oluşturulamadı."
-                started = false // kullanıcı tekrar deneyebilsin
             } finally {
                 _isLoading.value = false
             }
         }
+    }
+
+    /** "Tekrar dene": yarım kalmış odayı siler ve yeni bir oda kurmayı dener. */
+    fun retry(genres: IntArray, startYear: Int) {
+        if (_isLoading.value || _error.value == null) return
+        _roomCode.value?.let { stale -> viewModelScope.launch { firebaseRepository.deleteRoom(stale) } }
+        _roomCode.value = null
+        started = false
+        createRoomFromFilters(genres, startYear)
     }
 }

@@ -18,6 +18,7 @@ import com.enes.movyswipe.R
 import com.enes.movyswipe.databinding.FragmentOdaKoduBinding
 import com.enes.movyswipe.viewmodels.OdaKoduViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -38,6 +39,7 @@ class OdaKoduFragment : Fragment() {
         // ViewModel odayı yalnızca bir kez oluşturur (döndürmede yeni oda açılmaz).
         viewModel.createRoomFromFilters(args.genres, args.StartYear)
         binding.tvOdaKodu.setOnClickListener { shareCode() }
+        binding.errorView.btnRetry.setOnClickListener { viewModel.retry(args.genres, args.StartYear) }
         observeViewModelStates()
     }
 
@@ -54,18 +56,16 @@ class OdaKoduFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    viewModel.isLoading.collect { isLoading ->
+                    // Hata toast yerine kalıcı panelde: ekran döndürmede/geri gelmede tekrar çıkmaz.
+                    combine(viewModel.isLoading, viewModel.error, ::Pair).collect { (isLoading, error) ->
                         binding.progressBar.isVisible = isLoading
-                        binding.contentLayout.isVisible = !isLoading
+                        binding.contentLayout.isVisible = !isLoading && error == null
+                        binding.errorView.root.isVisible = !isLoading && error != null
+                        if (error != null) binding.errorView.tvErrorMessage.text = error
                     }
                 }
                 launch {
                     viewModel.roomCode.collect { roomCode -> if (roomCode != null) binding.tvOdaKodu.text = roomCode }
-                }
-                launch {
-                    viewModel.error.collect { error ->
-                        if (error != null) Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
-                    }
                 }
                 launch {
                     viewModel.navigateToDuel.collect { code ->
