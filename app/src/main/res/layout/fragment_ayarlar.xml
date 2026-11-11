@@ -133,10 +133,14 @@
                                 android:text="●  Sinemasever"
                                 android:textColor="@color/settings_purple_light"
                                 android:textSize="10sp" />
+                            <!-- Yalnızca reklamsız sürüm satın alındıysa görünür. -->
                             <TextView
+                                android:id="@+id/tvProRozet"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="6dp"
+                                android:visibility="gone"
+                                tools:visibility="visible"
                                 android:background="@drawable/settings_pro_badge"
                                 android:paddingHorizontal="8dp"
                                 android:paddingVertical="4dp"
@@ -341,75 +345,6 @@
                         app:trackTint="@color/settings_switch_track" />
                 </LinearLayout>
 
-                <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginStart="60dp" android:background="@color/settings_divider" />
-
-                <!-- Eşleşme Bildirimleri satırı -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="14dp">
-                    <TextView
-                        android:layout_width="34dp"
-                        android:layout_height="34dp"
-                        android:background="@drawable/settings_icon_circle"
-                        android:gravity="center"
-                        android:text="🔔"
-                        android:textSize="15sp" />
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Eşleşme Bildirimleri" android:textColor="@color/settings_text_primary" android:textSize="14sp" android:textStyle="bold" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Ortak film bulunduğunda haber ver" android:textColor="@color/settings_muted" android:textSize="11sp" />
-                    </LinearLayout>
-                    <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/switchEslemeBildirimleri"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        app:thumbTint="@color/settings_on_accent"
-                        app:trackTint="@color/settings_switch_track" />
-                </LinearLayout>
-
-                <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginStart="60dp" android:background="@color/settings_divider" />
-
-                <!-- Yayın Platformları & Türler satırı -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="14dp">
-                    <TextView
-                        android:layout_width="34dp"
-                        android:layout_height="34dp"
-                        android:background="@drawable/settings_icon_circle"
-                        android:gravity="center"
-                        android:text="▶"
-                        android:textColor="@color/settings_purple_light"
-                        android:textSize="14sp" />
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Yayın Platformları &amp; Türler" android:textColor="@color/settings_text_primary" android:textSize="14sp" android:textStyle="bold" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Netflix, Disney+, Prime &amp; 14 Tür" android:textColor="@color/settings_muted" android:textSize="11sp" />
-                    </LinearLayout>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingEnd="2dp"
-                        android:text="›"
-                        android:textColor="@color/settings_muted"
-                        android:textSize="24sp" />
-                </LinearLayout>
-
                 <!-- Reklam Gizlilik (gizli, gerekirse gösterilir) -->
                 <Button
                     android:id="@+id/btnReklamGizlilik"
@@ -476,7 +411,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
-                    android:text="Sınırsız kaydırma ve sıfır reklam"
+                    android:text="Tek seferlik ödemeyle tüm reklamları kaldır"
                     android:textColor="#C4A8FF"
                     android:textSize="11sp" />
             </LinearLayout>

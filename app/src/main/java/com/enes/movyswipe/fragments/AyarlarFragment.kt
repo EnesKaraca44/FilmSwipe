@@ -116,6 +116,7 @@ class AyarlarFragment : Fragment() {
                 }
                 launch {
                     viewModel.isPremium.collect { premium ->
+                        binding.tvProRozet.isVisible = premium
                         binding.btnReklamlariKaldir.isEnabled = !premium
                         binding.btnReklamlariKaldir.text =
                             if (premium) "Reklamsız sürüm aktif ✓" else "Reklamları Kaldır →"
