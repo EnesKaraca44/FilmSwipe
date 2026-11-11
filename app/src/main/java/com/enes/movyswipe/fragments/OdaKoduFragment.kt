@@ -1,6 +1,9 @@
 package com.enes.movyswipe.fragments
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -39,8 +42,20 @@ class OdaKoduFragment : Fragment() {
         // ViewModel odayı yalnızca bir kez oluşturur (döndürmede yeni oda açılmaz).
         viewModel.createRoomFromFilters(args.genres, args.StartYear)
         binding.tvOdaKodu.setOnClickListener { shareCode() }
+        binding.btnKopyala.setOnClickListener { copyCode() }
         binding.errorView.btnRetry.setOnClickListener { viewModel.retry(args.genres, args.StartYear) }
         observeViewModelStates()
+    }
+
+    /** "Kopyala" düğmesi eskiden hiçbir şey yapmıyordu. */
+    private fun copyCode() {
+        val code = viewModel.roomCode.value ?: return
+        val clipboard = requireContext().getSystemService(ClipboardManager::class.java) ?: return
+        clipboard.setPrimaryClip(ClipData.newPlainText(getString(R.string.duel_room_code_clip_label), code))
+        // Android 13+ panoya kopyalanınca kendi bildirimini gösterir; eski sürümlerde biz söyleyelim.
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            Toast.makeText(requireContext(), R.string.duel_room_code_copied, Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun shareCode() {

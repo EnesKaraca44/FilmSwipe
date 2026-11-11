@@ -3,6 +3,7 @@
 <resources>
     <color name="wl_page_start">#1A1A1A</color>
     <color name="wl_page_center">#252636</color>
+    <color name="wl_page_end">#0D1117</color>
     <color name="wl_card">#1F2133</color>
     <color name="wl_card_border">#32354E</color>
     <color name="wl_header_button">#202235</color>

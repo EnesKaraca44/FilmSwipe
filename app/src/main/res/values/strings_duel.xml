@@ -110,4 +110,8 @@
 
     <!-- Shared error panel -->
     <string name="duel_try_again">Try again</string>
+
+    <!-- Oda kodu panoya kopyalama -->
+    <string name="duel_room_code_clip_label">FilmSwipe room code</string>
+    <string name="duel_room_code_copied">Room code copied</string>
 </resources>

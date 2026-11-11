@@ -123,6 +123,15 @@ class AnaMenuFragment : Fragment() {
         dialog.findViewById<TextView>(R.id.textViewDialogTitle).text = movie.displayTitle
         dialog.findViewById<TextView>(R.id.textViewDialogOverview).text =
             movie.overview?.takeIf { it.isNotBlank() } ?: getString(R.string.home_no_overview)
+        // Eskiden layout'taki sabit "8.5", "(2023)" ve "Aksiyon / Dram" her filmde aynen görünüyordu.
+        dialog.findViewById<TextView>(R.id.textViewDialogRating).text = MovieFormat.rating(movie.voteAverage)
+        dialog.findViewById<TextView>(R.id.textViewDialogYear).apply {
+            val year = movie.releaseYear
+            isVisible = year != null
+            text = year?.let { "($it)" }
+        }
+        // Tür bilgisi Movie modelinde yok; uydurma etiket göstermek yerine gizle.
+        dialog.findViewById<View>(R.id.layoutDialogGenres).isVisible = false
         Glide.with(this)
             .load(MovieFormat.posterUrl(movie.posterPath))
             .placeholder(R.drawable.placeholder_movie_poster)

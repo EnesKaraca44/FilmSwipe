@@ -110,4 +110,8 @@
 
     <!-- Ortak hata paneli -->
     <string name="duel_try_again">Tekrar dene</string>
+
+    <!-- Oda kodu panoya kopyalama -->
+    <string name="duel_room_code_clip_label">FilmSwipe oda kodu</string>
+    <string name="duel_room_code_copied">Oda kodu kopyalandı</string>
 </resources>
