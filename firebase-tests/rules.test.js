@@ -149,6 +149,22 @@ describe("oyun içi yazmalar", () => {
   test("odaya tanımsız alan eklenemez", async () => {
     await assertFails(set(ref(db("alice"), "rooms/ABC123/hacked"), true));
   });
+
+  test("çevrimiçi kaydı: oyuncu kendini yazıp silebilir, başkasını ve yabancı yazamaz", async () => {
+    await assertSucceeds(set(ref(db("alice"), "rooms/ABC123/online/alice"), true));
+    await assertSucceeds(set(ref(db("bob"), "rooms/ABC123/online/bob"), true));
+    await assertSucceeds(get(ref(db("bob"), "rooms/ABC123/online")));
+    await assertSucceeds(remove(ref(db("alice"), "rooms/ABC123/online/alice")));
+    await assertFails(remove(ref(db("alice"), "rooms/ABC123/online/bob")));
+    await assertFails(set(ref(db("carol"), "rooms/ABC123/online/carol"), true));
+    await assertFails(set(ref(db("alice"), "rooms/ABC123/online/alice"), "evet"));
+  });
+
+  test("host misafir gelmeden odayı silebilir (onDisconnect temizliği), misafir silemez", async () => {
+    await seed("rooms/WAIT01", { ...newRoom("alice"), createdAt: Date.now() });
+    await assertFails(remove(ref(db("bob"), "rooms/WAIT01")));
+    await assertSucceeds(remove(ref(db("alice"), "rooms/WAIT01")));
+  });
 });
 
 describe("sohbet", () => {

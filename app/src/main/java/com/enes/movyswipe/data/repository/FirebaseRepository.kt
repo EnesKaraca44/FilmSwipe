@@ -121,6 +121,66 @@ class FirebaseRepository @Inject constructor() {
     fun listenToRoomStatus(code: String): Flow<String> =
         valueFlow(room(code).child("status")) { it.getValue(String::class.java) ?: "unknown" }
 
+    /**
+     * Misafir beklenirken host'un bağlantısı koparsa (uygulama kapandı vb.) oda sunucuda silinsin;
+     * böylece kimse terk edilmiş bir odaya katılıp tek başına kaydırmaz.
+     */
+    suspend fun deleteRoomOnDisconnect(code: String) {
+        try {
+            room(code).onDisconnect().removeValue().await()
+        } catch (e: Exception) {
+            Log.w(TAG, "Oda için bağlantı kopma temizliği kurulamadı", e)
+        }
+    }
+
+    /** Misafir katıldı: oda artık host'un bağlantısına bağlı değil. */
+    suspend fun keepRoomOnDisconnect(code: String) {
+        try {
+            room(code).onDisconnect().cancel().await()
+        } catch (e: Exception) {
+            Log.w(TAG, "Oda temizliği iptal edilemedi", e)
+        }
+    }
+
+    suspend fun deleteRoom(code: String) {
+        try {
+            room(code).removeValue().await()
+        } catch (e: Exception) {
+            Log.w(TAG, "Oda silinemedi ($code)", e)
+        }
+    }
+
+    /**
+     * Toplandığı sürece bu kullanıcıyı odada "çevrimiçi" gösterir. Bağlantı koparsa sunucu kaydı
+     * siler (onDisconnect), bağlantı geri gelince yeniden yazılır. Toplama bitince (ekrandan
+     * çıkınca) kayıt silinir.
+     */
+    fun stayOnlineInRoom(code: String, userId: String): Flow<Unit> = callbackFlow {
+        val myRef = room(code).child("online").child(userId)
+        val connectedRef = Firebase.database.getReference(".info/connected")
+        val listener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.getValue(Boolean::class.java) != true) return
+                myRef.onDisconnect().removeValue()
+                myRef.setValue(true)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                close(error.toException())
+            }
+        }
+        connectedRef.addValueEventListener(listener)
+        awaitClose {
+            connectedRef.removeEventListener(listener)
+            myRef.onDisconnect().cancel()
+            myRef.removeValue()
+        }
+    }
+
+    /** Odada şu an çevrimiçi olan oyuncular. */
+    fun listenToOnlinePlayers(code: String): Flow<Set<String>> =
+        valueFlow(room(code).child("online")) { s -> s.children.mapNotNull { it.key }.toSet() }
+
     suspend fun submitChoice(code: String, movieId: Int, userId: String, liked: Boolean): Boolean = try {
         room(code).child("choices").child(movieId.toString()).child(userId)
             .setValue(if (liked) CHOICE_LIKE else CHOICE_PASS).await()

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -23,6 +24,7 @@ import com.yuyakaido.android.cardstackview.CardStackListener
 import com.yuyakaido.android.cardstackview.Direction
 import com.yuyakaido.android.cardstackview.SwipeAnimationSetting
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -108,16 +110,36 @@ class DuelloFragment : Fragment(), CardStackListener {
                     }
                 }
                 launch {
-                    viewModel.waitingForPartner.collect { waiting ->
-                        binding.tvPartnerStatus.text =
-                            if (waiting) "⏳ Partnerin bitirmesi bekleniyor..." else "👤 Partner hazır"
-                        binding.btnLike.isEnabled = !waiting
-                        binding.btnDislike.isEnabled = !waiting
-                    }
+                    combine(viewModel.waitingForPartner, viewModel.partnerOffline, ::Pair)
+                        .collect { (waiting, offline) ->
+                            binding.tvPartnerStatus.text = when {
+                                offline -> "📶 Partnerin bağlantısı koptu..."
+                                waiting -> "⏳ Partnerin bitirmesi bekleniyor..."
+                                else -> "👤 Partner hazır"
+                            }
+                            binding.btnLike.isEnabled = !waiting
+                            binding.btnDislike.isEnabled = !waiting
+                        }
                 }
+                launch { viewModel.partnerLeft.collect { left -> if (left) showPartnerLeftDialog() } }
                 launch { viewModel.matchState.collect(::handleMatchState) }
             }
         }
+    }
+
+    private var partnerLeftDialog: AlertDialog? = null
+
+    private fun showPartnerLeftDialog() {
+        if (partnerLeftDialog?.isShowing == true) return
+        partnerLeftDialog = AlertDialog.Builder(requireContext())
+            .setTitle("Partnerin ayrıldı")
+            .setMessage("Partnerin odadan çıktı ya da bağlantısı koptu. Bu düello devam edemez.")
+            .setCancelable(false)
+            .setPositiveButton("Ana menüye dön") { _, _ ->
+                val nav = findNavController()
+                if (!nav.popBackStack(R.id.anaMenuFragment, false)) nav.navigateUp()
+            }
+            .show()
     }
 
     private fun handleMatchState(state: MatchState) {
@@ -162,6 +184,8 @@ class DuelloFragment : Fragment(), CardStackListener {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        partnerLeftDialog?.dismiss()
+        partnerLeftDialog = null
         _binding = null
     }
 }

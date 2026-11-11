@@ -44,6 +44,12 @@
             ".validate": "newData.val() === true"
           }
         },
+        "online": {
+          "$uid": {
+            ".write": "auth != null && auth.uid === $uid && (root.child('rooms').child($roomCode).child('hostId').val() === auth.uid || root.child('rooms').child($roomCode).child('guestId').val() === auth.uid)",
+            ".validate": "newData.val() === true"
+          }
+        },
         "match": {
           ".write": false
         },

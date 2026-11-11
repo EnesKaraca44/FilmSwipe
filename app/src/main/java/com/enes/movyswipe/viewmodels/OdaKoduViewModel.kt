@@ -6,8 +6,10 @@ import com.enes.movyswipe.data.MovieFilters
 import com.enes.movyswipe.data.Result
 import com.enes.movyswipe.data.repository.FirebaseRepository
 import com.enes.movyswipe.data.repository.MovieRepository
+import com.enes.movyswipe.di.ApplicationScope
 import com.enes.movyswipe.util.AuthManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class OdaKoduViewModel @Inject constructor(
     private val movieRepository: MovieRepository,
-    private val firebaseRepository: FirebaseRepository
+    private val firebaseRepository: FirebaseRepository,
+    @ApplicationScope private val appScope: CoroutineScope
 ) : ViewModel() {
 
     private val _isLoading = MutableStateFlow(false)
@@ -35,6 +38,15 @@ class OdaKoduViewModel @Inject constructor(
     val navigateToDuel = _navigateToDuel.receiveAsFlow()
 
     private var started = false
+    private var guestJoined = false
+
+    /** Host, misafir gelmeden ekrandan çıktıysa oda silinir (misafir terk edilmiş odaya girmesin). */
+    override fun onCleared() {
+        super.onCleared()
+        val code = _roomCode.value ?: return
+        if (guestJoined) return
+        appScope.launch { firebaseRepository.deleteRoom(code) }
+    }
 
     /**
      * Odayı SADECE BİR KEZ oluşturur. Ekran döndürme veya tema değişimi Fragment'ı yeniden
@@ -66,8 +78,11 @@ class OdaKoduViewModel @Inject constructor(
                 )
                 _roomCode.value = code
                 _isLoading.value = false
+                firebaseRepository.deleteRoomOnDisconnect(code)
 
                 firebaseRepository.listenToRoomStatus(code).first { it == FirebaseRepository.STATUS_ACTIVE }
+                guestJoined = true
+                firebaseRepository.keepRoomOnDisconnect(code)
                 _navigateToDuel.send(code)
             } catch (e: Exception) {
                 _error.value = e.message ?: "Oda oluşturulamadı."

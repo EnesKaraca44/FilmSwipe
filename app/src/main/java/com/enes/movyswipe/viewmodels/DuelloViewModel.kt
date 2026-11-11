@@ -54,6 +54,17 @@ class DuelloViewModel @Inject constructor(
     private var noMatchJob: Job? = null
     private var listeningToRoom = false
 
+    /** Rakibin bağlantısı şu an kopuk (geri gelebilir). */
+    private val _partnerOffline = MutableStateFlow(false)
+    val partnerOffline: StateFlow<Boolean> = _partnerOffline.asStateFlow()
+
+    /** Rakip [PARTNER_LEFT_GRACE_MS] boyunca geri gelmedi: odadan ayrıldı sayılır. */
+    private val _partnerLeft = MutableStateFlow(false)
+    val partnerLeft: StateFlow<Boolean> = _partnerLeft.asStateFlow()
+
+    private var partnerSeen = false
+    private var partnerLeftJob: Job? = null
+
     /**
      * Odayı tek kez yükler. Ekran döndürmede desteyi baştan çekmez, dinleyicileri çoğaltmaz.
      */
@@ -93,6 +104,7 @@ class DuelloViewModel @Inject constructor(
                     if (!listeningToRoom) {
                         listeningToRoom = true
                         listenToRoom(code)
+                        trackPresence(code, uid, info)
                     }
                 }
                 is Result.Error -> _error.value = roomResult.exception.message ?: "Oda yüklenemedi."
@@ -117,6 +129,40 @@ class DuelloViewModel @Inject constructor(
                 .collect { finished ->
                     finishedUsers = finished
                     evaluateNoMatch()
+                }
+        }
+    }
+
+    /**
+     * Kendi çevrimiçi kaydımızı tutar ve rakibinkini izler. Rakip bir kez görüldükten sonra
+     * kaybolursa önce "bağlantısı koptu" gösterilir, süre dolunca "ayrıldı" sayılır.
+     * Rakip hiç görünmediyse (çevrimiçi kaydı yazmayan eski sürüm olabilir) bir şey yapılmaz;
+     * o durumda desteyi bitirince eski [PARTNER_TIMEOUT_MS] zaman aşımı devreye girer.
+     */
+    private fun trackPresence(code: String, me: String, info: RoomInfo) {
+        val partner = info.participants.firstOrNull { it != me } ?: return
+        viewModelScope.launch {
+            firebaseRepository.stayOnlineInRoom(code, me)
+                .catch { Log.w(TAG, "Çevrimiçi durumu yazılamadı", it) }
+                .collect {}
+        }
+        viewModelScope.launch {
+            firebaseRepository.listenToOnlinePlayers(code)
+                .catch { Log.w(TAG, "Rakibin durumu dinlenemedi", it) }
+                .collect { online ->
+                    if (partner in online) {
+                        partnerSeen = true
+                        partnerLeftJob?.cancel()
+                        _partnerOffline.value = false
+                        return@collect
+                    }
+                    if (!partnerSeen || _matchState.value != MatchState.IDLE) return@collect
+                    _partnerOffline.value = true
+                    if (partnerLeftJob?.isActive == true) return@collect
+                    partnerLeftJob = launch {
+                        delay(PARTNER_LEFT_GRACE_MS)
+                        if (_matchState.value == MatchState.IDLE) _partnerLeft.value = true
+                    }
                 }
         }
     }
@@ -166,5 +212,7 @@ class DuelloViewModel @Inject constructor(
         private const val TAG = "DuelloViewModel"
         private const val MATCH_GRACE_MS = 3_000L
         private const val PARTNER_TIMEOUT_MS = 120_000L
+        /** Kısa bağlantı kopmalarında (tünel, ağ değişimi) hemen "ayrıldı" denmesin. */
+        private const val PARTNER_LEFT_GRACE_MS = 20_000L
     }
 }
