@@ -58,40 +58,57 @@ class HizliDuelloBeklemeViewModel @Inject constructor(
     private var rejoinJob: Job? = null
     private var deck: QueueDeck? = null
 
+    /** Arama bir hatayla durdu; ekranda "Tekrar dene" düğmesi gösterilir. */
+    private val _canRetry = MutableStateFlow(false)
+    val canRetry: StateFlow<Boolean> = _canRetry.asStateFlow()
+
+    private var listeningForAssignment = false
+
     fun startSearch() {
         if (started) return
         started = true
+        _canRetry.value = false
+        _matchmakingStatus.value = "Eşleşme aranıyor..."
         viewModelScope.launch {
-            val userId = AuthManager.getCurrentUserId()
+            val userId = myUserId ?: AuthManager.getCurrentUserId()
             if (userId == null) {
-                _matchmakingStatus.value = "Giriş yapılamadı. İnternet bağlantını kontrol et."
-                started = false
+                fail("Giriş yapılamadı. İnternet bağlantını kontrol et.")
                 return@launch
             }
             myUserId = userId
 
-            val prepared = prepareDeck()
+            val prepared = deck ?: prepareDeck()
             if (prepared == null) {
-                _matchmakingStatus.value = "Film listesi alınamadı. İnternet bağlantını kontrol et."
-                started = false
+                fail("Film listesi alınamadı. İnternet bağlantını kontrol et.")
                 return@launch
             }
             deck = prepared
 
             firebaseRepository.syncBlocks(userId, safetyPrefs.blockedUsers.value)
-            firebaseRepository.clearMatchmakingData(userId)
-            listenForAssignment(userId)
+            if (!listeningForAssignment) {
+                firebaseRepository.clearMatchmakingData(userId)
+                listeningForAssignment = true
+                listenForAssignment(userId)
+            }
             try {
                 firebaseRepository.joinQueue(userId, prepared)
                 inQueue = true
             } catch (e: Exception) {
                 Log.w(TAG, "Kuyruğa katılınamadı", e)
-                _matchmakingStatus.value = "Eşleştirme sunucusuna bağlanılamadı."
-                started = false
+                fail("Eşleştirme sunucusuna bağlanılamadı.")
                 return@launch
             }
             listenToQueue(userId)
         }
+    }
+
+    /** "Tekrar dene": hazırlanan deste ve dinleyiciler korunur, kalan adımlar yeniden denenir. */
+    fun retry() = startSearch()
+
+    private fun fail(message: String) {
+        _matchmakingStatus.value = message
+        started = false
+        _canRetry.value = true
     }
 
     private suspend fun prepareDeck(): QueueDeck? {

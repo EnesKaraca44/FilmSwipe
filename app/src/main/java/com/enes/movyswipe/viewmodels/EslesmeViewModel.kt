@@ -22,13 +22,21 @@ class EslesmeViewModel @Inject constructor(
     private val _movie = MutableStateFlow<Movie?>(null)
     val movie: StateFlow<Movie?> = _movie.asStateFlow()
 
+    /** Film bilgisi çekilemedi; ekranda "Tekrar dene" gösterilir. */
+    private val _loadFailed = MutableStateFlow(false)
+    val loadFailed: StateFlow<Boolean> = _loadFailed.asStateFlow()
+
     private var loadedId: Int? = null
 
+    /** Aynı film için tekrar çağrılar yok sayılır; yalnızca önceki deneme başarısızsa yeniden çeker. */
     fun loadMatchedMovie(movieId: Int) {
-        if (loadedId == movieId) return
+        if (loadedId == movieId && !_loadFailed.value) return
         loadedId = movieId
+        _loadFailed.value = false
         viewModelScope.launch {
-            _movie.value = (movieRepository.getMovieDetails(movieId) as? Result.Success)?.data
+            val movie = (movieRepository.getMovieDetails(movieId) as? Result.Success)?.data
+            _movie.value = movie
+            _loadFailed.value = movie == null
         }
     }
 

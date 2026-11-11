@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -30,6 +31,7 @@ class HizliDuelloBeklemeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.startSearch() // ViewModel tekrar çağrıları yok sayar
+        binding.btnTekrarDene.setOnClickListener { viewModel.retry() }
         binding.btnIptal.setOnClickListener { findNavController().popBackStack() }
         binding.btnAnaMenu.setOnClickListener { findNavController().popBackStack(R.id.anaMenuFragment, false) }
         observeViewModel()
@@ -39,6 +41,12 @@ class HizliDuelloBeklemeFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch { viewModel.matchmakingStatus.collect { binding.tvBeklemeZamani.text = it } }
+                launch {
+                    viewModel.canRetry.collect { canRetry ->
+                        binding.btnTekrarDene.isVisible = canRetry
+                        binding.progressBar.isVisible = !canRetry
+                    }
+                }
                 launch {
                     viewModel.queueSize.collect { size ->
                         // Eskiden sabit "12 kişi çevrimiçi" yazıyordu.

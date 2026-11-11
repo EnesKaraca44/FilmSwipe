@@ -151,6 +151,21 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <!-- Bağlantı / film listesi hatasında görünür -->
+        <Button
+            android:id="@+id/btnTekrarDene"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/button_accent"
+            android:elevation="6dp"
+            android:text="🔄 Tekrar Dene"
+            android:textColor="@color/text_white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
         <!-- İptal Button -->
         <Button
             android:id="@+id/btnIptal"

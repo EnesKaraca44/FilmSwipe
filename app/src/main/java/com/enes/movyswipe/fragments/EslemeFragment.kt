@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -42,6 +43,14 @@ class EslemeFragment : Fragment() {
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.loadFailed.collect { failed ->
+                        binding.errorView.root.isVisible = failed
+                        binding.cardFilm.isVisible = !failed
+                        if (failed) binding.errorView.tvErrorMessage.text =
+                            "Eşleşen film yüklenemedi. İnternet bağlantını kontrol et."
+                    }
+                }
                 viewModel.movie.collect { movie ->
                     if (movie == null) return@collect
                     binding.tvEslesenFilmAdi.text = movie.displayTitle
@@ -58,6 +67,7 @@ class EslemeFragment : Fragment() {
     }
 
     private fun setupClickListeners() {
+        binding.errorView.btnRetry.setOnClickListener { viewModel.loadMatchedMovie(args.matchedMovieId) }
         binding.btnSohbetEt.setOnClickListener {
             findNavController().navigate(EslemeFragmentDirections.actionEslemeFragmentToSohbetFragment(args.roomCode))
         }

@@ -52,6 +52,7 @@ class DuelloViewModel @Inject constructor(
     private var currentMatch: Int? = null
     private var finishedUsers: Set<String> = emptySet()
     private var noMatchJob: Job? = null
+    private var listeningToRoom = false
 
     /**
      * Odayı tek kez yükler. Ekran döndürmede desteyi baştan çekmez, dinleyicileri çoğaltmaz.
@@ -59,11 +60,23 @@ class DuelloViewModel @Inject constructor(
     fun start(code: String) {
         if (roomCode != null) return
         roomCode = code
+        load(code)
+    }
+
+    /** Yükleme başarısız olduysa ("Tekrar dene") odayı ve filmleri yeniden çeker. */
+    fun retry() {
+        val code = roomCode ?: return
+        if (_isLoading.value || _movies.value.isNotEmpty()) return
+        load(code)
+    }
+
+    private fun load(code: String) {
         viewModelScope.launch {
             _isLoading.value = true
             _error.value = null
-            userId = AuthManager.getCurrentUserId()
-            if (userId == null) {
+            val uid = userId ?: AuthManager.getCurrentUserId()
+            userId = uid
+            if (uid == null) {
                 _error.value = "Giriş yapılamadı. İnternet bağlantını kontrol et."
                 _isLoading.value = false
                 return@launch
@@ -77,7 +90,10 @@ class DuelloViewModel @Inject constructor(
                     val movies = movieRepository.getMovieDetailsList(info.movieDeck)
                     if (movies.isEmpty()) _error.value = "Filmler yüklenemedi. İnternet bağlantını kontrol et."
                     _movies.value = movies
-                    listenToRoom(code)
+                    if (!listeningToRoom) {
+                        listeningToRoom = true
+                        listenToRoom(code)
+                    }
                 }
                 is Result.Error -> _error.value = roomResult.exception.message ?: "Oda yüklenemedi."
                 Result.Loading -> Unit

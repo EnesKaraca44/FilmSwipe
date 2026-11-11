@@ -28,8 +28,17 @@
             app:lottie_loop="false"
             app:lottie_rawRes="@raw/match_animation" />
 
+        <!-- Eşleşen film yüklenemezse: mesaj + "Tekrar dene" (kart gizlenir). -->
+        <include
+            android:id="@+id/errorView"
+            layout="@layout/view_error_retry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp" />
+
         <!-- Film Bilgisi Kartı -->
         <androidx.cardview.widget.CardView
+            android:id="@+id/cardFilm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -62,6 +61,7 @@ class DuelloFragment : Fragment(), CardStackListener {
     private fun setupClickListeners() {
         binding.btnLike.setOnClickListener { swipe(Direction.Right) }
         binding.btnDislike.setOnClickListener { swipe(Direction.Left) }
+        binding.errorView.btnRetry.setOnClickListener { viewModel.retry() }
     }
 
     private fun swipe(direction: Direction) {
@@ -96,10 +96,14 @@ class DuelloFragment : Fragment(), CardStackListener {
                     }
                 }
                 launch {
+                    // Hata, toast yerine kalıcı panelde gösterilir: ekran döndürmede/geri gelmede
+                    // aynı toast tekrar çıkmaz ve kullanıcı boş ekranda kalmaz.
                     viewModel.error.collect { error ->
+                        binding.errorView.root.isVisible = error != null
                         if (error != null) {
-                            Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
+                            binding.errorView.tvErrorMessage.text = error
                             binding.progressBar.isVisible = false
+                            binding.contentLayout.isVisible = false
                         }
                     }
                 }
