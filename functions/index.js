@@ -1,10 +1,41 @@
-const { onValueWritten } = require("firebase-functions/v2/database");
+const { onValueWritten, onValueCreated } = require("firebase-functions/v2/database");
 const { onSchedule } = require("firebase-functions/v2/scheduler");
 const { logger } = require("firebase-functions");
 const admin = require("firebase-admin");
 const { isMatch, pickPair, generateRoomCode, ROOM_TTL_MS, QUEUE_TTL_MS } = require("./match");
 
+const { isChatRateExceeded, CHAT_RATE_WINDOW_MS } = require("./chat");
+
 admin.initializeApp();
+
+/**
+ * Sohbet sıklık sınırı: aynı kişinin pencere içindeki fazla mesajlarını siler.
+ * Kurallarla yapmak eski sürümlerin mesaj göndermesini bozacağı için sunucuda yapılır.
+ */
+exports.limitChatRate = onValueCreated("/rooms/{roomCode}/chat/{messageId}", async (event) => {
+  const msg = event.data.val();
+  if (!msg || !msg.senderId || typeof msg.timestamp !== "number") return null;
+
+  const recent = await event.data.ref.parent
+    .orderByChild("timestamp")
+    .startAt(msg.timestamp - CHAT_RATE_WINDOW_MS)
+    .once("value");
+  const earlier = [];
+  recent.forEach((child) => {
+    const v = child.val();
+    if (child.key === event.params.messageId || !v || v.senderId !== msg.senderId) return;
+    // Aynı milisaniyedeki mesajlarda sırayı push anahtarı belirler.
+    if (v.timestamp < msg.timestamp || (v.timestamp === msg.timestamp && child.key < event.params.messageId)) {
+      earlier.push(v.timestamp);
+    }
+  });
+
+  if (isChatRateExceeded(earlier, msg.timestamp)) {
+    await event.data.ref.remove();
+    logger.info(`Sohbet sınırı: oda=${event.params.roomCode} mesaj silindi`);
+  }
+  return null;
+});
 
 /**
  * Hızlı düello eşleştirmesi (sunucu tarafı).

@@ -54,6 +54,7 @@
           ".write": false
         },
         "chat": {
+          ".indexOn": ["timestamp"],
           "$messageId": {
             ".write": "auth != null && !data.exists() && (root.child('rooms').child($roomCode).child('hostId').val() === auth.uid || root.child('rooms').child($roomCode).child('guestId').val() === auth.uid) && (!root.child('rooms').child($roomCode).child('hostId').exists() || !root.child('blocks').child(root.child('rooms').child($roomCode).child('hostId').val()).child(auth.uid).exists()) && (!root.child('rooms').child($roomCode).child('guestId').exists() || !root.child('blocks').child(root.child('rooms').child($roomCode).child('guestId').val()).child(auth.uid).exists())",
             ".validate": "newData.hasChildren(['senderId', 'senderNickname', 'text', 'timestamp']) && newData.child('senderId').val() === auth.uid && newData.child('text').isString() && newData.child('text').val().length > 0 && newData.child('text').val().length <= 500 && newData.child('senderNickname').isString() && newData.child('senderNickname').val().length <= 40 && newData.child('timestamp').val() === now",

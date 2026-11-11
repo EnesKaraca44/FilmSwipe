@@ -7,7 +7,7 @@ const fs = require("fs");
 const path = require("path");
 const { initializeTestEnvironment } = require("@firebase/rules-unit-testing");
 const { setLogLevel } = require("firebase/app");
-const { ref, set, update, get, serverTimestamp } = require("firebase/database");
+const { ref, set, update, get, push, serverTimestamp } = require("firebase/database");
 
 setLogLevel("error");
 
@@ -147,6 +147,21 @@ test("eski sürüm (destesiz) kullanıcı, destesi olan yeni sürümle eşleşir
   const room = await adminGet(`rooms/${code}`);
   expect(room.hostId).toBe("new");
   expect(room.guestId).toBe("old");
+});
+
+test("sohbet sınırı: 10 saniyede 5'ten fazla mesajın fazlası silinir, karşı taraf etkilenmez", async () => {
+  await adminSet("rooms/CHAT01", {
+    status: "active", hostId: "spam", guestId: "calm", movieDeck: [1], createdAt: Date.now(),
+  });
+  const msg = (uid, i) => ({ senderId: uid, senderNickname: uid, text: `m${i}`, timestamp: serverTimestamp() });
+  for (let i = 0; i < 8; i++) await push(ref(db("spam"), "rooms/CHAT01/chat"), msg("spam", i));
+  await push(ref(db("calm"), "rooms/CHAT01/chat"), msg("calm", 0));
+
+  await sleep(4000);
+  const chat = Object.values((await adminGet("rooms/CHAT01/chat")) || {});
+  const spam = chat.filter((m) => m.senderId === "spam").map((m) => m.text).sort();
+  expect(spam).toEqual(["m0", "m1", "m2", "m3", "m4"]);
+  expect(chat.filter((m) => m.senderId === "calm")).toHaveLength(1);
 });
 
 test("temizlik fonksiyonu 24 saatten eski odaları ve bayat kuyruk kayıtlarını siler", async () => {

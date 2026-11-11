@@ -10,6 +10,7 @@ import com.enes.movyswipe.data.RoomInfo
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.Query
 import com.google.firebase.database.ServerValue
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
@@ -207,8 +208,12 @@ class FirebaseRepository @Inject constructor() {
 
     // ---------------------------------------------------------------- Sohbet
 
+    /**
+     * Son [CHAT_HISTORY_LIMIT] mesaj (push anahtarları zamana göre sıralıdır). Uzun sohbetlerde
+     * ilk yükleme ve her yeni mesajda yeniden kurulan liste sınırlı kalır.
+     */
     fun listenToMessages(code: String): Flow<List<ChatMessage>> =
-        valueFlow(room(code).child("chat")) { snapshot ->
+        valueFlow(room(code).child("chat").orderByKey().limitToLast(CHAT_HISTORY_LIMIT)) { snapshot ->
             snapshot.children.mapNotNull { child ->
                 child.getValue(ChatMessage::class.java)?.also { it.id = child.key.orEmpty() }
             }
@@ -322,7 +327,7 @@ class FirebaseRepository @Inject constructor() {
 
     // ---------------------------------------------------------------- Yardımcılar
 
-    private fun <T> valueFlow(ref: DatabaseReference, map: (DataSnapshot) -> T): Flow<T> = callbackFlow {
+    private fun <T> valueFlow(ref: Query, map: (DataSnapshot) -> T): Flow<T> = callbackFlow {
         val listener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 trySend(map(snapshot))
@@ -339,6 +344,7 @@ class FirebaseRepository @Inject constructor() {
     companion object {
         private const val TAG = "FirebaseRepository"
         const val STATUS_WAITING = "waiting"
+        const val CHAT_HISTORY_LIMIT = 100
         const val STATUS_ACTIVE = "active"
         const val CHOICE_LIKE = "like"
         const val CHOICE_PASS = "pass"

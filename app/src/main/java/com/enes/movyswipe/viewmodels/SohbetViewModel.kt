@@ -3,6 +3,7 @@ package com.enes.movyswipe.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.enes.movyswipe.data.ChatMessage
+import com.enes.movyswipe.data.ChatRateLimit
 import com.enes.movyswipe.data.Result
 import com.enes.movyswipe.data.repository.FirebaseRepository
 import com.enes.movyswipe.util.AuthManager
@@ -64,6 +65,8 @@ class SohbetViewModel @Inject constructor(
         }
     }
 
+    private var recentSendTimes: List<Long> = emptyList()
+
     /** @return mesaj gönderime alındıysa true (giriş kutusu temizlenmeli) */
     fun sendMessage(rawText: String, nickname: String): Boolean {
         val code = roomCode ?: return false
@@ -74,6 +77,13 @@ class SohbetViewModel @Inject constructor(
             _toasts.trySend("Mesaj en fazla ${ChatMessage.MAX_LENGTH} karakter olabilir.")
             return false
         }
+        // Sunucu sınırı aşan mesajı siler; kullanıcı mesajının kaybolduğunu görmesin diye baştan uyar.
+        val now = System.currentTimeMillis()
+        if (ChatRateLimit.isExceeded(recentSendTimes, now)) {
+            _toasts.trySend("Çok hızlı mesaj gönderiyorsun, birkaç saniye bekle.")
+            return false
+        }
+        recentSendTimes = recentSendTimes.filter { it > now - ChatRateLimit.WINDOW_MS } + now
         val message = ChatMessage(senderId = userId, senderNickname = nickname, text = text)
         viewModelScope.launch {
             if (!firebaseRepository.sendMessage(code, message)) _toasts.send("Mesaj gönderilemedi.")
