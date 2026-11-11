@@ -101,7 +101,7 @@ class FirebaseRepository @Inject constructor() {
     suspend fun getRoom(code: String): Result<RoomInfo> = try {
         val s = room(code).get().await()
         if (!s.exists()) {
-            Result.Error(Exception("Oda bulunamadı."))
+            Result.Error(RoomNotFoundException())
         } else {
             val deck = s.child("movieDeck").children.mapNotNull { it.getValue(Long::class.java)?.toInt() }
             Result.Success(
@@ -340,6 +340,9 @@ class FirebaseRepository @Inject constructor() {
         ref.addValueEventListener(listener)
         awaitClose { ref.removeEventListener(listener) }
     }
+
+    /** Oda yok; arayüz bunu yerelleştirilmiş bir mesaja çevirir. */
+    class RoomNotFoundException : Exception("Oda bulunamadı.")
 
     companion object {
         private const val TAG = "FirebaseRepository"

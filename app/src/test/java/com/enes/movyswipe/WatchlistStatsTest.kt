@@ -1,5 +1,6 @@
 package com.enes.movyswipe
 
+import com.enes.movyswipe.data.RelativeDay
 import com.enes.movyswipe.data.WatchlistMovie
 import com.enes.movyswipe.data.WatchlistSort
 import com.enes.movyswipe.data.WatchlistStats
@@ -91,13 +92,13 @@ class WatchlistStatsTest {
     }
 
     @Test
-    fun relativeDayLabels() {
-        assertEquals("Bugün", WatchlistStats.relativeDayLabel(0))
-        assertEquals("Dün", WatchlistStats.relativeDayLabel(1))
-        assertEquals("5 gün önce", WatchlistStats.relativeDayLabel(5))
-        assertEquals("2 hafta önce", WatchlistStats.relativeDayLabel(14))
-        assertEquals("3 ay önce", WatchlistStats.relativeDayLabel(95))
-        assertEquals("1 yıl önce", WatchlistStats.relativeDayLabel(400))
+    fun relativeDays() {
+        assertEquals(RelativeDay(RelativeDay.Kind.TODAY, 0), WatchlistStats.relativeDay(0))
+        assertEquals(RelativeDay(RelativeDay.Kind.YESTERDAY, 1), WatchlistStats.relativeDay(1))
+        assertEquals(RelativeDay(RelativeDay.Kind.DAYS, 5), WatchlistStats.relativeDay(5))
+        assertEquals(RelativeDay(RelativeDay.Kind.WEEKS, 2), WatchlistStats.relativeDay(14))
+        assertEquals(RelativeDay(RelativeDay.Kind.MONTHS, 3), WatchlistStats.relativeDay(95))
+        assertEquals(RelativeDay(RelativeDay.Kind.YEARS, 1), WatchlistStats.relativeDay(400))
     }
 
     @Test

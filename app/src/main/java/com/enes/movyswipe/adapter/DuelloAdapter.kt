@@ -22,10 +22,11 @@ class DuelloAdapter : RecyclerView.Adapter<DuelloAdapter.CardViewHolder>() {
         with(holder.binding) {
             tvFilmAdi.text = movie.displayTitle
             // Çıkış tarihi boş olan filmlerde eskiden substring() uygulamayı çökertiyordu.
-            tvFilmYili.text = "📅 ${movie.releaseYear ?: "Bilinmiyor"}"
-            tvFilmPuani.text = "⭐ ${MovieFormat.rating(movie.voteAverage)}/10"
-            tvFilmOzet.text = movie.overview?.takeIf { it.isNotBlank() } ?: "Özet bulunmuyor."
-            tvFilmTuru.text = "🎭 Film"
+            val ctx = root.context
+            tvFilmYili.text = ctx.getString(R.string.duel_card_year, movie.releaseYear ?: ctx.getString(R.string.duel_unknown_year))
+            tvFilmPuani.text = ctx.getString(R.string.duel_card_rating, MovieFormat.rating(movie.voteAverage))
+            tvFilmOzet.text = movie.overview?.takeIf { it.isNotBlank() } ?: ctx.getString(R.string.duel_no_overview)
+            tvFilmTuru.setText(R.string.duel_card_genre_placeholder)
             Glide.with(root)
                 .load(MovieFormat.posterUrl(movie.posterPath))
                 .placeholder(R.drawable.placeholder_movie_poster)

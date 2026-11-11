@@ -17,6 +17,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.enes.movyswipe.R
 import com.enes.movyswipe.adapter.ChatAdapter
 import com.enes.movyswipe.data.ChatMessage
 import com.enes.movyswipe.databinding.FragmentSohbetBinding
@@ -89,33 +90,25 @@ class SohbetFragment : Fragment() {
 
     private fun showCommunityRules() {
         AlertDialog.Builder(requireContext())
-            .setTitle("Topluluk Kuralları")
-            .setMessage(
-                "Sohbete katılmadan önce lütfen kabul et:\n\n" +
-                    "• Hakaret, taciz, nefret söylemi ve tehdit yasaktır.\n" +
-                    "• Cinsel içerik, spam ve dolandırıcılık yasaktır.\n" +
-                    "• Kişisel bilgilerini (telefon, adres vb.) paylaşma.\n\n" +
-                    "Kurallara uymayan kullanıcıları mesajlarına uzun basarak veya sağ üstteki menüden " +
-                    "şikayet edebilir ve engelleyebilirsin. Şikayetler incelenir; kuralı ihlal eden " +
-                    "hesaplar uygulamadan uzaklaştırılır."
-            )
+            .setTitle(R.string.chat_rules_title)
+            .setMessage(R.string.chat_rules_message)
             .setCancelable(false)
-            .setPositiveButton("Kabul Ediyorum") { _, _ ->
+            .setPositiveButton(R.string.chat_rules_accept) { _, _ ->
                 viewModel.acceptCommunityRules()
                 viewModel.start(args.roomCode)
             }
-            .setNegativeButton("Vazgeç") { _, _ -> findNavController().popBackStack() }
+            .setNegativeButton(R.string.chat_cancel) { _, _ -> findNavController().popBackStack() }
             .show()
     }
 
     private fun showSafetyMenu(anchor: View) {
         PopupMenu(requireContext(), anchor).apply {
-            menu.add(0, MENU_REPORT, 0, "Kullanıcıyı şikayet et")
-            menu.add(0, MENU_BLOCK, 1, "Kullanıcıyı engelle")
+            menu.add(0, MENU_REPORT, 0, R.string.chat_report_user)
+            menu.add(0, MENU_BLOCK, 1, R.string.chat_block_user)
             setOnMenuItemClickListener { item ->
                 val partner = viewModel.partnerId()
                 if (partner == null) {
-                    Toast.makeText(requireContext(), "Sohbet bilgisi yüklenemedi, biraz sonra tekrar dene.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), R.string.chat_partner_unavailable, Toast.LENGTH_SHORT).show()
                 } else if (item.itemId == MENU_REPORT) {
                     showReportReasons(partner, null)
                 } else {
@@ -128,28 +121,34 @@ class SohbetFragment : Fragment() {
 
     private fun showMessageActions(message: ChatMessage) {
         AlertDialog.Builder(requireContext())
-            .setTitle(message.senderNickname)
-            .setItems(arrayOf("Mesajı şikayet et", "Kullanıcıyı engelle")) { _, which ->
+            .setTitle(ChatAdapter.displayNickname(requireContext(), message.senderNickname))
+            .setItems(arrayOf(getString(R.string.chat_report_message), getString(R.string.chat_block_user))) { _, which ->
                 if (which == 0) showReportReasons(message.senderId, message) else confirmBlock(message.senderId)
             }
             .show()
     }
 
     private fun showReportReasons(userId: String, message: ChatMessage?) {
-        val reasons = arrayOf("Hakaret / taciz", "Cinsel içerik", "Spam / dolandırıcılık", "Nefret söylemi", "Diğer")
+        val reasons = arrayOf(
+            getString(R.string.chat_reason_harassment),
+            getString(R.string.chat_reason_sexual),
+            getString(R.string.chat_reason_spam),
+            getString(R.string.chat_reason_hate),
+            getString(R.string.chat_reason_other)
+        )
         AlertDialog.Builder(requireContext())
-            .setTitle("Şikayet nedeni")
+            .setTitle(R.string.chat_report_reason_title)
             .setItems(reasons) { _, which -> viewModel.report(userId, reasons[which], message) }
-            .setNegativeButton("Vazgeç", null)
+            .setNegativeButton(R.string.chat_cancel, null)
             .show()
     }
 
     private fun confirmBlock(userId: String) {
         AlertDialog.Builder(requireContext())
-            .setTitle("Kullanıcıyı engelle")
-            .setMessage("Bu kullanıcının mesajlarını artık görmeyeceksin ve hızlı düelloda onunla eşleşmeyeceksin.")
-            .setPositiveButton("Engelle") { _, _ -> viewModel.block(userId) }
-            .setNegativeButton("Vazgeç", null)
+            .setTitle(R.string.chat_block_user)
+            .setMessage(R.string.chat_block_confirm_message)
+            .setPositiveButton(R.string.chat_block) { _, _ -> viewModel.block(userId) }
+            .setNegativeButton(R.string.chat_cancel, null)
             .show()
     }
 

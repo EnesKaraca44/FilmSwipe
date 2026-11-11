@@ -46,7 +46,7 @@ class OdayaKatilFragment : Fragment() {
     private fun submit() {
         val roomCode = binding.etOdaKodu.text.toString()
         if (roomCode.isBlank()) {
-            Toast.makeText(requireContext(), "Lütfen bir oda kodu girin.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), R.string.duel_join_enter_code, Toast.LENGTH_SHORT).show()
         } else {
             viewModel.joinRoom(roomCode)
         }
@@ -70,7 +70,7 @@ class OdayaKatilFragment : Fragment() {
                     // Tek seferlik olay: Düello'dan geri dönünce tekrar Düello'ya atılmıyor.
                     viewModel.navigateToDuel.collect { code ->
                         if (findNavController().currentDestination?.id != R.id.odayaKatilFragment) return@collect
-                        Toast.makeText(requireContext(), "Odaya başarıyla katıldın!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), R.string.duel_join_success, Toast.LENGTH_SHORT).show()
                         findNavController().navigate(OdayaKatilFragmentDirections.actionOdayaKatilFragmentToDuelloFragment(code))
                     }
                 }

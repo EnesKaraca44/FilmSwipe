@@ -24,7 +24,7 @@
             android:src="@drawable/placeholder_movie_poster"
             android:background="@drawable/poster_shadow"
             android:layout_marginEnd="16dp"
-            android:contentDescription="Film Posteri" />
+            android:contentDescription="@string/home_movie_poster" />
 
         <!-- Film Info -->
         <LinearLayout
@@ -93,7 +93,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Aksiyon"
+                    android:text="@string/home_genre_action"
                     android:textColor="#FFFFFF"
                     android:textSize="10sp"
                     android:background="@drawable/genre_tag"
@@ -104,7 +104,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Drama"
+                    android:text="@string/home_genre_drama"
                     android:textColor="#FFFFFF"
                     android:textSize="10sp"
                     android:background="@drawable/genre_tag"
@@ -121,6 +121,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="✕"
+            android:contentDescription="@string/close"
             android:textColor="#CCCCCC"
             android:textSize="20sp"
             android:textStyle="bold"

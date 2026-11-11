@@ -47,9 +47,9 @@ class OdaKoduFragment : Fragment() {
         val code = viewModel.roomCode.value ?: return
         val intent = Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
-            putExtra(Intent.EXTRA_TEXT, "FilmSwipe'ta film düellosuna gel! Oda kodu: $code")
+            putExtra(Intent.EXTRA_TEXT, getString(R.string.duel_share_room_text, code))
         }
-        startActivity(Intent.createChooser(intent, "Oda kodunu paylaş"))
+        startActivity(Intent.createChooser(intent, getString(R.string.duel_share_room_chooser)))
     }
 
     private fun observeViewModelStates() {
@@ -70,7 +70,7 @@ class OdaKoduFragment : Fragment() {
                 launch {
                     viewModel.navigateToDuel.collect { code ->
                         if (findNavController().currentDestination?.id != R.id.odaKoduFragment) return@collect
-                        Toast.makeText(requireContext(), "Partnerin katıldı, düello başlıyor!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), R.string.duel_room_partner_joined, Toast.LENGTH_SHORT).show()
                         findNavController().navigate(OdaKoduFragmentDirections.actionOdaKoduFragmentToDuelloFragment(code))
                     }
                 }

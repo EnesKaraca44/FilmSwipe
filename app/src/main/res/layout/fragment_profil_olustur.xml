@@ -18,7 +18,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Profil Oluştur"
+            android:text="@string/settings_create_profile_title"
             android:textColor="@color/text_primary"
             android:textSize="26sp"
             android:textStyle="bold"
@@ -47,14 +47,15 @@
                     android:layout_marginBottom="12dp"
                     android:background="@color/bg_medium"
                     android:scaleType="centerCrop"
-                    android:src="@mipmap/ic_launcher_round" />
+                    android:src="@mipmap/ic_launcher_round"
+                    android:contentDescription="@string/settings_avatar_description" />
 
                 <Button
                     android:id="@+id/btnAvatarSec"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_primary"
-                    android:text="FOTOĞRAF SEÇ"
+                    android:text="@string/settings_choose_photo"
                     android:textColor="@color/text_white"
                     android:textStyle="bold"
                     android:paddingHorizontal="16dp"
@@ -81,7 +82,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Ad"
+                    android:text="@string/settings_name_label"
                     android:textColor="@color/text_secondary"
                     android:textSize="14sp" />
 
@@ -90,7 +91,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:background="@drawable/card_background"
-                    android:hint="Adınızı girin"
+                    android:hint="@string/settings_name_hint"
                     android:inputType="textPersonName"
                     android:paddingHorizontal="16dp"
                     android:textColor="@color/text_primary"
@@ -104,7 +105,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Kullanıcı Adı"
+                    android:text="@string/settings_username_label"
                     android:textColor="@color/text_secondary"
                     android:textSize="14sp" />
 
@@ -113,7 +114,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:background="@drawable/card_background"
-                    android:hint="@kullaniciadi"
+                    android:hint="@string/settings_username_handle_hint"
                     android:inputType="textNoSuggestions|textVisiblePassword"
                     android:paddingHorizontal="16dp"
                     android:textColor="@color/text_primary"
@@ -127,7 +128,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Biyografi"
+                    android:text="@string/settings_bio_label"
                     android:textColor="@color/text_secondary"
                     android:textSize="14sp" />
 
@@ -139,7 +140,7 @@
                     android:maxLines="5"
                     android:gravity="top|start"
                     android:background="@drawable/card_background"
-                    android:hint="Kendinizden kısaca bahsedin"
+                    android:hint="@string/settings_bio_hint"
                     android:inputType="textCapSentences|textMultiLine"
                     android:padding="16dp"
                     android:textColor="@color/text_primary"
@@ -161,7 +162,7 @@
                 android:layout_height="56dp"
                 android:layout_marginBottom="12dp"
                 android:background="@drawable/button_primary"
-                android:text="KAYDET"
+                android:text="@string/settings_save_profile"
                 android:textColor="@color/text_white"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -171,7 +172,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:background="@drawable/button_secondary"
-                android:text="SONRA YAP"
+                android:text="@string/settings_skip_profile"
                 android:textColor="@color/text_white"
                 android:textSize="16sp"
                 android:textStyle="bold" />

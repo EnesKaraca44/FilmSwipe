@@ -2,6 +2,7 @@ package com.enes.movyswipe.util
 
 import android.content.Context
 import android.util.Log
+import com.enes.movyswipe.R
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.sync.Mutex
@@ -21,8 +22,8 @@ object AuthManager {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         prefs.getString(KEY_NICKNAME, null)?.let { return it }
 
-        val adjectives = listOf("Hızlı", "Gizemli", "Neşeli", "Cesur", "Uykucu", "Meraklı")
-        val nouns = listOf("Aslan", "Kaplan", "Kartal", "Panda", "Tilki", "Gezgin")
+        val adjectives = context.resources.getStringArray(R.array.settings_nickname_adjectives)
+        val nouns = context.resources.getStringArray(R.array.settings_nickname_nouns)
         val nickname = "${adjectives.random()} ${nouns.random()}"
         prefs.edit().putString(KEY_NICKNAME, nickname).apply()
         return nickname

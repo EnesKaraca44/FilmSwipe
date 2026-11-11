@@ -1,40 +1,39 @@
 <resources>
     <string name="app_name">FilmSwipe</string>
     
-    <!-- Ana Menü -->
+    <!-- Main Menu -->
     <string name="app_title">FilmSwipe</string>
-    <string name="app_subtitle">Arkadaşınla film eşleştir!</string>
-    <string name="welcome_message">Hoş geldin, %s!</string>
+    <string name="app_subtitle">Match movies with your friend!</string>
+    <string name="welcome_message">Welcome, %s!</string>
     
-    <!-- Popüler Filmler -->
-    <string name="popular_matches_title">Haftanın Popüler Eşleşmeleri</string>
-    <string name="movie_name">Film Adı</string>
+    <!-- Popular Movies -->
+    <string name="popular_matches_title">Popular Matches of the Week</string>
+    <string name="movie_name">Movie Name</string>
     <string name="hot_badge">HOT</string>
     
-    <!-- Butonlar -->
-    <string name="create_room">Oda Kur</string>
-    <string name="create_room_description">Yeni bir düello odası oluştur</string>
-    <string name="join_room">Odaya Katıl</string>
-    <string name="join_room_description">Mevcut bir odaya katıl</string>
-    <string name="instant_match">Anında Eşleştir</string>
-    <string name="instant_match_description">Rastgele bir kullanıcıyla hemen başla</string>
+    <!-- Buttons -->
+    <string name="create_room">Create Room</string>
+    <string name="create_room_description">Create a new duel room</string>
+    <string name="join_room">Join Room</string>
+    <string name="join_room_description">Join an existing room</string>
+    <string name="instant_match">Instant Match</string>
+    <string name="instant_match_description">Start immediately with a random user</string>
     
-    <!-- Film Detay Diyalogu -->
-    <string name="film_overview">Film özeti burada görünecek...</string>
-    <string name="view_on_tmdb">TMDB\'de Görüntüle</string>
-    <string name="add_to_watchlist">Listeme Ekle</string>
+    <!-- Film Detail Dialog -->
+    <string name="film_overview">Movie overview will appear here...</string>
+    <string name="view_on_tmdb">View on TMDB</string>
+    <string name="add_to_watchlist">Add to My List</string>
     
-    <!-- Navigasyon -->
-    <string name="nav_home">Ana Menü</string>
-    <string name="nav_watchlist">Listem</string>
-    <string name="nav_profile">Profilim</string>
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_watchlist">My List</string>
+    <string name="nav_profile">My Profile</string>
     
-    <!-- Genel -->
-    <string name="close">Kapat</string>
-    <string name="loading">Yükleniyor...</string>
-    <string name="error">Hata</string>
-    <string name="retry">Tekrar Dene</string>
-    
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- General -->
+    <string name="close">Close</string>
+    <string name="loading">Loading...</string>
+    <string name="error">Error</string>
+    <string name="retry">Retry</string>
 </resources>
+
+

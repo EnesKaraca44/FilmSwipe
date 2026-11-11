@@ -1,10 +1,12 @@
 package com.enes.movyswipe.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.enes.movyswipe.R
 import com.enes.movyswipe.data.ChatMessage
 import com.enes.movyswipe.databinding.ItemMessageReceivedBinding
 import com.enes.movyswipe.databinding.ItemMessageSentBinding
@@ -39,7 +41,7 @@ class ChatAdapter : ListAdapter<ChatMessage, RecyclerView.ViewHolder>(DiffCallba
         RecyclerView.ViewHolder(binding.root) {
         fun bind(message: ChatMessage) {
             binding.tvMessage.text = message.text
-            binding.tvSenderNickname.text = message.senderNickname
+            binding.tvSenderNickname.text = displayNickname(binding.root.context, message.senderNickname)
             binding.tvTime.text = message.timestampMillis?.let { timeFormat.format(Date(it)) }.orEmpty()
             binding.root.setOnLongClickListener {
                 onReceivedMessageLongClick(message)
@@ -78,5 +80,9 @@ class ChatAdapter : ListAdapter<ChatMessage, RecyclerView.ViewHolder>(DiffCallba
     companion object {
         private const val VIEW_TYPE_SENT = 1
         private const val VIEW_TYPE_RECEIVED = 2
+
+        /** Takma ad boşsa veya ChatMessage'ın varsayılanıysa ("Bilinmeyen") yerelleştirilmiş yedek ad. */
+        fun displayNickname(context: Context, nickname: String): String =
+            if (nickname.isBlank() || nickname == "Bilinmeyen") context.getString(R.string.chat_unknown_user) else nickname
     }
 }

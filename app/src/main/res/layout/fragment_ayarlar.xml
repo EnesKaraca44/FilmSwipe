@@ -30,7 +30,7 @@
                 android:layout_height="34dp"
                 android:background="@drawable/settings_icon_circle"
                 android:clickable="true"
-                android:contentDescription="Geri dön"
+                android:contentDescription="@string/settings_back"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:gravity="center"
@@ -46,7 +46,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Ayarlar  •"
+                    android:text="@string/settings_title"
                     android:textColor="@color/settings_text_primary"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -54,7 +54,7 @@
                     android:id="@+id/tvAyarlarSurum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="FilmSwipe"
+                    android:text="@string/app_name"
                     android:textColor="@color/settings_muted"
                     android:textSize="11sp" />
             </LinearLayout>
@@ -105,7 +105,7 @@
                             android:id="@+id/tvProfilKullaniciAdi"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Kullanıcı  •"
+                            android:text="@string/settings_user_placeholder"
                             android:textColor="@color/settings_text_primary"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -115,7 +115,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="Anonim hesap · e-posta gerekmez"
+                            android:text="@string/settings_anonymous_account"
                             android:textColor="@color/settings_muted"
                             android:textSize="11sp" />
                         <LinearLayout
@@ -130,7 +130,7 @@
                                 android:background="@drawable/settings_badge_background"
                                 android:paddingHorizontal="10dp"
                                 android:paddingVertical="4dp"
-                                android:text="●  Sinemasever"
+                                android:text="@string/settings_movie_buff_badge"
                                 android:textColor="@color/settings_purple_light"
                                 android:textSize="10sp" />
                             <!-- Yalnızca reklamsız sürüm satın alındıysa görünür. -->
@@ -144,7 +144,7 @@
                                 android:background="@drawable/settings_pro_badge"
                                 android:paddingHorizontal="8dp"
                                 android:paddingVertical="4dp"
-                                android:text="Pro"
+                                android:text="@string/settings_pro_badge"
                                 android:textColor="#120800"
                                 android:textSize="10sp"
                                 android:textStyle="bold" />
@@ -174,7 +174,7 @@
                             android:textColor="@color/settings_text_primary"
                             android:textSize="18sp"
                             android:textStyle="bold" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="DÜELLO" android:textColor="@color/settings_muted" android:textSize="9sp" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/settings_stat_duels" android:textColor="@color/settings_muted" android:textSize="9sp" />
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="0dp"
@@ -192,7 +192,7 @@
                             android:textColor="@color/settings_text_primary"
                             android:textSize="18sp"
                             android:textStyle="bold" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="EŞLEŞME" android:textColor="@color/settings_muted" android:textSize="9sp" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/settings_stat_matches" android:textColor="@color/settings_muted" android:textSize="9sp" />
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="0dp"
@@ -210,7 +210,7 @@
                             android:textColor="@color/settings_gold"
                             android:textSize="18sp"
                             android:textStyle="bold" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="UYUM" android:textColor="@color/settings_muted" android:textSize="9sp" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/settings_stat_compatibility" android:textColor="@color/settings_muted" android:textSize="9sp" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -223,7 +223,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginStart="4dp"
             android:layout_marginBottom="8dp"
-            android:text="PROFİL BİLGİLERİ"
+            android:text="@string/settings_section_profile"
             android:textColor="@color/settings_label"
             android:textSize="10sp"
             android:textStyle="bold" />
@@ -242,7 +242,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
-                    android:text="Kullanıcı Adı"
+                    android:text="@string/settings_username_label"
                     android:textColor="@color/settings_muted"
                     android:textSize="11sp" />
                 <!-- Kullanıcı adı giriş satırı -->
@@ -260,7 +260,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:background="@android:color/transparent"
-                        android:hint="Kullanıcı adı"
+                        android:hint="@string/settings_username_hint"
                         android:inputType="textPersonName"
                         android:padding="0dp"
                         android:singleLine="true"
@@ -275,7 +275,7 @@
                         app:backgroundTint="@null"
                         android:minWidth="0dp"
                         android:paddingHorizontal="12dp"
-                        android:text="▣  Kaydet"
+                        android:text="@string/settings_save_username"
                         android:textAllCaps="false"
                         android:textColor="@color/settings_on_accent"
                         android:textSize="11sp"
@@ -285,7 +285,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Film özlerinde ve swipe eşleşmelerinde diğer kullanıcılar bu ad görünür."
+                    android:text="@string/settings_username_info"
                     android:textColor="@color/settings_muted"
                     android:textSize="11sp" />
             </LinearLayout>
@@ -298,7 +298,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginStart="4dp"
             android:layout_marginBottom="8dp"
-            android:text="UYGULAMA TERCİHLERİ"
+            android:text="@string/settings_section_preferences"
             android:textColor="@color/settings_label"
             android:textSize="10sp"
             android:textStyle="bold" />
@@ -334,8 +334,8 @@
                         android:layout_marginStart="12dp"
                         android:layout_weight="1"
                         android:orientation="vertical">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Koyu Tema" android:textColor="@color/settings_text_primary" android:textSize="14sp" android:textStyle="bold" />
-                        <TextView android:id="@+id/tvKoyuTemaAciklama" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Sinematik gece modu aktif" android:textColor="@color/settings_muted" android:textSize="11sp" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/settings_dark_theme" android:textColor="@color/settings_text_primary" android:textSize="14sp" android:textStyle="bold" />
+                        <TextView android:id="@+id/tvKoyuTemaAciklama" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/settings_dark_theme_on" android:textColor="@color/settings_muted" android:textSize="11sp" />
                     </LinearLayout>
                     <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/switchKoyuTema"
@@ -353,7 +353,7 @@
                     android:background="@android:color/transparent"
                     android:gravity="start|center_vertical"
                     android:paddingHorizontal="14dp"
-                    android:text="♛  Reklam Gizlilik Seçenekleri"
+                    android:text="@string/settings_ad_privacy_options"
                     android:textAllCaps="false"
                     android:textColor="@color/settings_text_primary"
                     android:textSize="13sp"
@@ -391,7 +391,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Film Swipe Plus"
+                        android:text="@string/settings_plus_title"
                         android:textColor="@color/settings_on_accent"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -402,7 +402,7 @@
                         android:background="@drawable/settings_pro_badge"
                         android:paddingHorizontal="8dp"
                         android:paddingVertical="3dp"
-                        android:text="PRO"
+                        android:text="@string/settings_plus_badge"
                         android:textColor="#120800"
                         android:textSize="10sp"
                         android:textStyle="bold" />
@@ -411,7 +411,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
-                    android:text="Tek seferlik ödemeyle tüm reklamları kaldır"
+                    android:text="@string/settings_plus_description"
                     android:textColor="#C4A8FF"
                     android:textSize="11sp" />
             </LinearLayout>
@@ -423,7 +423,7 @@
                 app:backgroundTint="@null"
                 android:minWidth="0dp"
                 android:paddingHorizontal="12dp"
-                android:text="Reklamları Kaldır →"
+                android:text="@string/settings_remove_ads"
                 android:textAllCaps="false"
                 android:textColor="@color/settings_on_accent"
                 android:textSize="10sp"
@@ -449,11 +449,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_weight="1"
-                    android:text="Gizlilik Politikası"
+                    android:text="@string/settings_privacy_policy"
                     android:textColor="@color/settings_text_primary"
                     android:textSize="13sp" />
                 <Button
                     android:id="@+id/btnGizlilikPolitikasi"
+                    android:contentDescription="@string/settings_privacy_policy"
                     android:layout_width="32dp"
                     android:layout_height="50dp"
                     android:background="@android:color/transparent"
@@ -477,7 +478,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_weight="1"
-                    android:text="Kullanım Koşulları &amp; Lisanslar"
+                    android:text="@string/settings_terms_licenses"
                     android:textColor="@color/settings_text_primary"
                     android:textSize="13sp" />
                 <TextView
@@ -496,7 +497,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
             android:gravity="center"
-            android:text="Film verileri ve posterler: TMDB\n\nThis product uses the TMDB API but is not endorsed or certified\nby TMDB."
+            android:text="@string/settings_tmdb_note"
             android:textColor="@color/settings_muted"
             android:textSize="10sp" />
 
@@ -508,7 +509,7 @@
             android:layout_marginTop="22dp"
             android:background="@drawable/settings_primary_button"
             app:backgroundTint="@null"
-            android:text="⇥  ÇIKIŞ YAP"
+            android:text="@string/settings_sign_out_button"
             android:textColor="@color/settings_on_accent"
             android:textSize="13sp"
             android:textStyle="bold" />

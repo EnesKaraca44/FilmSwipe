@@ -29,6 +29,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:importantForAccessibility="no"
             android:text="⚡"
             android:textSize="64sp"
             android:layout_marginBottom="16dp" />
@@ -36,7 +37,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hızlı Düello"
+            android:text="@string/duel_quick_title"
             android:textColor="@color/text_primary"
             android:textSize="24sp"
             android:textStyle="bold"
@@ -45,7 +46,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Partner aranıyor..."
+            android:text="@string/duel_quick_searching_partner"
             android:textColor="@color/text_secondary"
             android:textSize="16sp"
             android:layout_marginBottom="24dp" />
@@ -72,7 +73,7 @@
             android:id="@+id/tvBeklemeZamani"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="00:15"
+            tools:text="00:15"
             android:textColor="@color/primary_medium"
             android:textSize="32sp"
             android:textStyle="bold"
@@ -81,7 +82,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="⏰ Bekleme süresi"
+            android:text="@string/duel_quick_wait_time"
             android:textColor="@color/text_secondary"
             android:textSize="14sp"
             android:alpha="0.8"
@@ -100,6 +101,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:importantForAccessibility="no"
                 android:text="👥 "
                 android:textSize="16sp" />
 
@@ -107,7 +109,7 @@
                 android:id="@+id/tvOnlineKullanici"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="12 kişi çevrimiçi"
+                tools:text="12 kişi çevrimiçi"
                 android:textColor="@color/text_white"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -127,7 +129,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="💡 Nasıl Çalışır?"
+            android:text="@string/duel_quick_how_title"
             android:textColor="@color/text_primary"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -136,7 +138,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="• Sistem seni başka bir kullanıcıyla eşleştirir\n• Popüler filmler arasından seçim yaparsınız\n• Hızlı ve eğlenceli deneyim!"
+            android:text="@string/duel_quick_how_body"
             android:textColor="@color/text_secondary"
             android:textSize="14sp"
             android:alpha="0.9"
@@ -159,7 +161,7 @@
             android:layout_marginBottom="8dp"
             android:background="@drawable/button_accent"
             android:elevation="6dp"
-            android:text="🔄 Tekrar Dene"
+            android:text="@string/duel_quick_retry"
             android:textColor="@color/text_white"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -174,7 +176,7 @@
             android:layout_marginBottom="8dp"
             android:background="@drawable/button_secondary"
             android:elevation="6dp"
-            android:text="❌ İptal Et"
+            android:text="@string/duel_quick_cancel"
             android:textColor="@color/text_white"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -186,7 +188,7 @@
             android:layout_height="48dp"
             android:background="@color/text_hint"
             android:elevation="2dp"
-            android:text="🏠 Ana Menü"
+            android:text="@string/duel_main_menu"
             android:textColor="@color/text_white"
             android:textSize="14sp" />
 

@@ -50,7 +50,8 @@ class HizliDuelloBeklemeFragment : Fragment() {
                 launch {
                     viewModel.queueSize.collect { size ->
                         // Eskiden sabit "12 kişi çevrimiçi" yazıyordu.
-                        binding.tvOnlineKullanici.text = "$size kişi eşleşme bekliyor"
+                        binding.tvOnlineKullanici.text =
+                            resources.getQuantityString(R.plurals.duel_quick_waiting_count, size, size)
                     }
                 }
                 launch {

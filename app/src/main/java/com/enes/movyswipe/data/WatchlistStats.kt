@@ -75,25 +75,33 @@ data class WatchlistStats(
         fun epochDay(timestamp: Long, timeZone: TimeZone = TimeZone.getDefault()): Long =
             (timestamp + timeZone.getOffset(timestamp)).floorDiv(DAY_MS)
 
-        /** "Bugün", "Dün", "3 gün önce", "2 hafta önce", "4 ay önce". */
-        fun relativeDayLabel(daysAgo: Int): String = when {
-            daysAgo <= 0 -> "Bugün"
-            daysAgo == 1 -> "Dün"
-            daysAgo < 7 -> "$daysAgo gün önce"
-            daysAgo < 30 -> "${daysAgo / 7} hafta önce"
-            daysAgo < 365 -> "${daysAgo / 30} ay önce"
-            else -> "${daysAgo / 365} yıl önce"
+        /**
+         * "Bugün", "Dün", "3 gün önce", "2 hafta önce", "4 ay önce" için birim + miktar.
+         * Metin UI katmanında string kaynaklarından üretilir (bu sınıf Android'den bağımsız kalır).
+         */
+        fun relativeDay(daysAgo: Int): RelativeDay = when {
+            daysAgo <= 0 -> RelativeDay(RelativeDay.Kind.TODAY, 0)
+            daysAgo == 1 -> RelativeDay(RelativeDay.Kind.YESTERDAY, 1)
+            daysAgo < 7 -> RelativeDay(RelativeDay.Kind.DAYS, daysAgo)
+            daysAgo < 30 -> RelativeDay(RelativeDay.Kind.WEEKS, daysAgo / 7)
+            daysAgo < 365 -> RelativeDay(RelativeDay.Kind.MONTHS, daysAgo / 30)
+            else -> RelativeDay(RelativeDay.Kind.YEARS, daysAgo / 365)
         }
     }
 }
 
-/** Listem sıralama seçenekleri (filtre butonu). */
-enum class WatchlistSort(val label: String) {
-    NEWEST("En yeni eklenen"),
-    OLDEST("En eski eklenen"),
-    TITLE("Ada göre (A-Z)"),
-    RATING("En yüksek puan"),
-    RELEASE("En yeni çıkan");
+/** Göreli zaman: [kind] cinsinden [amount] önce (TODAY/YESTERDAY için miktar önemsiz). */
+data class RelativeDay(val kind: Kind, val amount: Int) {
+    enum class Kind { TODAY, YESTERDAY, DAYS, WEEKS, MONTHS, YEARS }
+}
+
+/** Listem sıralama seçenekleri (filtre butonu). Görünen adlar UI katmanında (string kaynakları). */
+enum class WatchlistSort {
+    NEWEST,
+    OLDEST,
+    TITLE,
+    RATING,
+    RELEASE;
 
     fun sort(movies: List<WatchlistMovie>): List<WatchlistMovie> = when (this) {
         NEWEST -> movies.sortedByDescending { it.addedTimestamp }

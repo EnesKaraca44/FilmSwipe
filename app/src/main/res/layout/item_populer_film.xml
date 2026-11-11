@@ -22,7 +22,7 @@
             android:scaleType="centerCrop"
             android:src="@drawable/placeholder_movie_poster"
             android:background="@drawable/poster_shadow"
-            android:contentDescription="Film Posteri" />
+            android:contentDescription="@string/home_movie_poster" />
 
         <!-- Film Info Overlay -->
         <LinearLayout

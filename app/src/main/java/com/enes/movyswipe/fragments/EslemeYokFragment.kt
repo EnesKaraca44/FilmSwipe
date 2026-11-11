@@ -25,7 +25,8 @@ class EslemeYokFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         // Eskiden sabit "25 film kontrol edildi" yazıyordu; artık gerçek deste boyutu.
         binding.layoutIstatistik.isVisible = args.checkedCount > 0
-        binding.tvFilmSayisi.text = "${args.checkedCount} film kontrol edildi"
+        binding.tvFilmSayisi.text =
+            resources.getQuantityString(R.plurals.duel_no_match_checked_count, args.checkedCount, args.checkedCount)
 
         // Aksiyonlar ana menüye kadar geri yığını temizler (nav_host.xml'de popUpTo).
         binding.btnTekrarDene.setOnClickListener {

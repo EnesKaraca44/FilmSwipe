@@ -1,8 +1,10 @@
 package com.enes.movyswipe.viewmodels
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.enes.movyswipe.R
 import com.enes.movyswipe.data.MovieFilters
 import com.enes.movyswipe.data.QueueDeck
 import com.enes.movyswipe.data.Result
@@ -12,6 +14,7 @@ import com.enes.movyswipe.di.ApplicationScope
 import com.enes.movyswipe.util.AuthManager
 import com.enes.movyswipe.util.SafetyPrefs
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -36,13 +39,14 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class HizliDuelloBeklemeViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val firebaseRepository: FirebaseRepository,
     private val movieRepository: MovieRepository,
     private val safetyPrefs: SafetyPrefs,
     @ApplicationScope private val appScope: CoroutineScope
 ) : ViewModel() {
 
-    private val _matchmakingStatus = MutableStateFlow("Eşleşme aranıyor...")
+    private val _matchmakingStatus = MutableStateFlow(context.getString(R.string.duel_quick_status_searching))
     val matchmakingStatus = _matchmakingStatus.asStateFlow()
 
     private val _queueSize = MutableStateFlow(0)
@@ -68,18 +72,18 @@ class HizliDuelloBeklemeViewModel @Inject constructor(
         if (started) return
         started = true
         _canRetry.value = false
-        _matchmakingStatus.value = "Eşleşme aranıyor..."
+        _matchmakingStatus.value = context.getString(R.string.duel_quick_status_searching)
         viewModelScope.launch {
             val userId = myUserId ?: AuthManager.getCurrentUserId()
             if (userId == null) {
-                fail("Giriş yapılamadı. İnternet bağlantını kontrol et.")
+                fail(context.getString(R.string.duel_error_sign_in))
                 return@launch
             }
             myUserId = userId
 
             val prepared = deck ?: prepareDeck()
             if (prepared == null) {
-                fail("Film listesi alınamadı. İnternet bağlantını kontrol et.")
+                fail(context.getString(R.string.duel_error_movie_list))
                 return@launch
             }
             deck = prepared
@@ -95,7 +99,7 @@ class HizliDuelloBeklemeViewModel @Inject constructor(
                 inQueue = true
             } catch (e: Exception) {
                 Log.w(TAG, "Kuyruğa katılınamadı", e)
-                fail("Eşleştirme sunucusuna bağlanılamadı.")
+                fail(context.getString(R.string.duel_quick_error_server))
                 return@launch
             }
             listenToQueue(userId)
@@ -113,11 +117,12 @@ class HizliDuelloBeklemeViewModel @Inject constructor(
 
     private suspend fun prepareDeck(): QueueDeck? {
         val genres = listOf(
-            "Aksiyon" to MovieFilters.Genre.ACTION,
-            "Komedi" to MovieFilters.Genre.COMEDY,
-            "Korku" to MovieFilters.Genre.HORROR,
-            "Romantik" to MovieFilters.Genre.ROMANCE,
-            "Bilim Kurgu" to MovieFilters.Genre.SCIENCE_FICTION
+            // Tür adı odaya yazılır ve iki oyuncuya da gösterilir; kurucunun cihaz dilinde olur.
+            context.getString(R.string.duel_genre_action) to MovieFilters.Genre.ACTION,
+            context.getString(R.string.duel_genre_comedy) to MovieFilters.Genre.COMEDY,
+            context.getString(R.string.duel_genre_horror) to MovieFilters.Genre.HORROR,
+            context.getString(R.string.duel_genre_romance) to MovieFilters.Genre.ROMANCE,
+            context.getString(R.string.duel_genre_scifi) to MovieFilters.Genre.SCIENCE_FICTION
         ).shuffled()
         for ((name, id) in genres.take(2)) {
             val result = movieRepository.getMovies(MovieFilters.discover(listOf(id)))
@@ -139,7 +144,7 @@ class HizliDuelloBeklemeViewModel @Inject constructor(
                     inQueue = false
                     rejoinJob?.cancel()
                     firebaseRepository.clearMatchmakingData(userId)
-                    _matchmakingStatus.value = "Rakip bulundu!"
+                    _matchmakingStatus.value = context.getString(R.string.duel_quick_status_found)
                     _navigateToRoom.send(code)
                 }
         }
@@ -172,7 +177,7 @@ class HizliDuelloBeklemeViewModel @Inject constructor(
         try {
             firebaseRepository.joinQueue(userId, prepared)
             inQueue = true
-            _matchmakingStatus.value = "Eşleşme aranıyor..."
+            _matchmakingStatus.value = context.getString(R.string.duel_quick_status_searching)
         } catch (e: Exception) {
             Log.w(TAG, "Kuyruğa yeniden katılınamadı", e)
         }

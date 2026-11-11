@@ -88,7 +88,7 @@ class DuelloFragment : Fragment(), CardStackListener {
                 launch {
                     viewModel.genreName.collect { genreName ->
                         binding.tvGenreName.isVisible = genreName != null
-                        if (genreName != null) binding.tvGenreName.text = "Tür: $genreName"
+                        if (genreName != null) binding.tvGenreName.text = getString(R.string.duel_genre_label, genreName)
                     }
                 }
                 launch {
@@ -112,11 +112,13 @@ class DuelloFragment : Fragment(), CardStackListener {
                 launch {
                     combine(viewModel.waitingForPartner, viewModel.partnerOffline, ::Pair)
                         .collect { (waiting, offline) ->
-                            binding.tvPartnerStatus.text = when {
-                                offline -> "📶 Partnerin bağlantısı koptu..."
-                                waiting -> "⏳ Partnerin bitirmesi bekleniyor..."
-                                else -> "👤 Partner hazır"
-                            }
+                            binding.tvPartnerStatus.setText(
+                                when {
+                                    offline -> R.string.duel_partner_offline
+                                    waiting -> R.string.duel_partner_waiting
+                                    else -> R.string.duel_partner_ready
+                                }
+                            )
                             binding.btnLike.isEnabled = !waiting
                             binding.btnDislike.isEnabled = !waiting
                         }
@@ -132,10 +134,10 @@ class DuelloFragment : Fragment(), CardStackListener {
     private fun showPartnerLeftDialog() {
         if (partnerLeftDialog?.isShowing == true) return
         partnerLeftDialog = AlertDialog.Builder(requireContext())
-            .setTitle("Partnerin ayrıldı")
-            .setMessage("Partnerin odadan çıktı ya da bağlantısı koptu. Bu düello devam edemez.")
+            .setTitle(R.string.duel_partner_left_title)
+            .setMessage(R.string.duel_partner_left_message)
             .setCancelable(false)
-            .setPositiveButton("Ana menüye dön") { _, _ ->
+            .setPositiveButton(R.string.duel_partner_left_button) { _, _ ->
                 val nav = findNavController()
                 if (!nav.popBackStack(R.id.anaMenuFragment, false)) nav.navigateUp()
             }

@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.enes.movyswipe.R
 import com.enes.movyswipe.databinding.FragmentProfilOlusturBinding
 import com.enes.movyswipe.util.AuthManager
 
@@ -41,13 +42,13 @@ class ProfilOlusturFragment : Fragment() {
         if (nickname == null) {
             Toast.makeText(
                 requireContext(),
-                "Kullanıcı adı ${AuthManager.NICKNAME_MIN}-${AuthManager.NICKNAME_MAX} karakter olmalıdır.",
+                getString(R.string.settings_nickname_length_error, AuthManager.NICKNAME_MIN, AuthManager.NICKNAME_MAX),
                 Toast.LENGTH_SHORT
             ).show()
             return
         }
         AuthManager.saveUserNickname(requireContext(), nickname)
-        Toast.makeText(requireContext(), "Profil kaydedildi!", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), getString(R.string.settings_profile_saved), Toast.LENGTH_SHORT).show()
         navigateToMainMenu()
     }
 

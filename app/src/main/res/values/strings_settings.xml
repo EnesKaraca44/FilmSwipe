@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Settings / Profile screen -->
+    <string name="settings_back">Go back</string>
+    <string name="settings_title">Settings  •</string>
+    <string name="settings_version">FilmSwipe v%1$s</string>
+    <string name="settings_user_placeholder">User  •</string>
+    <string name="settings_nickname_header">%1$s  •</string>
+    <string name="settings_anonymous_account">Anonymous account · no email needed</string>
+    <string name="settings_movie_buff_badge">●  Movie Buff</string>
+    <string name="settings_pro_badge">Pro</string>
+    <string name="settings_stat_duels">DUELS</string>
+    <string name="settings_stat_matches">MATCHES</string>
+    <string name="settings_stat_compatibility">COMPATIBILITY</string>
+    <string name="settings_compatibility_rate">%1$d%%</string>
+    <string name="settings_section_profile">PROFILE INFO</string>
+    <string name="settings_username_label">Username</string>
+    <string name="settings_username_hint">Username</string>
+    <string name="settings_save_username">▣  Save</string>
+    <string name="settings_username_info">Other users see this name in movie summaries and swipe matches.</string>
+    <string name="settings_section_preferences">APP PREFERENCES</string>
+    <string name="settings_dark_theme">Dark Theme</string>
+    <string name="settings_dark_theme_on">Cinematic night mode on</string>
+    <string name="settings_dark_theme_off">Using light theme</string>
+    <string name="settings_ad_privacy_options">♛  Ad Privacy Options</string>
+    <string name="settings_plus_title">Film Swipe Plus</string>
+    <string name="settings_plus_badge">PRO</string>
+    <string name="settings_plus_description">Remove all ads with a one-time payment</string>
+    <string name="settings_remove_ads">Remove Ads →</string>
+    <string name="settings_ad_free_active">Ad-free version active ✓</string>
+    <string name="settings_privacy_policy">Privacy Policy</string>
+    <string name="settings_terms_licenses">Terms of Use &amp; Licenses</string>
+    <string name="settings_tmdb_note">Movie data and posters: TMDB\n\nThis product uses the TMDB API but is not endorsed or certified\nby TMDB.</string>
+    <string name="settings_sign_out_button">⇥  SIGN OUT</string>
+    <string name="settings_nickname_length_error">Username must be %1$d–%2$d characters.</string>
+    <string name="settings_nickname_updated">Username updated!</string>
+    <string name="settings_sign_out_title">Sign Out</string>
+    <string name="settings_sign_out_message">Are you sure you want to sign out? Your watchlist, stats and ad-free version stay on this device; your username will be deleted and you\'ll continue with a new identity.</string>
+    <string name="settings_sign_out_confirm">Yes, Sign Out</string>
+    <string name="settings_sign_out_cancel">No</string>
+
+    <!-- Create profile screen -->
+    <string name="settings_create_profile_title">Create Profile</string>
+    <string name="settings_avatar_description">Profile photo</string>
+    <string name="settings_choose_photo">CHOOSE PHOTO</string>
+    <string name="settings_name_label">Name</string>
+    <string name="settings_name_hint">Enter your name</string>
+    <string name="settings_username_handle_hint">\@username</string>
+    <string name="settings_bio_label">Bio</string>
+    <string name="settings_bio_hint">Tell us a little about yourself</string>
+    <string name="settings_save_profile">SAVE</string>
+    <string name="settings_skip_profile">MAYBE LATER</string>
+    <string name="settings_profile_saved">Profile saved!</string>
+
+    <!-- Billing -->
+    <string name="settings_purchase_completed">Thank you! Ads have been removed.</string>
+    <string name="settings_purchase_pending">Your payment is awaiting approval. Ads will be removed once it\'s approved.</string>
+    <string name="settings_purchase_unavailable">Purchases are unavailable right now. Please try again later.</string>
+    <string name="settings_purchase_failed">Purchase could not be completed (code %1$d).</string>
+
+    <!-- Random nickname generator (adjective + noun) -->
+    <string-array name="settings_nickname_adjectives">
+        <item>Swift</item>
+        <item>Mysterious</item>
+        <item>Cheerful</item>
+        <item>Brave</item>
+        <item>Sleepy</item>
+        <item>Curious</item>
+    </string-array>
+    <string-array name="settings_nickname_nouns">
+        <item>Lion</item>
+        <item>Tiger</item>
+        <item>Eagle</item>
+        <item>Panda</item>
+        <item>Fox</item>
+        <item>Wanderer</item>
+    </string-array>
+</resources>

@@ -124,8 +124,8 @@ class MainActivity : AppCompatActivity() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 billingManager.events.collect { event ->
                     val message = when (event) {
-                        BillingManager.Event.PurchaseCompleted -> "Teşekkürler! Reklamlar kaldırıldı."
-                        BillingManager.Event.PurchasePending -> "Ödemen onay bekliyor. Onaylanınca reklamlar kalkacak."
+                        BillingManager.Event.PurchaseCompleted -> getString(R.string.settings_purchase_completed)
+                        BillingManager.Event.PurchasePending -> getString(R.string.settings_purchase_pending)
                         is BillingManager.Event.Error -> event.message
                     }
                     Toast.makeText(this@MainActivity, message, Toast.LENGTH_LONG).show()

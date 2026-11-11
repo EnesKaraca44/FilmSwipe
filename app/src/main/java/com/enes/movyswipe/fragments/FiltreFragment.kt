@@ -27,7 +27,7 @@ class FiltreFragment : Fragment() {
 
         // Eskiden liste 2024'te bitiyordu; artık güncel yıldan başlıyor.
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        val yearOptions = listOf(ALL_YEARS) + (currentYear downTo 1950).map { it.toString() }
+        val yearOptions = listOf(getString(R.string.duel_filter_all_years)) + (currentYear downTo 1950).map { it.toString() }
         binding.spinnerYear.adapter =
             ArrayAdapter(requireContext(), R.layout.item_spinner_year, yearOptions).apply {
                 setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -55,9 +55,5 @@ class FiltreFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private companion object {
-        const val ALL_YEARS = "Tüm yıllar"
     }
 }

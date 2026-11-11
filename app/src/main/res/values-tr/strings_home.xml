@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Ana Menü -->
+    <string name="home_error_tap_to_retry">%1$s\n(Tekrar denemek için dokun)</string>
+    <string name="home_load_error">Filmler yüklenemedi. İnternet bağlantını kontrol et.</string>
+    <string name="home_no_overview">Özet bulunmuyor.</string>
+    <string name="home_added_to_watchlist">%1$s listeye eklendi!</string>
+    <string name="home_add_failed">Film eklenemedi.</string>
+    <string name="home_no_browser">Tarayıcı bulunamadı.</string>
+    <string name="home_movie_poster">Film Posteri</string>
+    <string name="home_genre_action">Aksiyon</string>
+    <string name="home_genre_drama">Drama</string>
+
+    <!-- Listem -->
+    <string name="watchlist_title">İzleme Listesi</string>
+    <string name="watchlist_subtitle">FilmSwipe Ortak Arşiv • v%1$s</string>
+    <string name="watchlist_search_button">Listede ara</string>
+    <string name="watchlist_sort_button">Sırala</string>
+    <string name="watchlist_search_hint">Listende film ara</string>
+    <string name="watchlist_close_search">Aramayı kapat</string>
+    <string name="watchlist_empty_title">Henüz film eklenmemiş</string>
+    <string name="watchlist_empty_message">Eşleştiğiniz filmler ve arkadaşlarınızla ortak beğendiğiniz tüm sinema yapımları burada listelenir.</string>
+    <string name="watchlist_start_duel">Düello Başlat &amp; Film Eşle</string>
+    <string name="watchlist_stats_header">İSTATİSTİKLER</string>
+    <string name="watchlist_stat_total">Toplam Film</string>
+    <string name="watchlist_stat_this_month">Bu Ay</string>
+    <string name="watchlist_stat_this_week">Bu Hafta</string>
+    <string name="watchlist_stat_hours_zero">0 saat</string>
+    <plurals name="watchlist_stat_hours_estimate">
+        <item quantity="one">≈%1$d saat</item>
+        <item quantity="other">≈%1$d saat</item>
+    </plurals>
+    <string name="watchlist_stat_added_today">+%1$d bugün</string>
+    <plurals name="watchlist_stat_streak">
+        <item quantity="one">Seri: %1$d gün</item>
+        <item quantity="other">Seri: %1$d gün</item>
+    </plurals>
+    <string name="watchlist_stats_up_to_date">Bu Hafta Güncel</string>
+    <string name="watchlist_stats_last_added">Son ekleme: %1$s</string>
+    <string name="watchlist_stats_no_data">Henüz veri yok</string>
+    <string name="watchlist_manage_header">LİSTE YÖNETİMİ</string>
+    <string name="watchlist_clear_list">Listeyi Temizle</string>
+    <string name="watchlist_clear_list_subtitle">Tüm kayıtlı film verilerini sıfırla</string>
+    <string name="watchlist_share_list">Listeyi Paylaş</string>
+    <string name="watchlist_share_list_subtitle">Arkadaşlarınla ortak link veya hikaye üret</string>
+    <string name="watchlist_invite_to_room">Film Odasına Davet Et</string>
+    <string name="watchlist_invite_to_room_subtitle">Oda kur, kodu arkadaşınla paylaş</string>
+    <string name="watchlist_remove_movie">Filmi listeden kaldır</string>
+    <string name="watchlist_added_ago">Eklendi • %1$s</string>
+    <string name="watchlist_my_movies_count">FİLMLERİM (%1$d)</string>
+    <string name="watchlist_results_count">SONUÇLAR (%1$d/%2$d)</string>
+    <string name="watchlist_no_search_results">“%1$s” ile eşleşen film yok.</string>
+
+    <string name="watchlist_sort_newest">En yeni eklenen</string>
+    <string name="watchlist_sort_oldest">En eski eklenen</string>
+    <string name="watchlist_sort_title">Ada göre (A-Z)</string>
+    <string name="watchlist_sort_rating">En yüksek puan</string>
+    <string name="watchlist_sort_release">En yeni çıkan</string>
+
+    <string name="watchlist_relative_today">Bugün</string>
+    <string name="watchlist_relative_yesterday">Dün</string>
+    <plurals name="watchlist_relative_days_ago">
+        <item quantity="one">%1$d gün önce</item>
+        <item quantity="other">%1$d gün önce</item>
+    </plurals>
+    <plurals name="watchlist_relative_weeks_ago">
+        <item quantity="one">%1$d hafta önce</item>
+        <item quantity="other">%1$d hafta önce</item>
+    </plurals>
+    <plurals name="watchlist_relative_months_ago">
+        <item quantity="one">%1$d ay önce</item>
+        <item quantity="other">%1$d ay önce</item>
+    </plurals>
+    <plurals name="watchlist_relative_years_ago">
+        <item quantity="one">%1$d yıl önce</item>
+        <item quantity="other">%1$d yıl önce</item>
+    </plurals>
+
+    <string name="watchlist_remove_title">Filmi Kaldır</string>
+    <string name="watchlist_remove_message">\'%1$s\' filmini izleme listenizden kaldırmak istediğinizden emin misiniz?</string>
+    <string name="watchlist_remove_confirm">Evet, Kaldır</string>
+    <string name="watchlist_movie_removed">Film kaldırıldı.</string>
+    <string name="watchlist_no">Hayır</string>
+    <string name="watchlist_cancel">Vazgeç</string>
+    <string name="watchlist_already_empty">Listeniz zaten boş.</string>
+    <string name="watchlist_nothing_to_search">Listende henüz aranacak film yok.</string>
+    <string name="watchlist_nothing_to_sort">Sıralamak için listende film bulunmuyor.</string>
+    <string name="watchlist_nothing_to_share">Paylaşmak için listenizde film bulunmuyor.</string>
+    <string name="watchlist_clear_message">İzleme listenizdeki tüm filmleri silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.</string>
+    <string name="watchlist_clear_confirm">Evet, Sil</string>
+    <string name="watchlist_cleared">İzleme listesi temizlendi.</string>
+    <string name="watchlist_share_option_story">Hikaye görseli oluştur</string>
+    <string name="watchlist_share_option_text">Metin ve link olarak paylaş</string>
+    <string name="watchlist_story_preparing">Hikaye görseli hazırlanıyor…</string>
+    <string name="watchlist_story_failed">Görsel oluşturulamadı. Metin olarak paylaşmayı dene.</string>
+    <string name="watchlist_share_image_text">FilmSwipe İzleme Listem 🎬 %1$s</string>
+    <string name="watchlist_share_chooser_title">İzleme Listeni Paylaş</string>
+    <string name="watchlist_share_no_app">Paylaşım için uygun uygulama bulunamadı.</string>
+
+    <!-- Paylaşım metni ve hikaye görseli -->
+    <plurals name="watchlist_share_text_header">
+        <item quantity="one">🎬 FilmSwipe İzleme Listem (%1$d film)</item>
+        <item quantity="other">🎬 FilmSwipe İzleme Listem (%1$d film)</item>
+    </plurals>
+    <string name="watchlist_share_text_footer">Birlikte film seçelim! FilmSwipe\'ı indir: %1$s</string>
+    <string name="watchlist_story_title">İzleme Listem</string>
+    <plurals name="watchlist_story_subtitle">
+        <item quantity="one">%1$d film • FilmSwipe Ortak Arşiv</item>
+        <item quantity="other">%1$d film • FilmSwipe Ortak Arşiv</item>
+    </plurals>
+    <plurals name="watchlist_story_more">
+        <item quantity="one">+%1$d film daha</item>
+        <item quantity="other">+%1$d film daha</item>
+    </plurals>
+    <string name="watchlist_story_footer">FilmSwipe ile birlikte film seçelim!</string>
+    <string name="watchlist_story_search_store">Google Play\'de \"FilmSwipe\" ara</string>
+</resources>

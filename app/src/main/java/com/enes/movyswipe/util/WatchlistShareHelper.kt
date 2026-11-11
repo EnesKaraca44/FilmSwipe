@@ -14,6 +14,7 @@ import android.text.TextPaint
 import android.text.TextUtils
 import androidx.core.content.FileProvider
 import com.enes.movyswipe.BuildConfig
+import com.enes.movyswipe.R
 import com.enes.movyswipe.data.MovieFormat
 import com.enes.movyswipe.data.WatchlistMovie
 import java.io.File
@@ -27,18 +28,20 @@ object WatchlistShareHelper {
     val storeLink: String
         get() = "https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}"
 
-    fun buildShareText(movies: List<WatchlistMovie>): String = buildString {
-        append("🎬 FilmSwipe İzleme Listem (${movies.size} film)\n\n")
+    fun buildShareText(context: Context, movies: List<WatchlistMovie>): String = buildString {
+        append(context.resources.getQuantityString(R.plurals.watchlist_share_text_header, movies.size, movies.size))
+        append("\n\n")
         movies.forEachIndexed { index, movie ->
             val year = MovieFormat.releaseYear(movie.releaseDate)?.let { " ($it)" }.orEmpty()
             append("${index + 1}. ${movie.title}$year\n")
         }
-        append("\nBirlikte film seçelim! FilmSwipe'ı indir: $storeLink")
+        append("\n")
+        append(context.getString(R.string.watchlist_share_text_footer, storeLink))
     }
 
     /** Hikaye görselini önbelleğe yazar ve paylaşılabilir content:// adresini döndürür. Arka planda çağır. */
     fun createStoryImage(context: Context, movies: List<WatchlistMovie>): Uri {
-        val bitmap = renderStory(movies)
+        val bitmap = renderStory(context, movies)
         val dir = File(context.cacheDir, SHARE_DIR).apply { mkdirs() }
         val file = File(dir, "filmswipe_izleme_listem.png")
         file.outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
@@ -51,7 +54,7 @@ object WatchlistShareHelper {
     private const val HEIGHT = 1920
     private const val MAX_ROWS = 7
 
-    private fun renderStory(movies: List<WatchlistMovie>): Bitmap {
+    private fun renderStory(context: Context, movies: List<WatchlistMovie>): Bitmap {
         val bitmap = Bitmap.createBitmap(WIDTH, HEIGHT, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         val w = WIDTH.toFloat()
@@ -70,9 +73,10 @@ object WatchlistShareHelper {
 
         // Başlık
         val titlePaint = textPaint(0xFFF5F3FF.toInt(), 92f, bold)
-        canvas.drawText("İzleme Listem", margin, 280f, titlePaint)
-        canvas.drawCircle(margin + titlePaint.measureText("İzleme Listem") + 34f, 252f, 14f, Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0xFFA855F7.toInt() })
-        canvas.drawText("${movies.size} film • FilmSwipe Ortak Arşiv", margin, 350f, textPaint(0xFF9A9CB3.toInt(), 40f))
+        val storyTitle = context.getString(R.string.watchlist_story_title)
+        canvas.drawText(storyTitle, margin, 280f, titlePaint)
+        canvas.drawCircle(margin + titlePaint.measureText(storyTitle) + 34f, 252f, 14f, Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0xFFA855F7.toInt() })
+        canvas.drawText(context.resources.getQuantityString(R.plurals.watchlist_story_subtitle, movies.size, movies.size), margin, 350f, textPaint(0xFF9A9CB3.toInt(), 40f))
 
         // Film satırları
         val cardPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0xFF15162A.toInt() }
@@ -113,13 +117,13 @@ object WatchlistShareHelper {
 
         val remaining = movies.size - MAX_ROWS
         if (remaining > 0) {
-            canvas.drawText("+$remaining film daha", w / 2, top + 50f, textPaint(0xFFA78BFA.toInt(), 40f, bold).apply { textAlign = Paint.Align.CENTER })
+            canvas.drawText(context.resources.getQuantityString(R.plurals.watchlist_story_more, remaining, remaining), w / 2, top + 50f, textPaint(0xFFA78BFA.toInt(), 40f, bold).apply { textAlign = Paint.Align.CENTER })
         }
 
         // Alt bilgi
         canvas.drawRect(margin, h - 230f, w - margin, h - 227f, Paint().apply { color = 0xFF23253A.toInt() })
-        canvas.drawText("FilmSwipe ile birlikte film seçelim!", w / 2, h - 150f, textPaint(0xFFF5F3FF.toInt(), 44f, bold).apply { textAlign = Paint.Align.CENTER })
-        canvas.drawText("Google Play'de \"FilmSwipe\" ara", w / 2, h - 90f, textPaint(0xFFA78BFA.toInt(), 36f).apply { textAlign = Paint.Align.CENTER })
+        canvas.drawText(context.getString(R.string.watchlist_story_footer), w / 2, h - 150f, textPaint(0xFFF5F3FF.toInt(), 44f, bold).apply { textAlign = Paint.Align.CENTER })
+        canvas.drawText(context.getString(R.string.watchlist_story_search_store), w / 2, h - 90f, textPaint(0xFFA78BFA.toInt(), 36f).apply { textAlign = Paint.Align.CENTER })
 
         return bitmap
     }

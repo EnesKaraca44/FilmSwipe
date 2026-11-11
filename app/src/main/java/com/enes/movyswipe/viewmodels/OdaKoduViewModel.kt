@@ -1,7 +1,10 @@
 package com.enes.movyswipe.viewmodels
 
+import android.content.Context
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.enes.movyswipe.R
 import com.enes.movyswipe.data.MovieFilters
 import com.enes.movyswipe.data.Result
 import com.enes.movyswipe.data.repository.FirebaseRepository
@@ -9,6 +12,7 @@ import com.enes.movyswipe.data.repository.MovieRepository
 import com.enes.movyswipe.di.ApplicationScope
 import com.enes.movyswipe.util.AuthManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,6 +24,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OdaKoduViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val movieRepository: MovieRepository,
     private val firebaseRepository: FirebaseRepository,
     @ApplicationScope private val appScope: CoroutineScope
@@ -60,15 +65,15 @@ class OdaKoduViewModel @Inject constructor(
             _error.value = null
             try {
                 val hostId = AuthManager.getCurrentUserId()
-                    ?: throw IllegalStateException("Giriş yapılamadı. İnternet bağlantını kontrol et.")
+                    ?: throw RoomSetupException(R.string.duel_error_sign_in)
                 val filters = MovieFilters.discover(genres.toList(), startYear)
                 val movies = when (val r = movieRepository.getMovies(filters)) {
                     is Result.Success -> r.data
-                    is Result.Error -> throw IllegalStateException("Film listesi alınamadı. İnternet bağlantını kontrol et.")
+                    is Result.Error -> throw RoomSetupException(R.string.duel_error_movie_list)
                     Result.Loading -> emptyList()
                 }
                 if (movies.isEmpty()) {
-                    throw IllegalStateException("Bu filtrelere uygun film bulunamadı. Filtreleri genişlet.")
+                    throw RoomSetupException(R.string.duel_error_no_movies_for_filters)
                 }
 
                 val code = firebaseRepository.createRoom(
@@ -86,7 +91,7 @@ class OdaKoduViewModel @Inject constructor(
                 _navigateToDuel.send(code)
             } catch (e: Exception) {
                 // started true kalır: ekran döndürmede kendiliğinden yeniden denenmez, "Tekrar dene" beklenir.
-                _error.value = e.message ?: "Oda oluşturulamadı."
+                _error.value = context.getString((e as? RoomSetupException)?.messageRes ?: R.string.duel_error_create_room)
             } finally {
                 _isLoading.value = false
             }
@@ -101,4 +106,7 @@ class OdaKoduViewModel @Inject constructor(
         started = false
         createRoomFromFilters(genres, startYear)
     }
+
+    /** Kullanıcıya gösterilecek, yerelleştirilmiş oda kurma hatası. */
+    private class RoomSetupException(@StringRes val messageRes: Int) : Exception()
 }

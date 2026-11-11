@@ -27,9 +27,9 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/chat_back"
             android:src="@drawable/ic_arrow_back"
-            app:tint="@color/text_white"
-            tools:ignore="ContentDescription" />
+            app:tint="@color/text_white" />
 
         <!-- Başlık Bölümü -->
         <LinearLayout
@@ -41,7 +41,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Film Hakkında Sohbet"
+                android:text="@string/chat_title"
                 android:textColor="@color/text_white"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -65,9 +65,9 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/chat_safety_options"
             android:src="@drawable/ic_more_vert"
-            app:tint="@color/text_white"
-            tools:ignore="ContentDescription" />
+            app:tint="@color/text_white" />
 
     </LinearLayout>
 
@@ -92,7 +92,7 @@
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
             android:background="@drawable/card_background"
-            android:hint="Mesajınızı yazın..."
+            android:hint="@string/chat_message_hint"
             android:inputType="textCapSentences|textMultiLine"
             android:maxLines="4"
             android:minHeight="48dp"
@@ -107,6 +107,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@drawable/button_primary"
+            android:contentDescription="@string/chat_send"
             android:elevation="6dp"
             android:text="➤"
             android:textColor="@color/text_white"
@@ -153,7 +154,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
-            android:text="Sohbeti Başlatın!"
+            android:text="@string/chat_empty_title"
             android:textColor="@color/text_primary"
             android:textSize="22sp"
             android:textStyle="bold" />
@@ -164,7 +165,7 @@
             android:alpha="0.9"
             android:gravity="center"
             android:lineSpacingExtra="4dp"
-            android:text="Eşleştiniz film hakkında\nkonuşmaya başlayın"
+            android:text="@string/chat_empty_subtitle"
             android:textColor="@color/text_secondary"
             android:textSize="16sp" />
     </LinearLayout>

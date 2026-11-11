@@ -54,7 +54,7 @@ class AnaMenuFragment : Fragment() {
         setupActionCards()
         setupRecyclerView()
         observeViewModel()
-        binding.tvWelcomeMessage.text = "Hoş geldin, ${AuthManager.getUserNickname(requireContext())}!"
+        binding.tvWelcomeMessage.text = getString(R.string.welcome_message, AuthManager.getUserNickname(requireContext()))
         binding.layoutError.setOnClickListener { viewModel.loadData(force = true) }
         viewModel.loadData()
     }
@@ -62,7 +62,7 @@ class AnaMenuFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         // Ayarlar'da ad değiştirilmiş olabilir.
-        binding.tvWelcomeMessage.text = "Hoş geldin, ${AuthManager.getUserNickname(requireContext())}!"
+        binding.tvWelcomeMessage.text = getString(R.string.welcome_message, AuthManager.getUserNickname(requireContext()))
     }
 
     private fun setupRecyclerView() {
@@ -83,7 +83,7 @@ class AnaMenuFragment : Fragment() {
                         val hasError = !errorMessage.isNullOrBlank()
                         binding.layoutError.isVisible = hasError
                         binding.cardViewPopulerFilmler.isVisible = !hasError
-                        if (hasError) binding.tvErrorMessage.text = "$errorMessage\n(Tekrar denemek için dokun)"
+                        if (hasError) binding.tvErrorMessage.text = getString(R.string.home_error_tap_to_retry, errorMessage)
                     }
                 }
                 launch { viewModel.shouldShowAds.collect { show -> updateBanner(show) } }
@@ -122,7 +122,7 @@ class AnaMenuFragment : Fragment() {
         val poster = dialog.findViewById<ImageView>(R.id.imageViewDialogPoster)
         dialog.findViewById<TextView>(R.id.textViewDialogTitle).text = movie.displayTitle
         dialog.findViewById<TextView>(R.id.textViewDialogOverview).text =
-            movie.overview?.takeIf { it.isNotBlank() } ?: "Özet bulunmuyor."
+            movie.overview?.takeIf { it.isNotBlank() } ?: getString(R.string.home_no_overview)
         Glide.with(this)
             .load(MovieFormat.posterUrl(movie.posterPath))
             .placeholder(R.drawable.placeholder_movie_poster)
@@ -132,8 +132,11 @@ class AnaMenuFragment : Fragment() {
         dialog.findViewById<View>(R.id.textViewDialogClose).setOnClickListener { dialog.dismiss() }
         dialog.findViewById<LinearLayout>(R.id.layoutWatchlistButton).setOnClickListener {
             val appContext = requireContext().applicationContext
+            // Metinler fragment'ın (doğru dil ayarlı) context'inden, dialog kapanmadan alınır.
+            val addedMsg = getString(R.string.home_added_to_watchlist, movie.displayTitle)
+            val failedMsg = getString(R.string.home_add_failed)
             viewModel.addMovieToWatchlist(movie) { ok ->
-                val msg = if (ok) "${movie.displayTitle} listeye eklendi!" else "Film eklenemedi."
+                val msg = if (ok) addedMsg else failedMsg
                 Toast.makeText(appContext, msg, Toast.LENGTH_SHORT).show()
             }
             dialog.dismiss()
@@ -142,7 +145,7 @@ class AnaMenuFragment : Fragment() {
             try {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.themoviedb.org/movie/${movie.id}")))
             } catch (e: ActivityNotFoundException) {
-                Toast.makeText(requireContext(), "Tarayıcı bulunamadı.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.home_no_browser), Toast.LENGTH_SHORT).show()
             }
         }
         dialog.show()

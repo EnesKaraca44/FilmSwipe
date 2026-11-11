@@ -17,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.enes.movyswipe.BuildConfig
 import com.enes.movyswipe.MainActivity
+import com.enes.movyswipe.R
 import com.enes.movyswipe.databinding.FragmentAyarlarBinding
 import com.enes.movyswipe.util.AuthManager
 import com.enes.movyswipe.util.ThemePrefs
@@ -39,7 +40,7 @@ class AyarlarFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.etKullaniciAdiAyarlar.setText(viewModel.getCurrentNickname())
-        binding.tvAyarlarSurum.text = "FilmSwipe v${BuildConfig.VERSION_NAME}"
+        binding.tvAyarlarSurum.text = getString(R.string.settings_version, BuildConfig.VERSION_NAME)
         setupThemeSwitch()
         setupClickListeners()
         observeState()
@@ -65,7 +66,8 @@ class AyarlarFragment : Fragment() {
     }
 
     private fun updateThemeDescription(dark: Boolean) {
-        binding.tvKoyuTemaAciklama.text = if (dark) "Sinematik gece modu aktif" else "Açık tema kullanılıyor"
+        binding.tvKoyuTemaAciklama.text =
+            getString(if (dark) R.string.settings_dark_theme_on else R.string.settings_dark_theme_off)
     }
 
     private fun setupClickListeners() {
@@ -89,10 +91,10 @@ class AyarlarFragment : Fragment() {
         binding.btnKullaniciAdiKaydet.setOnClickListener {
             val saved = viewModel.saveNewNickname(binding.etKullaniciAdiAyarlar.text.toString())
             val message = if (saved == null) {
-                "Kullanıcı adı ${AuthManager.NICKNAME_MIN}-${AuthManager.NICKNAME_MAX} karakter olmalıdır."
+                getString(R.string.settings_nickname_length_error, AuthManager.NICKNAME_MIN, AuthManager.NICKNAME_MAX)
             } else {
                 binding.etKullaniciAdiAyarlar.setText(saved)
-                "Kullanıcı adı güncellendi!"
+                getString(R.string.settings_nickname_updated)
             }
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         }
@@ -104,22 +106,24 @@ class AyarlarFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewModel.nickname.collect { nickname ->
-                        binding.tvProfilKullaniciAdi.text = "$nickname  •"
+                        binding.tvProfilKullaniciAdi.text = getString(R.string.settings_nickname_header, nickname)
                     }
                 }
                 launch {
                     viewModel.userStats.collect { stats ->
                         binding.tvDuelloSayisi.text = stats.duels.toString()
                         binding.tvEslesmeSayisi.text = stats.matches.toString()
-                        binding.tvUyumOrani.text = "%${stats.compatibilityRate}"
+                        binding.tvUyumOrani.text =
+                            getString(R.string.settings_compatibility_rate, stats.compatibilityRate)
                     }
                 }
                 launch {
                     viewModel.isPremium.collect { premium ->
                         binding.tvProRozet.isVisible = premium
                         binding.btnReklamlariKaldir.isEnabled = !premium
-                        binding.btnReklamlariKaldir.text =
-                            if (premium) "Reklamsız sürüm aktif ✓" else "Reklamları Kaldır →"
+                        binding.btnReklamlariKaldir.text = getString(
+                            if (premium) R.string.settings_ad_free_active else R.string.settings_remove_ads
+                        )
                     }
                 }
                 launch {
@@ -131,19 +135,16 @@ class AyarlarFragment : Fragment() {
 
     private fun showSignOutConfirmationDialog() {
         AlertDialog.Builder(requireContext())
-            .setTitle("Çıkış Yap")
-            .setMessage(
-                "Çıkış yapmak istediğinden emin misin? İzleme listen, istatistiklerin ve reklamsız sürüm " +
-                    "bu cihazda kalır; kullanıcı adın silinir ve yeni bir kimlikle devam edersin."
-            )
-            .setPositiveButton("Evet, Çıkış Yap") { _, _ ->
+            .setTitle(R.string.settings_sign_out_title)
+            .setMessage(R.string.settings_sign_out_message)
+            .setPositiveButton(R.string.settings_sign_out_confirm) { _, _ ->
                 viewModel.signOut()
                 val intent = Intent(requireActivity(), MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
                 requireActivity().finish()
             }
-            .setNegativeButton("Hayır", null)
+            .setNegativeButton(R.string.settings_sign_out_cancel, null)
             .show()
     }
 

@@ -39,7 +39,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="İzleme Listesi"
+                        android:text="@string/watchlist_title"
                         android:textColor="@color/wl_text_primary"
                         android:textSize="23sp"
                         android:textStyle="bold" />
@@ -67,7 +67,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="@drawable/watchlist_icon_circle"
-                android:contentDescription="Listede ara"
+                android:contentDescription="@string/watchlist_search_button"
                 android:padding="10dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_wl_search"
@@ -79,7 +79,7 @@
                 android:layout_height="40dp"
                 android:layout_marginStart="10dp"
                 android:background="@drawable/watchlist_icon_circle"
-                android:contentDescription="Sırala"
+                android:contentDescription="@string/watchlist_sort_button"
                 android:padding="10dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_wl_tune"
@@ -114,7 +114,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_weight="1"
                 android:background="@null"
-                android:hint="Listende film ara"
+                android:hint="@string/watchlist_search_hint"
                 android:imeOptions="actionSearch"
                 android:importantForAutofill="no"
                 android:inputType="text"
@@ -128,7 +128,7 @@
                 android:layout_width="34dp"
                 android:layout_height="34dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Aramayı kapat"
+                android:contentDescription="@string/watchlist_close_search"
                 android:padding="8dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_wl_close"
@@ -175,7 +175,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
-                android:text="Henüz film eklenmemiş"
+                android:text="@string/watchlist_empty_title"
                 android:textColor="@color/wl_text_primary"
                 android:textSize="19sp"
                 android:textStyle="bold" />
@@ -186,7 +186,7 @@
                 android:layout_marginTop="8dp"
                 android:gravity="center"
                 android:lineSpacingExtra="3dp"
-                android:text="Eşleştiğiniz filmler ve arkadaşlarınızla ortak beğendiğiniz tüm sinema yapımları burada listelenir."
+                android:text="@string/watchlist_empty_message"
                 android:textColor="@color/wl_text_muted"
                 android:textSize="13sp" />
 
@@ -212,7 +212,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="Düello Başlat &amp; Film Eşle"
+                    android:text="@string/watchlist_start_duel"
                     android:textColor="@color/wl_on_accent"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -306,7 +306,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:letterSpacing="0.06"
-                android:text="İSTATİSTİKLER"
+                android:text="@string/watchlist_stats_header"
                 android:textColor="@color/wl_label"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -352,7 +352,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
-                    android:text="Toplam Film"
+                    android:text="@string/watchlist_stat_total"
                     android:textColor="@color/wl_text_secondary"
                     android:textSize="12sp"
                     android:textStyle="bold" />
@@ -366,7 +366,7 @@
                     android:maxLines="1"
                     android:paddingHorizontal="8dp"
                     android:paddingVertical="2dp"
-                    android:text="0 saat"
+                    android:text="@string/watchlist_stat_hours_zero"
                     android:textColor="@color/wl_text_muted"
                     android:textSize="10sp" />
             </LinearLayout>
@@ -396,7 +396,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
-                    android:text="Bu Ay"
+                    android:text="@string/watchlist_stat_this_month"
                     android:textColor="@color/wl_text_secondary"
                     android:textSize="12sp"
                     android:textStyle="bold" />
@@ -410,7 +410,7 @@
                     android:maxLines="1"
                     android:paddingHorizontal="8dp"
                     android:paddingVertical="2dp"
-                    android:text="+0 bugün"
+                    tools:text="+0 bugün"
                     android:textColor="@color/wl_pink"
                     android:textSize="10sp" />
             </LinearLayout>
@@ -440,7 +440,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
-                    android:text="Bu Hafta"
+                    android:text="@string/watchlist_stat_this_week"
                     android:textColor="@color/wl_text_secondary"
                     android:textSize="12sp"
                     android:textStyle="bold" />
@@ -454,7 +454,7 @@
                     android:maxLines="1"
                     android:paddingHorizontal="8dp"
                     android:paddingVertical="2dp"
-                    android:text="Seri: 0 gün"
+                    tools:text="Seri: 0 gün"
                     android:textColor="@color/wl_green"
                     android:textSize="10sp" />
             </LinearLayout>
@@ -466,7 +466,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:letterSpacing="0.06"
-            android:text="LİSTE YÖNETİMİ"
+            android:text="@string/watchlist_manage_header"
             android:textColor="@color/wl_label"
             android:textSize="12sp"
             android:textStyle="bold" />
@@ -487,11 +487,11 @@
 
                 <TextView
                     style="@style/Widget.FilmSwipe.Watchlist.RowTitle"
-                    android:text="Listeyi Temizle" />
+                    android:text="@string/watchlist_clear_list" />
 
                 <TextView
                     style="@style/Widget.FilmSwipe.Watchlist.RowSubtitle"
-                    android:text="Tüm kayıtlı film verilerini sıfırla" />
+                    android:text="@string/watchlist_clear_list_subtitle" />
             </LinearLayout>
 
             <ImageView style="@style/Widget.FilmSwipe.Watchlist.RowChevron" />
@@ -513,11 +513,11 @@
 
                 <TextView
                     style="@style/Widget.FilmSwipe.Watchlist.RowTitle"
-                    android:text="Listeyi Paylaş" />
+                    android:text="@string/watchlist_share_list" />
 
                 <TextView
                     style="@style/Widget.FilmSwipe.Watchlist.RowSubtitle"
-                    android:text="Arkadaşlarınla ortak link veya hikaye üret" />
+                    android:text="@string/watchlist_share_list_subtitle" />
             </LinearLayout>
 
             <ImageView style="@style/Widget.FilmSwipe.Watchlist.RowChevron" />
@@ -539,11 +539,11 @@
 
                 <TextView
                     style="@style/Widget.FilmSwipe.Watchlist.RowTitle"
-                    android:text="Film Odasına Davet Et" />
+                    android:text="@string/watchlist_invite_to_room" />
 
                 <TextView
                     style="@style/Widget.FilmSwipe.Watchlist.RowSubtitle"
-                    android:text="Oda kur, kodu arkadaşınla paylaş" />
+                    android:text="@string/watchlist_invite_to_room_subtitle" />
             </LinearLayout>
 
             <ImageView style="@style/Widget.FilmSwipe.Watchlist.RowChevron" />

@@ -1,8 +1,10 @@
 package com.enes.movyswipe.viewmodels
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.enes.movyswipe.R
 import com.enes.movyswipe.data.DuelResult
 import com.enes.movyswipe.data.Movie
 import com.enes.movyswipe.data.Result
@@ -12,6 +14,7 @@ import com.enes.movyswipe.data.repository.MatchState
 import com.enes.movyswipe.data.repository.MovieRepository
 import com.enes.movyswipe.util.AuthManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,6 +26,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DuelloViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val movieRepository: MovieRepository,
     private val firebaseRepository: FirebaseRepository
 ) : ViewModel() {
@@ -88,7 +92,7 @@ class DuelloViewModel @Inject constructor(
             val uid = userId ?: AuthManager.getCurrentUserId()
             userId = uid
             if (uid == null) {
-                _error.value = "Giriş yapılamadı. İnternet bağlantını kontrol et."
+                _error.value = context.getString(R.string.duel_error_sign_in)
                 _isLoading.value = false
                 return@launch
             }
@@ -99,7 +103,7 @@ class DuelloViewModel @Inject constructor(
                     _genreName.value = info.genreName
                     // Filmleri sırayla değil, paralel çekiyoruz (20 film ≈ 1 istek süresi).
                     val movies = movieRepository.getMovieDetailsList(info.movieDeck)
-                    if (movies.isEmpty()) _error.value = "Filmler yüklenemedi. İnternet bağlantını kontrol et."
+                    if (movies.isEmpty()) _error.value = context.getString(R.string.duel_error_movies_load)
                     _movies.value = movies
                     if (!listeningToRoom) {
                         listeningToRoom = true
@@ -107,7 +111,10 @@ class DuelloViewModel @Inject constructor(
                         trackPresence(code, uid, info)
                     }
                 }
-                is Result.Error -> _error.value = roomResult.exception.message ?: "Oda yüklenemedi."
+                is Result.Error -> _error.value = context.getString(
+                    if (roomResult.exception is FirebaseRepository.RoomNotFoundException) R.string.duel_error_room_not_found
+                    else R.string.duel_error_room_load
+                )
                 Result.Loading -> Unit
             }
             _isLoading.value = false

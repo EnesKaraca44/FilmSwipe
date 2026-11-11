@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Filtre -->
+    <string name="duel_filter_back_cd">Geri dön</string>
+    <string name="duel_filter_title">Film Filtreleri</string>
+    <string name="duel_filter_genres_title">Film Türleri</string>
+    <string name="duel_genre_action">Aksiyon</string>
+    <string name="duel_genre_comedy">Komedi</string>
+    <string name="duel_genre_drama">Dram</string>
+    <string name="duel_genre_scifi">Bilim Kurgu</string>
+    <string name="duel_genre_horror">Korku</string>
+    <string name="duel_genre_romance">Romantik</string>
+    <string name="duel_filter_min_year_title">Minimum Çıkış Yılı</string>
+    <string name="duel_filter_min_year_subtitle">Hangi yıldan sonraki filmler?</string>
+    <string name="duel_filter_all_years">Tüm yıllar</string>
+    <string name="duel_filter_start">🚀 DÜELLOYU BAŞLAT</string>
+
+    <!-- Oda kodu (kurucu) -->
+    <string name="duel_room_created_title">🏠 Oda Kuruldu!</string>
+    <string name="duel_room_show_code">Arkadaşına bu kodu göster</string>
+    <string name="duel_room_copy">📋 Kopyala</string>
+    <string name="duel_room_waiting_partner">⏳ Partnerin bekleniyor...</string>
+    <string name="duel_room_auto_start">Arkadaşın kodu girip odaya katıldığında\ndüello otomatik başlayacak</string>
+    <string name="duel_room_cancel">❌ Odayı İptal Et</string>
+    <string name="duel_share_room_text">FilmSwipe\'ta film düellosuna gel! Oda kodu: %1$s</string>
+    <string name="duel_share_room_chooser">Oda kodunu paylaş</string>
+    <string name="duel_room_partner_joined">Partnerin katıldı, düello başlıyor!</string>
+    <string name="duel_error_sign_in">Giriş yapılamadı. İnternet bağlantını kontrol et.</string>
+    <string name="duel_error_movie_list">Film listesi alınamadı. İnternet bağlantını kontrol et.</string>
+    <string name="duel_error_no_movies_for_filters">Bu filtrelere uygun film bulunamadı. Filtreleri genişlet.</string>
+    <string name="duel_error_create_room">Oda oluşturulamadı.</string>
+
+    <!-- Odaya katıl -->
+    <string name="duel_join_title">🚪 Odaya Katıl</string>
+    <string name="duel_join_subtitle">Arkadaşından aldığın 6 haneli kodu gir</string>
+    <string name="duel_join_code_label">Oda Kodu</string>
+    <string name="duel_join_code_hint">K8F3T1</string>
+    <string name="duel_join_button">🎯 Katıl</string>
+    <string name="duel_join_tip_title">💡 İpucu</string>
+    <string name="duel_join_tip_body">Kod 6 haneli ve büyük harflerden oluşur\n(Örnek: K8F3T1)</string>
+    <string name="duel_join_back">⬅️ Geri Dön</string>
+    <string name="duel_join_enter_code">Lütfen bir oda kodu girin.</string>
+    <string name="duel_join_success">Odaya başarıyla katıldın!</string>
+    <string name="duel_join_error_invalid">Oda kodu 6 karakter olmalı.</string>
+    <string name="duel_join_error_not_found">Bu kodla bir oda bulunamadı.</string>
+    <string name="duel_join_error_full">Bu oda dolu veya düello başlamış.</string>
+    <string name="duel_join_error_own_room">Kendi odana katılamazsın; kodu arkadaşınla paylaş.</string>
+    <string name="duel_join_error_connection">Bağlantı hatası. İnternetini kontrol edip tekrar dene.</string>
+
+    <!-- Hızlı düello -->
+    <string name="duel_quick_title">Hızlı Düello</string>
+    <string name="duel_quick_searching_partner">Partner aranıyor...</string>
+    <string name="duel_quick_wait_time">⏰ Bekleme süresi</string>
+    <string name="duel_quick_how_title">💡 Nasıl Çalışır?</string>
+    <string name="duel_quick_how_body">• Sistem seni başka bir kullanıcıyla eşleştirir\n• Popüler filmler arasından seçim yaparsınız\n• Hızlı ve eğlenceli deneyim!</string>
+    <string name="duel_quick_retry">🔄 Tekrar Dene</string>
+    <string name="duel_quick_cancel">❌ İptal Et</string>
+    <string name="duel_main_menu">🏠 Ana Menü</string>
+    <plurals name="duel_quick_waiting_count">
+        <item quantity="one">%1$d kişi eşleşme bekliyor</item>
+        <item quantity="other">%1$d kişi eşleşme bekliyor</item>
+    </plurals>
+    <string name="duel_quick_status_searching">Eşleşme aranıyor...</string>
+    <string name="duel_quick_status_found">Rakip bulundu!</string>
+    <string name="duel_quick_error_server">Eşleştirme sunucusuna bağlanılamadı.</string>
+
+    <!-- Düello -->
+    <string name="duel_title">⚔️ Düello</string>
+    <string name="duel_partner_ready">👤 Partner hazır</string>
+    <string name="duel_partner_offline">📶 Partnerin bağlantısı koptu...</string>
+    <string name="duel_partner_waiting">⏳ Partnerin bitirmesi bekleniyor...</string>
+    <string name="duel_genre_label">Tür: %1$s</string>
+    <string name="duel_cd_like">Beğen</string>
+    <string name="duel_cd_pass">Geç</string>
+    <string name="duel_swipe_hint">👆 Kaydır veya butonlara bas</string>
+    <string name="duel_partner_left_title">Partnerin ayrıldı</string>
+    <string name="duel_partner_left_message">Partnerin odadan çıktı ya da bağlantısı koptu. Bu düello devam edemez.</string>
+    <string name="duel_partner_left_button">Ana menüye dön</string>
+    <string name="duel_error_movies_load">Filmler yüklenemedi. İnternet bağlantını kontrol et.</string>
+    <string name="duel_error_room_not_found">Oda bulunamadı.</string>
+    <string name="duel_error_room_load">Oda yüklenemedi.</string>
+    <string name="duel_card_year">📅 %1$s</string>
+    <string name="duel_card_rating">⭐ %1$s/10</string>
+    <string name="duel_unknown_year">Bilinmiyor</string>
+    <string name="duel_no_overview">Özet bulunmuyor.</string>
+    <string name="duel_card_genre_placeholder">🎭 Film</string>
+    <string name="duel_cd_movie_poster">Film afişi</string>
+
+    <!-- Eşleşme -->
+    <string name="duel_match_title">🎊 Harika! 🎊</string>
+    <string name="duel_match_message">İkiniz de aynı filmi beğendiniz!\nBu filmi izleme zamanı!</string>
+    <string name="duel_match_chat">💬 SOHBET ET</string>
+    <string name="duel_match_add_list">⭐ LİSTEME EKLE</string>
+    <string name="duel_match_load_error">Eşleşen film yüklenemedi. İnternet bağlantını kontrol et.</string>
+    <string name="duel_match_added">İzleme listesine eklendi!</string>
+    <string name="duel_match_not_loaded">Film bilgisi henüz yüklenmedi, tekrar dene.</string>
+
+    <!-- Eşleşme yok -->
+    <string name="duel_no_match_title">Eşleşme Bulunamadı</string>
+    <string name="duel_no_match_message">Maalesef bu sefer ortak bir film bulamadınız.\nBelki farklı filtrelerle tekrar deneyebilirsiniz?</string>
+    <plurals name="duel_no_match_checked_count">
+        <item quantity="one">%1$d film kontrol edildi</item>
+        <item quantity="other">%1$d film kontrol edildi</item>
+    </plurals>
+    <string name="duel_no_match_tips_title">💡 Öneriler</string>
+    <string name="duel_no_match_tips_body">• Daha geniş film türleri seçin\n• Minimum yılı düşürün\n• Farklı bir partner ile deneyin</string>
+    <string name="duel_no_match_try_again">🔄 Tekrar Deneyin</string>
+    <string name="duel_no_match_change_filters">⚙️ Filtreleri Değiştir</string>
+    <string name="duel_no_match_quick_duel">⚡ Hızlı Düello Dene</string>
+
+    <!-- Ortak hata paneli -->
+    <string name="duel_try_again">Tekrar dene</string>
+</resources>

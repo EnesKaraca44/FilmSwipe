@@ -47,15 +47,15 @@ class EslemeFragment : Fragment() {
                     viewModel.loadFailed.collect { failed ->
                         binding.errorView.root.isVisible = failed
                         binding.cardFilm.isVisible = !failed
-                        if (failed) binding.errorView.tvErrorMessage.text =
-                            "Eşleşen film yüklenemedi. İnternet bağlantını kontrol et."
+                        if (failed) binding.errorView.tvErrorMessage.setText(R.string.duel_match_load_error)
                     }
                 }
                 viewModel.movie.collect { movie ->
                     if (movie == null) return@collect
                     binding.tvEslesenFilmAdi.text = movie.displayTitle
-                    binding.tvEslesenFilmYili.text = "📅 ${movie.releaseYear ?: "Bilinmiyor"}"
-                    binding.tvEslesenFilmPuani.text = "⭐ ${MovieFormat.rating(movie.voteAverage)}/10"
+                    binding.tvEslesenFilmYili.text =
+                        getString(R.string.duel_card_year, movie.releaseYear ?: getString(R.string.duel_unknown_year))
+                    binding.tvEslesenFilmPuani.text = getString(R.string.duel_card_rating, MovieFormat.rating(movie.voteAverage))
                     Glide.with(this@EslemeFragment)
                         .load(MovieFormat.posterUrl(movie.posterPath))
                         .placeholder(R.drawable.placeholder_movie_poster)
@@ -74,7 +74,7 @@ class EslemeFragment : Fragment() {
         binding.btnListemeEkle.setOnClickListener {
             val appContext = requireContext().applicationContext
             viewModel.addCurrentMovieToWatchlist { ok ->
-                val msg = if (ok) "İzleme listesine eklendi!" else "Film bilgisi henüz yüklenmedi, tekrar dene."
+                val msg = appContext.getString(if (ok) R.string.duel_match_added else R.string.duel_match_not_loaded)
                 Toast.makeText(appContext, msg, Toast.LENGTH_SHORT).show()
             }
         }

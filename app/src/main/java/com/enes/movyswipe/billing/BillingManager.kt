@@ -14,6 +14,7 @@ import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.QueryProductDetailsParams
 import com.android.billingclient.api.QueryPurchasesParams
+import com.enes.movyswipe.R
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -115,7 +116,7 @@ class BillingManager @Inject constructor(
     fun launchPurchaseFlow(activity: Activity) {
         val details = removeAdsDetails
         if (details == null) {
-            _events.trySend(Event.Error("Satın alma şu an kullanılamıyor. Lütfen daha sonra tekrar deneyin."))
+            _events.trySend(Event.Error(context.getString(R.string.settings_purchase_unavailable)))
             start()
             return
         }
@@ -144,7 +145,9 @@ class BillingManager @Inject constructor(
             }
             BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED -> refresh()
             BillingClient.BillingResponseCode.USER_CANCELED -> Unit
-            else -> _events.trySend(Event.Error("Satın alma tamamlanamadı (kod ${result.responseCode})."))
+            else -> _events.trySend(
+                Event.Error(context.getString(R.string.settings_purchase_failed, result.responseCode))
+            )
         }
     }
 

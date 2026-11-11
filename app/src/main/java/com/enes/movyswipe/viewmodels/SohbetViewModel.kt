@@ -1,7 +1,9 @@
 package com.enes.movyswipe.viewmodels
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.enes.movyswipe.R
 import com.enes.movyswipe.data.ChatMessage
 import com.enes.movyswipe.data.ChatRateLimit
 import com.enes.movyswipe.data.Result
@@ -9,6 +11,7 @@ import com.enes.movyswipe.data.repository.FirebaseRepository
 import com.enes.movyswipe.util.AuthManager
 import com.enes.movyswipe.util.SafetyPrefs
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,7 +25,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SohbetViewModel @Inject constructor(
     private val firebaseRepository: FirebaseRepository,
-    private val safetyPrefs: SafetyPrefs
+    private val safetyPrefs: SafetyPrefs,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
 
     private val _messages = MutableStateFlow<List<ChatMessage>>(emptyList())
@@ -50,7 +54,7 @@ class SohbetViewModel @Inject constructor(
             val me = AuthManager.getCurrentUserId()
             _currentUserId.value = me
             if (me == null) {
-                _toasts.send("Giriş yapılamadı. İnternet bağlantını kontrol et.")
+                _toasts.send(context.getString(R.string.chat_sign_in_failed))
                 return@launch
             }
             // Karşı tarafı odadan öğren: hiç mesaj yazmamış biri de şikayet edilip engellenebilsin.
@@ -60,7 +64,7 @@ class SohbetViewModel @Inject constructor(
         viewModelScope.launch {
             firebaseRepository.listenToMessages(code)
                 .combine(safetyPrefs.blockedUsers) { list, blocked -> list.filter { it.senderId !in blocked } }
-                .catch { _toasts.send("Mesajlar yüklenemedi.") }
+                .catch { _toasts.send(context.getString(R.string.chat_messages_load_failed)) }
                 .collect { _messages.value = it }
         }
     }
@@ -74,19 +78,19 @@ class SohbetViewModel @Inject constructor(
         val text = rawText.trim()
         if (text.isEmpty()) return false
         if (text.length > ChatMessage.MAX_LENGTH) {
-            _toasts.trySend("Mesaj en fazla ${ChatMessage.MAX_LENGTH} karakter olabilir.")
+            _toasts.trySend(context.getString(R.string.chat_message_too_long, ChatMessage.MAX_LENGTH))
             return false
         }
         // Sunucu sınırı aşan mesajı siler; kullanıcı mesajının kaybolduğunu görmesin diye baştan uyar.
         val now = System.currentTimeMillis()
         if (ChatRateLimit.isExceeded(recentSendTimes, now)) {
-            _toasts.trySend("Çok hızlı mesaj gönderiyorsun, birkaç saniye bekle.")
+            _toasts.trySend(context.getString(R.string.chat_rate_limited))
             return false
         }
         recentSendTimes = recentSendTimes.filter { it > now - ChatRateLimit.WINDOW_MS } + now
         val message = ChatMessage(senderId = userId, senderNickname = nickname, text = text)
         viewModelScope.launch {
-            if (!firebaseRepository.sendMessage(code, message)) _toasts.send("Mesaj gönderilemedi.")
+            if (!firebaseRepository.sendMessage(code, message)) _toasts.send(context.getString(R.string.chat_send_failed))
         }
         return true
     }
@@ -105,7 +109,7 @@ class SohbetViewModel @Inject constructor(
         val me = _currentUserId.value ?: return
         viewModelScope.launch {
             val ok = firebaseRepository.reportUser(code, me, reportedUserId, reason, message?.text)
-            _toasts.send(if (ok) "Şikayetin alındı. İncelenecek." else "Şikayet gönderilemedi, tekrar dene.")
+            _toasts.send(context.getString(if (ok) R.string.chat_report_sent else R.string.chat_report_failed))
         }
     }
 
@@ -117,7 +121,7 @@ class SohbetViewModel @Inject constructor(
      */
     fun block(userId: String) {
         safetyPrefs.block(userId)
-        _toasts.trySend("Kullanıcı engellendi. Sana mesaj yazamayacak ve onunla eşleşmeyeceksin.")
+        _toasts.trySend(context.getString(R.string.chat_user_blocked))
         viewModelScope.launch {
             val me = _currentUserId.value ?: AuthManager.getCurrentUserId() ?: return@launch
             firebaseRepository.blockUser(me, userId)

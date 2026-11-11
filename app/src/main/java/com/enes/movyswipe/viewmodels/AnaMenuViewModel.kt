@@ -1,7 +1,9 @@
 package com.enes.movyswipe.viewmodels
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.enes.movyswipe.R
 import com.enes.movyswipe.ads.AdsManager
 import com.enes.movyswipe.billing.BillingManager
 import com.enes.movyswipe.data.Movie
@@ -10,6 +12,7 @@ import com.enes.movyswipe.data.Result
 import com.enes.movyswipe.data.repository.MovieRepository
 import com.enes.movyswipe.data.repository.WatchlistRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -21,6 +24,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AnaMenuViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val movieRepository: MovieRepository,
     private val watchlistRepository: WatchlistRepository,
     adsManager: AdsManager,
@@ -54,7 +58,7 @@ class AnaMenuViewModel @Inject constructor(
                     _popularMovies.value = result.data
                     loaded = true
                 }
-                is Result.Error -> _error.value = "Filmler yüklenemedi. İnternet bağlantını kontrol et."
+                is Result.Error -> _error.value = context.getString(R.string.home_load_error)
                 Result.Loading -> Unit
             }
             _isLoading.value = false
