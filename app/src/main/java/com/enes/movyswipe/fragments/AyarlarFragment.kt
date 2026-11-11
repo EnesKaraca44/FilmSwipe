@@ -15,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.enes.movyswipe.BuildConfig
 import com.enes.movyswipe.MainActivity
 import com.enes.movyswipe.databinding.FragmentAyarlarBinding
 import com.enes.movyswipe.util.AuthManager
@@ -38,9 +39,15 @@ class AyarlarFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.etKullaniciAdiAyarlar.setText(viewModel.getCurrentNickname())
+        binding.tvAyarlarSurum.text = "FilmSwipe v${BuildConfig.VERSION_NAME}"
         setupThemeSwitch()
         setupClickListeners()
         observeState()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.refreshData()
     }
 
     private fun setupThemeSwitch() {
@@ -49,13 +56,23 @@ class AyarlarFragment : Fragment() {
             ?: ((resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
                 android.content.res.Configuration.UI_MODE_NIGHT_YES)
         binding.switchKoyuTema.isChecked = currentlyDark
+        updateThemeDescription(currentlyDark)
         binding.switchKoyuTema.setOnCheckedChangeListener { _, isChecked ->
+            updateThemeDescription(isChecked)
+            // Etkinlik yeniden oluşturulur; Profilim, Listem ve alt menü yeni temayla çizilir.
             ThemePrefs.setDark(context.applicationContext, isChecked)
         }
     }
 
+    private fun updateThemeDescription(dark: Boolean) {
+        binding.tvKoyuTemaAciklama.text = if (dark) "Sinematik gece modu aktif" else "Açık tema kullanılıyor"
+    }
+
     private fun setupClickListeners() {
-        // Eskiden bu dinleyici yanlışlıkla tüm sayfanın kök görünümüne bağlıydı.
+        // Profilim bir alt menü sekmesi: geri tuşu sistem geri tuşuyla aynı davranır (Ana Menü'ye döner).
+        binding.btnAyarlarGeri.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
         binding.btnReklamlariKaldir.setOnClickListener {
             (activity as? MainActivity)?.launchPurchaseFlow()
         }
@@ -86,9 +103,23 @@ class AyarlarFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
+                    viewModel.nickname.collect { nickname ->
+                        binding.tvProfilKullaniciAdi.text = "$nickname  •"
+                        binding.tvProfilEmail.text = viewModel.getEmailForNickname(nickname)
+                    }
+                }
+                launch {
+                    viewModel.userStats.collect { stats ->
+                        binding.tvDuelloSayisi.text = stats.duels.toString()
+                        binding.tvEslesmeSayisi.text = stats.matches.toString()
+                        binding.tvUyumOrani.text = "%${stats.compatibilityRate}"
+                    }
+                }
+                launch {
                     viewModel.isPremium.collect { premium ->
                         binding.btnReklamlariKaldir.isEnabled = !premium
-                        binding.btnReklamlariKaldir.text = if (premium) "Reklamsız sürüm aktif ✓" else "Reklamları Kaldır"
+                        binding.btnReklamlariKaldir.text =
+                            if (premium) "Reklamsız sürüm aktif ✓" else "Reklamları Kaldır →"
                     }
                 }
                 launch {

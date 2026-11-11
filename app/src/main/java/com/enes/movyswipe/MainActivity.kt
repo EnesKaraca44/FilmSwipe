@@ -1,10 +1,12 @@
 package com.enes.movyswipe
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
@@ -38,6 +40,9 @@ class MainActivity : AppCompatActivity() {
     )
     private var isTopLevel = true
 
+    /** Açık/koyu tema anahtarına uyan ekranlar; diğerleri tasarım gereği hep koyu. */
+    private val themedDestinations = setOf(R.id.izlemeListesiFragment, R.id.ayarlarFragment)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         // targetSdk 35+ cihazlarda edge-to-edge zorunlu; insets'i kendimiz yönetiyoruz.
         enableEdgeToEdge()
@@ -52,6 +57,7 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavView.setupWithNavController(navController)
         navController.addOnDestinationChangedListener { _, destination, _ ->
             isTopLevel = destination.id in topLevelDestinations
+            updateSystemBars(destination.id)
             ViewCompat.requestApplyInsets(binding.root)
         }
         setupInsets()
@@ -67,6 +73,29 @@ class MainActivity : AppCompatActivity() {
                     navController.navigate(R.id.action_anaMenuFragment_to_profilOlusturFragment)
                 }
             }
+        }
+    }
+
+    /**
+     * Durum çubuğu şeridi kök görünümün arka planını gösterir. Açık/koyu temaya uyan
+     * ekranlarda (Listem, Profilim) şerit sayfa rengini alır; diğer ekranlar hep koyu.
+     * Simgeler de zemine göre açık/koyu seçilir ki her iki temada okunabilsin.
+     */
+    private fun updateSystemBars(destinationId: Int) {
+        val isNight = (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) ==
+            Configuration.UI_MODE_NIGHT_YES
+        val themedPage = destinationId in themedDestinations
+        binding.root.setBackgroundResource(
+            when (destinationId) {
+                R.id.izlemeListesiFragment -> R.color.wl_page_start
+                R.id.ayarlarFragment -> R.color.settings_page_background
+                else -> R.drawable.light_gradient_background
+            }
+        )
+        WindowCompat.getInsetsController(window, window.decorView).apply {
+            isAppearanceLightStatusBars = themedPage && !isNight
+            // Alt menü (tema renkli) gezinme çubuğunun arkasına kadar uzanır.
+            isAppearanceLightNavigationBars = destinationId in topLevelDestinations && !isNight
         }
     }
 

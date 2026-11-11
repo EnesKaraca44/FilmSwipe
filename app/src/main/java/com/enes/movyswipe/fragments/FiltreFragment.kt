@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.enes.movyswipe.R
 import com.enes.movyswipe.data.MovieFilters
 import com.enes.movyswipe.databinding.FragmentFiltreBinding
 import java.util.Calendar
@@ -22,12 +23,15 @@ class FiltreFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.btnGeri.setOnClickListener { findNavController().navigateUp() }
 
         // Eskiden liste 2024'te bitiyordu; artık güncel yıldan başlıyor.
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
         val yearOptions = listOf(ALL_YEARS) + (currentYear downTo 1950).map { it.toString() }
         binding.spinnerYear.adapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, yearOptions)
+            ArrayAdapter(requireContext(), R.layout.item_spinner_year, yearOptions).apply {
+                setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            }
 
         binding.btnDuelloyuBaslat.setOnClickListener {
             val selectedGenres = buildList {

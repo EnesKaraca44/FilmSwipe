@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Kapalıyken gri, açıkken mor: anahtarın durumu tek bakışta anlaşılsın. -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/settings_purple" android:state_checked="true" />
+    <item android:color="@color/settings_switch_off" />
+</selector>

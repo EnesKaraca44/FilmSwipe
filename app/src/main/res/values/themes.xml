@@ -13,7 +13,10 @@
         <!-- Bu komut, sistemin başlangıç penceresinin arkaplanını
              doğrudan senin resminle kaplar. İkon, maske vb. eklemez. -->
         <item name="android:windowBackground">@drawable/splash_center_logo</item>
-
+        <!-- MainActivity bu temayı kullanıyor. Birincil rengi sabitliyoruz ki koyu temada
+             Material butonlar (Düelloyu Başlat vb.) soluk lilaya boyanıp okunmaz hale gelmesin. -->
+        <item name="colorPrimary">#6750A4</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
     </style>
     <style name="Theme.FilmSwipe" parent="Base.Theme.FilmSwipe" />
 </resources>

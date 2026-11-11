@@ -195,5 +195,12 @@
         android:id="@+id/izlemeListesiFragment"
         android:name="com.enes.movyswipe.fragments.IzlemeListesiFragment"
         android:label="fragment_izleme_listesi"
-        tools:layout="@layout/fragment_izleme_listesi" />
+        tools:layout="@layout/fragment_izleme_listesi" >
+        <action
+            android:id="@+id/action_izlemeListesiFragment_to_hizliDuelloBeklemeFragment"
+            app:destination="@id/hizliDuelloBeklemeFragment" />
+        <action
+            android:id="@+id/action_izlemeListesiFragment_to_filtreFragment"
+            app:destination="@id/filtreFragment" />
+    </fragment>
 </navigation>

@@ -1,27 +1,42 @@
 package com.enes.movyswipe.fragments
 
 import android.app.AlertDialog
+import android.content.ActivityNotFoundException
+import android.content.ClipData
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.enes.movyswipe.BuildConfig
+import com.enes.movyswipe.R
 import com.enes.movyswipe.adapter.IzlemeListesiAdapter
-import com.enes.movyswipe.data.MovieFormat
-import com.enes.movyswipe.data.WatchlistMovie
+import com.enes.movyswipe.data.WatchlistSort
+import com.enes.movyswipe.data.WatchlistStats
 import com.enes.movyswipe.databinding.FragmentIzlemeListesiBinding
+import com.enes.movyswipe.util.WatchlistShareHelper
 import com.enes.movyswipe.viewmodels.IzlemeListesiViewModel
+import com.enes.movyswipe.viewmodels.WatchlistUiState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class IzlemeListesiFragment : Fragment() {
@@ -38,13 +53,11 @@ class IzlemeListesiFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.tvAltBaslik.text = "FilmSwipe Ortak Arşiv • v${BuildConfig.VERSION_NAME}"
         setupRecyclerView()
-        observeWatchlist()
-        binding.rowListeyiTemizle.setOnClickListener {
-            if (viewModel.watchlistMovies.value.isNotEmpty()) showClearListConfirmationDialog()
-            else Toast.makeText(requireContext(), "Listeniz zaten boş.", Toast.LENGTH_SHORT).show()
-        }
-        binding.rowListeyiPaylas.setOnClickListener { shareWatchlist() }
+        setupSearch()
+        setupClickListeners()
+        observeState()
     }
 
     private fun setupRecyclerView() {
@@ -64,25 +77,138 @@ class IzlemeListesiFragment : Fragment() {
         binding.recyclerViewFilmler.layoutManager = LinearLayoutManager(requireContext())
     }
 
-    private fun observeWatchlist() {
+    private fun setupClickListeners() {
+        binding.btnAra.setOnClickListener {
+            if (binding.layoutArama.isVisible) closeSearch() else openSearch()
+        }
+        binding.btnFiltrele.setOnClickListener { showSortMenu(it) }
+        binding.btnSiralama.setOnClickListener { showSortMenu(it) }
+
+        binding.btnDuelloBaslat.setOnClickListener {
+            navigate(IzlemeListesiFragmentDirections.actionIzlemeListesiFragmentToHizliDuelloBeklemeFragment())
+        }
+        binding.rowListeyiTemizle.setOnClickListener {
+            if (viewModel.uiState.value.allMovies.isNotEmpty()) showClearListConfirmationDialog()
+            else toast("Listeniz zaten boş.")
+        }
+        binding.rowListeyiPaylas.setOnClickListener { showShareOptions() }
+        binding.rowFilmOdasinaDavetEt.setOnClickListener {
+            // Oda kurma akışı: Filtre -> Oda Kodu (kod arkadaşla paylaşılır).
+            navigate(IzlemeListesiFragmentDirections.actionIzlemeListesiFragmentToFiltreFragment())
+        }
+    }
+
+    // ---------- Arama ----------
+
+    private fun setupSearch() {
+        // Ekran döndürülünce / sekmeye geri gelince açık arama korunur.
+        val savedQuery = viewModel.currentQuery.value
+        if (savedQuery.isNotEmpty()) {
+            binding.layoutArama.isVisible = true
+            binding.etArama.setText(savedQuery)
+        }
+        binding.btnAra.isSelected = binding.layoutArama.isVisible
+        binding.etArama.doAfterTextChanged { viewModel.setQuery(it?.toString().orEmpty()) }
+        binding.etArama.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                hideKeyboard()
+                true
+            } else false
+        }
+        binding.btnAramaKapat.setOnClickListener { closeSearch() }
+    }
+
+    private fun openSearch() {
+        if (viewModel.uiState.value.allMovies.isEmpty()) {
+            toast("Listende henüz aranacak film yok.")
+            return
+        }
+        binding.layoutArama.isVisible = true
+        binding.btnAra.isSelected = true
+        binding.etArama.requestFocus()
+        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(binding.etArama, InputMethodManager.SHOW_IMPLICIT)
+    }
+
+    private fun closeSearch() {
+        binding.etArama.text?.clear()
+        binding.etArama.clearFocus()
+        binding.layoutArama.isVisible = false
+        binding.btnAra.isSelected = false
+        hideKeyboard()
+    }
+
+    private fun hideKeyboard() {
+        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.etArama.windowToken, 0)
+    }
+
+    // ---------- Sıralama ----------
+
+    private fun showSortMenu(anchor: View) {
+        val state = viewModel.uiState.value
+        if (state.allMovies.isEmpty()) {
+            toast("Sıralamak için listende film bulunmuyor.")
+            return
+        }
+        PopupMenu(requireContext(), anchor).apply {
+            WatchlistSort.entries.forEachIndexed { index, sort ->
+                menu.add(SORT_GROUP, index, index, sort.label).isChecked = sort == state.sort
+            }
+            menu.setGroupCheckable(SORT_GROUP, true, true)
+            setOnMenuItemClickListener { item ->
+                viewModel.setSort(WatchlistSort.entries[item.itemId])
+                true
+            }
+        }.show()
+    }
+
+    // ---------- Durum ----------
+
+    private fun observeState() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.watchlistMovies.collect { movies ->
-                    watchlistAdapter.submitList(movies)
-                    binding.cardEmptyState.isVisible = movies.isEmpty()
-                    binding.recyclerViewFilmler.isVisible = movies.isNotEmpty()
-                    // Eskiden üç istatistik de toplam sayıyı gösteriyordu.
-                    val now = System.currentTimeMillis()
-                    binding.tvToplamFilm.text = movies.size.toString()
-                    binding.tvBuAy.text = movies.countAddedWithin(now, 30).toString()
-                    binding.tvBuHafta.text = movies.countAddedWithin(now, 7).toString()
-                }
+                viewModel.uiState.collect { render(it) }
             }
         }
     }
 
-    private fun List<WatchlistMovie>.countAddedWithin(now: Long, days: Long): Int =
-        count { now - it.addedTimestamp <= TimeUnit.DAYS.toMillis(days) }
+    private fun render(state: WatchlistUiState) {
+        watchlistAdapter.submitList(state.visibleMovies)
+
+        val hasMovies = state.allMovies.isNotEmpty()
+        binding.cardEmptyState.isVisible = state.isListEmpty
+        binding.layoutListeBaslik.isVisible = hasMovies
+        binding.recyclerViewFilmler.isVisible = state.visibleMovies.isNotEmpty()
+        binding.tvSonucYok.isVisible = state.hasNoSearchResults
+        if (state.hasNoSearchResults) binding.tvSonucYok.text = "“${state.query.trim()}” ile eşleşen film yok."
+
+        // Liste temizlenince açık kalan aramayı kapat.
+        if (state.isListEmpty && binding.layoutArama.isVisible) closeSearch()
+
+        binding.tvListeBaslik.text = if (state.query.isBlank()) "FİLMLERİM (${state.allMovies.size})"
+        else "SONUÇLAR (${state.visibleMovies.size}/${state.allMovies.size})"
+        binding.tvSiralama.text = state.sort.label
+        binding.btnFiltrele.isSelected = state.sort != WatchlistSort.NEWEST
+
+        renderStats(state.stats)
+    }
+
+    private fun renderStats(stats: WatchlistStats) {
+        binding.tvToplamFilm.text = stats.total.toString()
+        binding.tvToplamFilmAlt.text = if (stats.estimatedHours > 0) "≈${stats.estimatedHours} saat" else "0 saat"
+        binding.tvBuAy.text = stats.thisMonth.toString()
+        binding.tvBuAyAlt.text = "+${stats.addedToday} bugün"
+        binding.tvBuHafta.text = stats.thisWeek.toString()
+        binding.tvBuHaftaAlt.text = "Seri: ${stats.streakDays} gün"
+        binding.tvIstatistikDurum.text = when {
+            stats.thisWeek > 0 -> "Bu Hafta Güncel"
+            stats.daysSinceLastAdded != null -> "Son ekleme: ${WatchlistStats.relativeDayLabel(stats.daysSinceLastAdded).lowercase()}"
+            else -> "Henüz veri yok"
+        }
+    }
+
+    // ---------- Liste yönetimi ----------
 
     private fun showClearListConfirmationDialog() {
         AlertDialog.Builder(requireContext())
@@ -90,35 +216,89 @@ class IzlemeListesiFragment : Fragment() {
             .setMessage("İzleme listenizdeki tüm filmleri silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.")
             .setPositiveButton("Evet, Sil") { _, _ ->
                 viewModel.clearWatchlist()
-                Toast.makeText(requireContext(), "İzleme listesi temizlendi.", Toast.LENGTH_SHORT).show()
+                toast("İzleme listesi temizlendi.")
             }
             .setNegativeButton("Hayır", null)
             .show()
     }
 
-    private fun shareWatchlist() {
-        val movies = viewModel.watchlistMovies.value
-        if (movies.isEmpty()) {
-            Toast.makeText(requireContext(), "Paylaşmak için listenizde film bulunmuyor.", Toast.LENGTH_SHORT).show()
+    private fun showShareOptions() {
+        if (viewModel.uiState.value.allMovies.isEmpty()) {
+            toast("Paylaşmak için listenizde film bulunmuyor.")
             return
         }
-        val shareText = buildString {
-            append("FilmSwipe İzleme Listem:\n\n")
-            movies.forEachIndexed { index, movie ->
-                // Çıkış tarihi boş filmlerde eskiden substring() çöküyordu.
-                val year = MovieFormat.releaseYear(movie.releaseDate)?.let { " ($it)" }.orEmpty()
-                append("${index + 1}. ${movie.title}$year\n")
+        AlertDialog.Builder(requireContext())
+            .setTitle("Listeyi Paylaş")
+            .setItems(arrayOf("Hikaye görseli oluştur", "Metin ve link olarak paylaş")) { _, which ->
+                if (which == 0) shareStoryImage() else shareAsText()
             }
-        }
+            .setNegativeButton("Vazgeç", null)
+            .show()
+    }
+
+    private fun shareAsText() {
+        // Arama/sıralama ekranda nasılsa paylaşılan liste de o sırada olsun.
+        val movies = viewModel.uiState.value.let { if (it.visibleMovies.isNotEmpty()) it.visibleMovies else it.allMovies }
         val sendIntent = Intent(Intent.ACTION_SEND).apply {
-            putExtra(Intent.EXTRA_TEXT, shareText)
             type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, WatchlistShareHelper.buildShareText(movies))
         }
-        startActivity(Intent.createChooser(sendIntent, "İzleme Listeni Paylaş"))
+        startChooser(sendIntent)
+    }
+
+    private fun shareStoryImage() {
+        val movies = viewModel.uiState.value.let { if (it.visibleMovies.isNotEmpty()) it.visibleMovies else it.allMovies }
+        val appContext = requireContext().applicationContext
+        toast("Hikaye görseli hazırlanıyor…")
+        viewLifecycleOwner.lifecycleScope.launch {
+            val uri = try {
+                withContext(Dispatchers.IO) { WatchlistShareHelper.createStoryImage(appContext, movies) }
+            } catch (e: Exception) {
+                Log.e(TAG, "Hikaye görseli oluşturulamadı", e)
+                toast("Görsel oluşturulamadı. Metin olarak paylaşmayı dene.")
+                return@launch
+            }
+            val sendIntent = Intent(Intent.ACTION_SEND).apply {
+                type = "image/png"
+                putExtra(Intent.EXTRA_STREAM, uri)
+                putExtra(Intent.EXTRA_TEXT, "FilmSwipe İzleme Listem 🎬 ${WatchlistShareHelper.storeLink}")
+                clipData = ClipData.newRawUri("", uri)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+            startChooser(sendIntent)
+        }
+    }
+
+    private fun startChooser(intent: Intent) {
+        try {
+            startActivity(Intent.createChooser(intent, "İzleme Listeni Paylaş"))
+        } catch (e: ActivityNotFoundException) {
+            toast("Paylaşım için uygun uygulama bulunamadı.")
+        }
+    }
+
+    // ---------- Yardımcılar ----------
+
+    private fun navigate(directions: NavDirections) {
+        val navController = findNavController()
+        // Hızlı çift dokunuşta ikinci navigate çağrısı çökmesin.
+        if (navController.currentDestination?.id == R.id.izlemeListesiFragment) {
+            hideKeyboard()
+            navController.navigate(directions)
+        }
+    }
+
+    private fun toast(message: String) {
+        context?.let { Toast.makeText(it, message, Toast.LENGTH_SHORT).show() }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private companion object {
+        const val TAG = "IzlemeListesiFragment"
+        const val SORT_GROUP = 1
     }
 }

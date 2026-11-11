@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Listem ekranı ve alt menü — AÇIK tema paleti. Koyu tema: values-night/watchlist_colors.xml -->
+<resources>
+    <color name="wl_page_start">#F5F4FA</color>
+    <color name="wl_page_center">#EEEAFB</color>
+    <color name="wl_card">#FFFFFF</color>
+    <color name="wl_card_border">#E4E1EF</color>
+    <color name="wl_header_button">#FFFFFF</color>
+    <color name="wl_empty_card">#F4EFFF</color>
+    <color name="wl_empty_card_border">#D9CCFA</color>
+    <color name="wl_divider">#E6E3EF</color>
+    <color name="wl_nav_background">#FFFFFF</color>
+
+    <color name="wl_text_primary">#17152B</color>
+    <color name="wl_text_secondary">#3B3A52</color>
+    <color name="wl_text_muted">#6B6A80</color>
+    <color name="wl_label">#7A7891</color>
+
+    <color name="wl_purple">#7C3AED</color>
+    <color name="wl_purple_dark">#6D28D9</color>
+    <color name="wl_purple_bright">#A855F7</color>
+    <color name="wl_purple_light">#6D28D9</color>
+    <color name="wl_purple_surface">#EDE4FF</color>
+    <color name="wl_purple_surface_border">#CDB8FB</color>
+    <color name="wl_indigo">#4F46E5</color>
+    <color name="wl_pink">#DB2777</color>
+    <color name="wl_pink_surface">#FCE7F3</color>
+    <color name="wl_green">#059669</color>
+    <color name="wl_green_surface">#D1FAE5</color>
+    <color name="wl_red">#DC2626</color>
+    <color name="wl_red_surface">#FEE2E2</color>
+    <color name="wl_amber">#D97706</color>
+    <color name="wl_amber_surface">#FEF3C7</color>
+    <color name="wl_gold">#D97706</color>
+    <color name="wl_neutral_surface">#EEEDF4</color>
+    <color name="wl_ripple">#1F000000</color>
+
+    <!-- İki temada da aynı: mor butonun üstündeki yazı ve şimşek ikonu. -->
+    <color name="wl_on_accent">#FFFFFF</color>
+    <color name="wl_cta_icon">#FDE68A</color>
+</resources>

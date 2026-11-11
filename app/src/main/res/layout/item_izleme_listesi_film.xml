@@ -1,151 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="12dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="6dp">
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/watchlist_stat_card"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="10dp">
 
+    <!-- Film Posteri -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="54dp"
+        android:layout_height="78dp"
+        app:cardBackgroundColor="@color/wl_neutral_surface"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="0dp">
+
+        <ImageView
+            android:id="@+id/imgFilmPoster"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:importantForAccessibility="no"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/placeholder_movie_poster" />
+    </androidx.cardview.widget.CardView>
+
+    <!-- Film Bilgileri -->
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/surface_light"
-        android:orientation="horizontal"
-        android:padding="12dp"
-        android:gravity="center_vertical">
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="8dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-        <!-- Film Posteri -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="60dp"
-            android:layout_height="80dp"
-            android:layout_marginEnd="12dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="4dp">
-
-            <ImageView
-                android:id="@+id/imgFilmPoster"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_launcher_background" />
-
-        </androidx.cardview.widget.CardView>
-
-        <!-- Film Bilgileri -->
-        <LinearLayout
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/tvFilmAdi"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/wl_text_primary"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            tools:text="Yıldızlararası" />
 
-            <TextView
-                android:id="@+id/tvFilmAdi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Film Adı"
-                android:textColor="@color/text_primary"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="4dp" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tvFilmYili"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2024"
-                android:textColor="@color/text_secondary"
-                android:textSize="14sp"
-                android:layout_marginBottom="4dp" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:id="@+id/tvFilmTuru"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Aksiyon"
-                    android:textColor="@color/text_hint"
-                    android:textSize="12sp"
-                    android:background="@color/bg_medium"
-                    android:paddingHorizontal="8dp"
-                    android:paddingVertical="2dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" • "
-                    android:textColor="@color/text_hint"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/tvFilmSuresi"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="120 dk"
-                    android:textColor="@color/text_hint"
-                    android:textSize="12sp" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <!-- Aksiyonlar -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center">
+                android:textColor="@color/wl_text_muted"
+                android:textSize="12sp"
+                tools:text="2014" />
 
             <TextView
-                android:id="@+id/tvEklemeTarihi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Bugün"
-                android:textColor="@color/text_secondary"
+                android:paddingHorizontal="6dp"
+                android:text="•"
+                android:textColor="@color/wl_text_muted"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:layout_width="13dp"
+                android:layout_height="13dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_wl_star"
+                app:tint="@color/wl_gold" />
+
+            <TextView
+                android:id="@+id/tvFilmPuani"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:textColor="@color/wl_gold"
                 android:textSize="12sp"
-                android:layout_marginBottom="8dp" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/btnIzlemeDurumu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="İzlendi"
-                    android:textColor="@color/success"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    android:background="@drawable/button_accent"
-                    android:paddingHorizontal="8dp"
-                    android:paddingVertical="4dp"
-                    android:layout_marginEnd="8dp" />
-
-                <TextView
-                    android:id="@+id/btnKaldir"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="🗑️"
-                    android:textSize="16sp"
-                    android:padding="8dp" />
-
-            </LinearLayout>
-
+                android:textStyle="bold"
+                tools:text="8.4" />
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/tvEklemeTarihi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:background="@drawable/watchlist_pill_neutral"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="2dp"
+            android:textColor="@color/wl_text_muted"
+            android:textSize="10.5sp"
+            tools:text="Eklendi • Bugün" />
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+    <ImageButton
+        android:id="@+id/btnKaldir"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:background="@drawable/watchlist_delete_button"
+        android:contentDescription="Filmi listeden kaldır"
+        android:padding="9dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_wl_trash"
+        app:tint="@color/wl_red" />
 
-
-
-
-
-
+</LinearLayout>

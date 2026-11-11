@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Profilim (Ayarlar) ekranı — AÇIK tema paleti. Koyu tema: values-night/settings_colors.xml -->
+<resources>
+    <color name="settings_page_background">#F5F4FA</color>
+    <color name="settings_card">#FFFFFF</color>
+    <color name="settings_profile_card">#EFE9FF</color>
+    <color name="settings_input">#F6F5FB</color>
+    <color name="settings_border">#E2DFEE</color>
+    <color name="settings_divider">#ECEAF3</color>
+    <color name="settings_text_primary">#17152B</color>
+    <color name="settings_muted">#6B6A80</color>
+    <color name="settings_label">#7A7891</color>
+    <color name="settings_purple">#7C3AED</color>
+    <color name="settings_purple_light">#6D28D9</color>
+    <color name="settings_gold">#C27803</color>
+    <color name="settings_avatar_fill">#FFFFFF</color>
+    <color name="settings_avatar_stroke">#A66CFF</color>
+    <color name="settings_badge_fill">#E4D8FF</color>
+    <color name="settings_icon_circle">#EEE8FB</color>
+    <color name="settings_stat_fill">#FFFFFF</color>
+    <color name="settings_switch_off">#D4D1E1</color>
+
+    <!-- Mor/renkli yüzeylerin üstündeki yazılar: iki temada da beyaz. -->
+    <color name="settings_on_accent">#FFFFFF</color>
+    <color name="settings_gold_on_accent">#F7BB18</color>
+</resources>

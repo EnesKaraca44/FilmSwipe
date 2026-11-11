@@ -17,6 +17,7 @@ import com.enes.movyswipe.R
 import com.enes.movyswipe.adapter.DuelloAdapter
 import com.enes.movyswipe.data.repository.MatchState
 import com.enes.movyswipe.databinding.FragmentDuelloBinding
+import com.enes.movyswipe.util.UserStatsManager
 import com.enes.movyswipe.viewmodels.DuelloViewModel
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager
 import com.yuyakaido.android.cardstackview.CardStackListener
@@ -119,15 +120,21 @@ class DuelloFragment : Fragment(), CardStackListener {
         val nav = findNavController()
         if (nav.currentDestination?.id != R.id.duelloFragment) return
         when (state) {
-            is MatchState.MATCH_FOUND -> nav.navigate(
-                DuelloFragmentDirections.actionDuelloFragmentToEslemeFragment(
-                    matchedMovieId = state.movieId,
-                    roomCode = args.roomCode
+            is MatchState.MATCH_FOUND -> {
+                UserStatsManager.recordDuel(requireContext().applicationContext, args.roomCode, isMatch = true)
+                nav.navigate(
+                    DuelloFragmentDirections.actionDuelloFragmentToEslemeFragment(
+                        matchedMovieId = state.movieId,
+                        roomCode = args.roomCode
+                    )
                 )
-            )
-            MatchState.NO_MATCH -> nav.navigate(
-                DuelloFragmentDirections.actionDuelloFragmentToEslemeYokFragment(checkedCount = cardStackAdapter.itemCount)
-            )
+            }
+            MatchState.NO_MATCH -> {
+                UserStatsManager.recordDuel(requireContext().applicationContext, args.roomCode, isMatch = false)
+                nav.navigate(
+                    DuelloFragmentDirections.actionDuelloFragmentToEslemeYokFragment(checkedCount = cardStackAdapter.itemCount)
+                )
+            }
             MatchState.IDLE -> Unit
         }
     }

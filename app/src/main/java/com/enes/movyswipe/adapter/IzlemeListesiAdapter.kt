@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.enes.movyswipe.R
 import com.enes.movyswipe.data.MovieFormat
 import com.enes.movyswipe.data.WatchlistMovie
+import com.enes.movyswipe.data.WatchlistStats
 import com.enes.movyswipe.databinding.ItemIzlemeListesiFilmBinding
 
 class IzlemeListesiAdapter : ListAdapter<WatchlistMovie, IzlemeListesiAdapter.WatchlistViewHolder>(DiffCallback()) {
@@ -20,6 +21,9 @@ class IzlemeListesiAdapter : ListAdapter<WatchlistMovie, IzlemeListesiAdapter.Wa
         fun bind(movie: WatchlistMovie) {
             binding.tvFilmAdi.text = movie.title
             binding.tvFilmYili.text = MovieFormat.releaseYear(movie.releaseDate) ?: "—"
+            binding.tvFilmPuani.text = MovieFormat.rating(movie.voteAverage)
+            val daysAgo = WatchlistStats.epochDay(System.currentTimeMillis()) - WatchlistStats.epochDay(movie.addedTimestamp)
+            binding.tvEklemeTarihi.text = "Eklendi • ${WatchlistStats.relativeDayLabel(daysAgo.toInt())}"
             Glide.with(binding.root)
                 .load(MovieFormat.posterUrl(movie.posterPath))
                 .placeholder(R.drawable.placeholder_movie_poster)
