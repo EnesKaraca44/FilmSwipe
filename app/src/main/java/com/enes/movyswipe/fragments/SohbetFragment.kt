@@ -115,7 +115,7 @@ class SohbetFragment : Fragment() {
             setOnMenuItemClickListener { item ->
                 val partner = viewModel.partnerId()
                 if (partner == null) {
-                    Toast.makeText(requireContext(), "Henüz karşı taraftan mesaj yok.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Sohbet bilgisi yüklenemedi, biraz sonra tekrar dene.", Toast.LENGTH_SHORT).show()
                 } else if (item.itemId == MENU_REPORT) {
                     showReportReasons(partner, null)
                 } else {

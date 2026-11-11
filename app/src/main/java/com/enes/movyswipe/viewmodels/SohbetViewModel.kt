@@ -3,6 +3,7 @@ package com.enes.movyswipe.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.enes.movyswipe.data.ChatMessage
+import com.enes.movyswipe.data.Result
 import com.enes.movyswipe.data.repository.FirebaseRepository
 import com.enes.movyswipe.util.AuthManager
 import com.enes.movyswipe.util.SafetyPrefs
@@ -45,8 +46,15 @@ class SohbetViewModel @Inject constructor(
         if (roomCode != null) return
         roomCode = code
         viewModelScope.launch {
-            _currentUserId.value = AuthManager.getCurrentUserId()
-            if (_currentUserId.value == null) _toasts.send("Giriş yapılamadı. İnternet bağlantını kontrol et.")
+            val me = AuthManager.getCurrentUserId()
+            _currentUserId.value = me
+            if (me == null) {
+                _toasts.send("Giriş yapılamadı. İnternet bağlantını kontrol et.")
+                return@launch
+            }
+            // Karşı tarafı odadan öğren: hiç mesaj yazmamış biri de şikayet edilip engellenebilsin.
+            val room = (firebaseRepository.getRoom(code) as? Result.Success)?.data
+            partner = listOf(room?.hostId, room?.guestId).firstOrNull { it != null && it != me }
         }
         viewModelScope.launch {
             firebaseRepository.listenToMessages(code)
@@ -73,8 +81,11 @@ class SohbetViewModel @Inject constructor(
         return true
     }
 
-    /** Sohbetteki karşı taraf: mesaj atmış, ben olmayan kullanıcı. */
+    private var partner: String? = null
+
+    /** Sohbetteki karşı taraf (odanın diğer oyuncusu). Oda henüz yüklenmediyse mesajlardan bulunur. */
     fun partnerId(): String? {
+        partner?.let { return it }
         val me = _currentUserId.value
         return _messages.value.lastOrNull { it.senderId != me }?.senderId
     }
@@ -88,8 +99,18 @@ class SohbetViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Engel hem cihazda (mesajları anında gizlemek için) hem sunucuda tutulur. Sunucudaki kayıt
+     * sayesinde eşleştirme iki yönde de bu kişiyi atlar ve kurallar onun bu odaya yazmasını reddeder.
+     * Bağlantı yoksa yazma Firebase tarafından sıraya alınır; kaybolursa hızlı düello başlarken
+     * [FirebaseRepository.syncBlocks] cihazdaki listeyi yeniden gönderir.
+     */
     fun block(userId: String) {
         safetyPrefs.block(userId)
-        _toasts.trySend("Kullanıcı engellendi. Mesajlarını görmeyecek ve onunla eşleşmeyeceksin.")
+        _toasts.trySend("Kullanıcı engellendi. Sana mesaj yazamayacak ve onunla eşleşmeyeceksin.")
+        viewModelScope.launch {
+            val me = _currentUserId.value ?: AuthManager.getCurrentUserId() ?: return@launch
+            firebaseRepository.blockUser(me, userId)
+        }
     }
 }

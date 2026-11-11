@@ -1,15 +1,17 @@
 /**
  * Android uygulamasını Firebase emülatöründe iki oyunculu test etmek için "bot" ikinci oyuncu.
  *
- *   node firebase-tests/android-bot.js guest   # bot kuyrukta bekler, uygulama host olur
- *   node firebase-tests/android-bot.js host    # bot uygulamayı yakalayıp odayı kurar
+ *   node firebase-tests/android-bot.js guest   # bot destesiz katılır, odayı uygulamanın destesiyle sunucu kurar
+ *   node firebase-tests/android-bot.js host    # bot desteyle önce katılır, oda botun destesiyle kurulur
+ *
+ * Eşleştirmeyi Cloud Function (pairFromQueue) yapar; bu yüzden emülatör "database,functions" ile çalışmalı.
  *
  * Bot, odadaki tüm filmleri beğenir; uygulamada herhangi bir filme sağa kaydırmak eşleşme üretir.
  * Eşleşmeden sonra sohbete bir mesaj yazar ve uygulamadan gelen mesajları yazdırır.
  */
 const { initializeTestEnvironment } = require("@firebase/rules-unit-testing");
 const { setLogLevel } = require("firebase/app");
-const { ref, set, get, onValue, push, serverTimestamp, runTransaction } = require("firebase/database");
+const { ref, set, get, onValue, push, serverTimestamp } = require("firebase/database");
 
 setLogLevel("error");
 const MODE = process.argv[2] || "guest";
@@ -49,34 +51,8 @@ const log = (...a) => console.log(new Date().toISOString().slice(11, 19), "[bot]
   onValue(ref(db, `matchmaking/${BOT}/assignedRoom`), (s) => {
     if (s.val()) { log(`posta kutusuna oda atandı: ${s.val()}`); playRoom(s.val()); }
   });
-  await set(ref(db, `queue/${BOT}`), { ts: serverTimestamp() });
+  const deck = { genreName: "Bot Testi", genreId: 28, movieIds: [550, 680, 13, 155, 27205] };
+  await set(ref(db, `queue/${BOT}`), MODE === "host" ? { ts: serverTimestamp(), deck } : { ts: serverTimestamp() });
   log(`kuyruğa girildi (mod=${MODE})`);
-
-  if (MODE === "host") {
-    onValue(ref(db, "queue"), async (s) => {
-      const q = s.val() || {};
-      const others = Object.keys(q).filter((k) => k !== BOT);
-      if (roomStarted || others.length === 0 || !(BOT in q)) return;
-      let opponent = null;
-      const r = await runTransaction(ref(db, "queue"), (cur) => {
-        if (!cur || !(BOT in cur)) return cur === null ? cur : undefined;
-        opponent = Object.keys(cur).find((k) => k !== BOT) || null;
-        if (!opponent) return undefined;
-        delete cur[BOT];
-        delete cur[opponent];
-        return cur;
-      });
-      if (!r.committed || !opponent) return;
-      const code = "BOT" + Math.random().toString(36).slice(2, 5).toUpperCase().replace(/[^A-Z0-9]/g, "Z");
-      await set(ref(db, `rooms/${code}`), {
-        status: "active", hostId: BOT, guestId: opponent, filters: { genreName: "Bot Testi" },
-        movieDeck: [550, 680, 13, 155, 27205], createdAt: serverTimestamp(),
-      });
-      await set(ref(db, `matchmaking/${opponent}/assignedRoom`), code);
-      log(`uygulama kullanıcısı (${opponent}) yakalandı, oda ${code} kuruldu`);
-      playRoom(code);
-    });
-  } else {
-    onValue(ref(db, "queue"), (s) => log(`kuyruk: ${Object.keys(s.val() || {}).join(", ") || "(boş)"}`));
-  }
+  onValue(ref(db, "queue"), (s) => log(`kuyruk: ${Object.keys(s.val() || {}).join(", ") || "(boş)"}`));
 })().catch((e) => { console.error(e); process.exit(1); });

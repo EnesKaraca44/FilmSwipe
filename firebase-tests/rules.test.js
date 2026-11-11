@@ -176,40 +176,75 @@ describe("sohbet", () => {
 });
 
 describe("hızlı düello kuyruğu ve posta kutusu", () => {
-  test("kullanıcı kendini kuyruğa ekleyebilir, başkasını ekleyemez", async () => {
-    await assertSucceeds(set(ref(db("alice"), "queue/alice"), { ts: serverTimestamp() }));
+  const deck = { genreName: "Aksiyon", genreId: 28, movieIds: [550, 551, 552] };
+
+  test("kullanıcı kendini (desteyle) kuyruğa ekleyebilir, başkasını ekleyemez", async () => {
+    await assertSucceeds(set(ref(db("alice"), "queue/alice"), { ts: serverTimestamp(), deck }));
+    await assertSucceeds(set(ref(db("dave"), "queue/dave"), { ts: serverTimestamp() })); // eski sürüm
     await assertFails(set(ref(db("alice"), "queue/bob"), { ts: serverTimestamp() }));
     await assertFails(set(ref(db(null), "queue/anon"), { ts: serverTimestamp() }));
   });
 
-  test("eşleştirme transaction'ı kendini ve rakibi kuyruktan çıkarabilir", async () => {
+  test("geçersiz veya çok büyük deste reddedilir", async () => {
+    const big = Array.from({ length: 41 }, (_, i) => i + 1);
+    await assertFails(set(ref(db("alice"), "queue/alice"), { ts: serverTimestamp(), deck: { ...deck, movieIds: big } }));
+    await assertFails(set(ref(db("alice"), "queue/alice"), { ts: serverTimestamp(), deck: { ...deck, movieIds: ["x"] } }));
+    await assertFails(set(ref(db("alice"), "queue/alice"), { ts: serverTimestamp(), deck: { genreName: "A" } }));
+    await assertFails(set(ref(db("alice"), "queue/alice"), { ts: serverTimestamp(), extra: 1 }));
+  });
+
+  test("kimse kuyruğun tamamını veya başkasının kaydını silemez", async () => {
     await seed("queue", { alice: { ts: 1 }, bob: { ts: 2 }, carol: { ts: 3 } });
+    await assertFails(remove(ref(db("mallory"), "queue")));
+    await assertFails(remove(ref(db("alice"), "queue/bob")));
+    await assertFails(set(ref(db("alice"), "queue/bob/ts"), 5));
     const result = await runTransaction(ref(db("alice"), "queue"), (q) => {
       if (!q) return q;
       delete q.alice;
       delete q.bob;
       return q;
-    });
-    expect(result.committed).toBe(true);
-    expect(result.snapshot.val()).toEqual({ carol: { ts: 3 } });
+    }).catch((e) => e);
+    expect(result instanceof Error).toBe(true);
+    await assertSucceeds(remove(ref(db("alice"), "queue/alice")));
   });
 
-  test("host, odasına atadığı misafirin posta kutusuna yazabilir", async () => {
+  test("posta kutusuna istemci yazamaz (host bile); oda kodunu sadece sunucu atar", async () => {
     await seed("rooms/ABC123", { ...newRoom("alice"), createdAt: Date.now(), guestId: "bob", status: "active" });
-    await assertSucceeds(set(ref(db("alice"), "matchmaking/bob/assignedRoom"), "ABC123"));
-    await assertSucceeds(get(ref(db("bob"), "matchmaking/bob/assignedRoom")));
-  });
-
-  test("ilgisiz biri başkasının posta kutusuna oda yazamaz veya okuyamaz", async () => {
-    await seed("rooms/ABC123", { ...newRoom("alice"), createdAt: Date.now(), guestId: "bob", status: "active" });
+    await assertFails(set(ref(db("alice"), "matchmaking/bob/assignedRoom"), "ABC123"));
+    await assertFails(set(ref(db("bob"), "matchmaking/bob/assignedRoom"), "ABC123"));
     await assertFails(set(ref(db("mallory"), "matchmaking/bob/assignedRoom"), "ABC123"));
-    await assertFails(set(ref(db("alice"), "matchmaking/carol/assignedRoom"), "ABC123"));
-    await assertFails(get(ref(db("mallory"), "matchmaking/bob")));
   });
 
-  test("kullanıcı kendi posta kutusunu temizleyebilir", async () => {
+  test("posta kutusunu sadece sahibi okuyabilir ve temizleyebilir", async () => {
     await seed("matchmaking/bob", { assignedRoom: "ABC123" });
+    await assertSucceeds(get(ref(db("bob"), "matchmaking/bob/assignedRoom")));
+    await assertFails(get(ref(db("mallory"), "matchmaking/bob")));
+    await assertFails(remove(ref(db("mallory"), "matchmaking/bob")));
     await assertSucceeds(remove(ref(db("bob"), "matchmaking/bob")));
+  });
+});
+
+describe("engelleme", () => {
+  test("kullanıcı kendi engel listesini yazıp okuyabilir, başkasınınkini değil", async () => {
+    await assertSucceeds(set(ref(db("alice"), "blocks/alice/mallory"), true));
+    await assertSucceeds(get(ref(db("alice"), "blocks/alice")));
+    await assertFails(get(ref(db("mallory"), "blocks/alice")));
+    await assertFails(set(ref(db("mallory"), "blocks/alice/bob"), true));
+    await assertFails(remove(ref(db("mallory"), "blocks/alice")));
+  });
+
+  test("geçersiz engel kaydı reddedilir", async () => {
+    await assertFails(set(ref(db("alice"), "blocks/alice/alice"), true));
+    await assertFails(set(ref(db("alice"), "blocks/alice/bob"), "evet"));
+  });
+
+  test("engellenen kişi aynı odada mesaj yazamaz, engelleyen yazabilir", async () => {
+    await seed("rooms/ABC123", { ...newRoom("alice"), createdAt: Date.now(), guestId: "bob", status: "active" });
+    const msg = (senderId) => ({ senderId, senderNickname: "Nick", text: "selam", timestamp: serverTimestamp() });
+    await assertSucceeds(push(ref(db("bob"), "rooms/ABC123/chat"), msg("bob")));
+    await seed("blocks/alice", { bob: true });
+    await assertFails(push(ref(db("bob"), "rooms/ABC123/chat"), msg("bob")));
+    await assertSucceeds(push(ref(db("alice"), "rooms/ABC123/chat"), msg("alice")));
   });
 });
 

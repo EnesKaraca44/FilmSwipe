@@ -7,7 +7,7 @@ const fs = require("fs");
 const path = require("path");
 const { initializeTestEnvironment } = require("@firebase/rules-unit-testing");
 const { setLogLevel } = require("firebase/app");
-const { ref, set, update, get, serverTimestamp, runTransaction } = require("firebase/database");
+const { ref, set, update, get, serverTimestamp } = require("firebase/database");
 
 setLogLevel("error");
 
@@ -100,35 +100,53 @@ test("eski sürüm odaları (hostId'siz) da eşleşmeye devam eder", async () =>
   expect(await waitFor(() => adminGet("rooms/LEGACY/match"))).toBe(700);
 });
 
-test("aynı anda kuyruktaki 4 kişi: her biri en fazla bir kez eşleşir", async () => {
+const DECK = { genreName: "Aksiyon", genreId: 28, movieIds: [550, 551, 552] };
+const joinQueue = (uid, deck = DECK) => set(ref(db(uid), `queue/${uid}`), deck ? { ts: serverTimestamp(), deck } : { ts: serverTimestamp() });
+const assigned = (uid) => adminGet(`matchmaking/${uid}/assignedRoom`);
+
+test("sunucu eşleştirmesi: aynı anda kuyruğa giren 4 kişi ikişer ikişer, birer kez eşleşir", async () => {
   const users = ["u1", "u2", "u3", "u4"];
-  for (const u of users) await set(ref(db(u), `queue/${u}`), { ts: serverTimestamp() });
+  await Promise.all(users.map((u) => joinQueue(u)));
 
-  // Kotlin'deki MatchmakingLogic.pickOpponent + claimOpponent transaction'ının aynısı.
-  const pick = (queue, me) => {
-    if (!queue || !(me in queue)) return null;
-    return Object.entries(queue)
-      .filter(([k]) => k !== me)
-      .sort((a, b) => (a[1]?.ts ?? Infinity) - (b[1]?.ts ?? Infinity) || a[0].localeCompare(b[0]))
-      .map(([k]) => k)[0] ?? null;
-  };
-  const claim = async (me) => {
-    let chosen = null;
-    const result = await runTransaction(ref(db(me), "queue"), (q) => {
-      chosen = pick(q, me);
-      if (!chosen) return q === null ? q : undefined; // undefined = abort
-      delete q[me];
-      delete q[chosen];
-      return q;
-    });
-    return result.committed && chosen ? [me, chosen] : null;
-  };
+  const codes = await Promise.all(users.map((u) => waitFor(() => assigned(u))));
+  expect(codes.every(Boolean)).toBe(true);
+  expect(new Set(codes).size).toBe(2);
 
-  const pairs = (await Promise.all(users.map(claim))).filter(Boolean);
-  const matchedUsers = pairs.flat();
-  expect(new Set(matchedUsers).size).toBe(matchedUsers.length); // kimse iki kez yok
-  expect(pairs.length).toBe(2);
+  for (const code of new Set(codes)) {
+    const room = await adminGet(`rooms/${code}`);
+    expect(room.status).toBe("active");
+    expect(room.movieDeck).toEqual(DECK.movieIds);
+    const members = users.filter((u, i) => codes[i] === code);
+    expect([room.hostId, room.guestId].sort()).toEqual(members.sort());
+  }
   expect(await adminGet("queue")).toBeNull();
+});
+
+test("engelleme iki yönlü: engellenen kişi engelleyenle eşleşmez", async () => {
+  await set(ref(db("alice"), "blocks/alice/bob"), true);
+  await joinQueue("alice");
+  await sleep(300);
+  await joinQueue("bob"); // bob, alice'i engellemedi ama alice onu engelledi
+  await sleep(3000);
+  expect(await assigned("alice")).toBeNull();
+  expect(await assigned("bob")).toBeNull();
+
+  await joinQueue("carol");
+  const code = await waitFor(() => assigned("carol"));
+  expect(code).not.toBeNull();
+  expect(await assigned("alice")).toBe(code); // en uzun bekleyen uygun kişi
+  expect(await assigned("bob")).toBeNull();
+  expect(Object.keys(await adminGet("queue"))).toEqual(["bob"]);
+});
+
+test("eski sürüm (destesiz) kullanıcı, destesi olan yeni sürümle eşleşir; o host olur", async () => {
+  await joinQueue("old", null);
+  await sleep(300);
+  await joinQueue("new");
+  const code = await waitFor(() => assigned("old"));
+  const room = await adminGet(`rooms/${code}`);
+  expect(room.hostId).toBe("new");
+  expect(room.guestId).toBe("old");
 });
 
 test("temizlik fonksiyonu 24 saatten eski odaları ve bayat kuyruk kayıtlarını siler", async () => {

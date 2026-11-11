@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.enes.movyswipe.data.MovieFilters
+import com.enes.movyswipe.data.QueueDeck
 import com.enes.movyswipe.data.Result
 import com.enes.movyswipe.data.repository.FirebaseRepository
 import com.enes.movyswipe.data.repository.MovieRepository
@@ -28,11 +29,10 @@ import javax.inject.Inject
  *
  * Akış:
  * 1. Deste baştan hazırlanır (eşleşince rakibi bekletmemek için).
- * 2. Kullanıcı kuyruğa girer; bağlantı koparsa sunucu kaydı siler (onDisconnect).
- * 3. Kuyrukta en az iki kişi varken her istemci bir transaction ile "kendini + en eski
- *    rakibi" kuyruktan çıkarmayı dener. Transaction atomik olduğu için yalnızca biri
- *    kazanır; kazanan odayı kurar ve rakibin posta kutusuna oda kodunu yazar.
- * 4. Kaybeden taraf posta kutusundan oda kodunu alır.
+ * 2. Cihazdaki engeller sunucuya eşitlenir (eşleştirme iki yönlü engele bakar).
+ * 3. Kullanıcı desteyle birlikte kuyruğa girer; bağlantı koparsa sunucu kaydı siler (onDisconnect).
+ * 4. Çifti sunucu seçer, odayı kurar ve iki tarafın posta kutusuna oda kodunu yazar
+ *    (functions/index.js: pairFromQueue). İstemci yalnızca kendi kaydını yazabilir.
  */
 @HiltViewModel
 class HizliDuelloBeklemeViewModel @Inject constructor(
@@ -54,12 +54,9 @@ class HizliDuelloBeklemeViewModel @Inject constructor(
     private var myUserId: String? = null
     private var started = false
     private var matched = false
-    private var claiming = false
     private var inQueue = false
     private var rejoinJob: Job? = null
-    private var deck: PreparedDeck? = null
-
-    private data class PreparedDeck(val genreName: String, val genreId: Int, val movieIds: List<Int>)
+    private var deck: QueueDeck? = null
 
     fun startSearch() {
         if (started) return
@@ -73,17 +70,19 @@ class HizliDuelloBeklemeViewModel @Inject constructor(
             }
             myUserId = userId
 
-            deck = prepareDeck()
-            if (deck == null) {
+            val prepared = prepareDeck()
+            if (prepared == null) {
                 _matchmakingStatus.value = "Film listesi alınamadı. İnternet bağlantını kontrol et."
                 started = false
                 return@launch
             }
+            deck = prepared
 
+            firebaseRepository.syncBlocks(userId, safetyPrefs.blockedUsers.value)
             firebaseRepository.clearMatchmakingData(userId)
             listenForAssignment(userId)
             try {
-                firebaseRepository.joinQueue(userId)
+                firebaseRepository.joinQueue(userId, prepared)
                 inQueue = true
             } catch (e: Exception) {
                 Log.w(TAG, "Kuyruğa katılınamadı", e)
@@ -95,7 +94,7 @@ class HizliDuelloBeklemeViewModel @Inject constructor(
         }
     }
 
-    private suspend fun prepareDeck(): PreparedDeck? {
+    private suspend fun prepareDeck(): QueueDeck? {
         val genres = listOf(
             "Aksiyon" to MovieFilters.Genre.ACTION,
             "Komedi" to MovieFilters.Genre.COMEDY,
@@ -106,13 +105,13 @@ class HizliDuelloBeklemeViewModel @Inject constructor(
         for ((name, id) in genres.take(2)) {
             val result = movieRepository.getMovies(MovieFilters.discover(listOf(id)))
             if (result is Result.Success && result.data.isNotEmpty()) {
-                return PreparedDeck(name, id, result.data.map { it.id })
+                return QueueDeck(name, id, result.data.map { it.id })
             }
         }
         return null
     }
 
-    /** Rakip benimle eşleştirdiyse oda kodunu buraya yazar. */
+    /** Sunucu bizi biriyle eşleştirince oda kodunu buraya yazar. */
     private fun listenForAssignment(userId: String) {
         viewModelScope.launch {
             firebaseRepository.listenForAssignedRoom(userId)
@@ -120,6 +119,7 @@ class HizliDuelloBeklemeViewModel @Inject constructor(
                 .collect { code ->
                     if (code == null || matched) return@collect
                     matched = true
+                    inQueue = false
                     rejoinJob?.cancel()
                     firebaseRepository.clearMatchmakingData(userId)
                     _matchmakingStatus.value = "Rakip bulundu!"
@@ -134,52 +134,11 @@ class HizliDuelloBeklemeViewModel @Inject constructor(
                 .catch { Log.w(TAG, "Kuyruk dinlenemedi", it) }
                 .collect { queue ->
                     _queueSize.value = queue.size
-                    if (matched || claiming) return@collect
-
-                    if (userId !in queue) {
-                        // Biri bizi eşleştirmek için kuyruktan çıkardı; oda kodu gelmezse geri dön.
-                        if (inQueue) scheduleRejoin(userId)
-                        return@collect
-                    }
-                    if (queue.size >= 2) tryClaim(userId)
+                    if (matched) return@collect
+                    // Sunucu bizi eşleştirmek için kuyruktan çıkardı; oda kodu gelmezse geri dön.
+                    if (userId in queue) rejoinJob?.cancel()
+                    else if (inQueue) scheduleRejoin(userId)
                 }
-        }
-    }
-
-    private fun tryClaim(userId: String) {
-        claiming = true
-        viewModelScope.launch {
-            try {
-                val opponent = firebaseRepository.claimOpponent(userId, safetyPrefs.blockedUsers.value)
-                if (opponent != null) {
-                    matched = true
-                    inQueue = false
-                    createRoomFor(userId, opponent)
-                }
-            } finally {
-                claiming = false
-            }
-        }
-    }
-
-    private suspend fun createRoomFor(hostId: String, guestId: String) {
-        val prepared = deck ?: return
-        _matchmakingStatus.value = "Rakip bulundu, oda hazırlanıyor..."
-        try {
-            val code = firebaseRepository.createRoom(
-                hostId = hostId,
-                guestId = guestId,
-                filters = mapOf("genreName" to prepared.genreName, "genreId" to prepared.genreId),
-                movieDeck = prepared.movieIds
-            )
-            firebaseRepository.notifyOpponent(guestId, code)
-            _navigateToRoom.send(code)
-        } catch (e: Exception) {
-            Log.w(TAG, "Hızlı düello odası kurulamadı", e)
-            // Kendimizi kuyruğa geri ekleyip aramaya devam edelim.
-            matched = false
-            _matchmakingStatus.value = "Bağlantı sorunu, yeniden aranıyor..."
-            rejoin(hostId)
         }
     }
 
@@ -192,8 +151,9 @@ class HizliDuelloBeklemeViewModel @Inject constructor(
     }
 
     private suspend fun rejoin(userId: String) {
+        val prepared = deck ?: return
         try {
-            firebaseRepository.joinQueue(userId)
+            firebaseRepository.joinQueue(userId, prepared)
             inQueue = true
             _matchmakingStatus.value = "Eşleşme aranıyor..."
         } catch (e: Exception) {

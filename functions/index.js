@@ -2,9 +2,83 @@ const { onValueWritten } = require("firebase-functions/v2/database");
 const { onSchedule } = require("firebase-functions/v2/scheduler");
 const { logger } = require("firebase-functions");
 const admin = require("firebase-admin");
-const { isMatch, ROOM_TTL_MS, QUEUE_TTL_MS } = require("./match");
+const { isMatch, pickPair, generateRoomCode, ROOM_TTL_MS, QUEUE_TTL_MS } = require("./match");
 
 admin.initializeApp();
+
+/**
+ * Hızlı düello eşleştirmesi (sunucu tarafı).
+ *
+ * Eskiden her istemci tüm /queue üzerinde transaction çalıştırıyordu; bu yüzden kurallar
+ * giriş yapmış herkesin kuyruğun tamamını silmesine izin vermek zorundaydı ve engelleme
+ * yalnızca eşleştirmeyi yapan tarafın listesine bakıyordu. Artık istemci yalnızca kendi
+ * kaydını yazar; çifti burada, iki yönlü engellemeyi kontrol ederek seçeriz.
+ */
+exports.pairFromQueue = onValueWritten("/queue/{uid}", async (event) => {
+  if (!event.data.after.exists()) return null;
+  const me = event.params.uid;
+  const db = event.data.after.ref.root;
+  const queueRef = db.child("queue");
+
+  // Engeller transaction dışında okunur: nadiren değişir ve transaction içinde okuma yapılamaz.
+  const [queueSnap, myBlocksSnap] = await Promise.all([
+    queueRef.once("value"),
+    db.child(`blocks/${me}`).once("value"),
+  ]);
+  const others = Object.keys(queueSnap.val() || {}).filter((uid) => uid !== me);
+  if (others.length === 0) return null;
+
+  const excluded = new Set(Object.keys(myBlocksSnap.val() || {}));
+  const theirBlocks = await Promise.all(others.map((uid) => db.child(`blocks/${uid}/${me}`).once("value")));
+  others.forEach((uid, i) => {
+    if (theirBlocks[i].exists()) excluded.add(uid);
+  });
+
+  let pair = null;
+  const result = await queueRef.transaction((current) => {
+    pair = pickPair(current, me, excluded);
+    // Yerel önbellek boşsa null dönmek sunucudaki gerçek veriyle yeniden denemeyi sağlar.
+    if (!pair) return current === null ? null : undefined;
+    delete current[pair.hostId];
+    delete current[pair.guestId];
+    return current;
+  });
+  if (!result.committed || !pair) return null;
+
+  try {
+    const code = await createQuickDuelRoom(db, pair);
+    await db.update({
+      [`matchmaking/${pair.hostId}/assignedRoom`]: code,
+      [`matchmaking/${pair.guestId}/assignedRoom`]: code,
+    });
+    logger.info(`Hızlı düello: oda=${code}`);
+  } catch (e) {
+    // Kuyruğa burada geri yazmıyoruz: kalıcı bir hatada fonksiyon kendini sonsuza dek tetiklerdi.
+    // Oda kodu gelmeyen istemciler REJOIN_TIMEOUT_MS sonra kuyruğa kendileri geri döner.
+    logger.error("Hızlı düello odası kurulamadı", e);
+  }
+  return null;
+});
+
+async function createQuickDuelRoom(db, { hostId, guestId, deck }) {
+  for (let attempt = 0; attempt < 5; attempt++) {
+    const code = generateRoomCode();
+    const roomRef = db.child(`rooms/${code}`);
+    const result = await roomRef.transaction((current) => {
+      if (current !== null) return undefined; // kod dolu
+      return {
+        status: "active",
+        hostId,
+        guestId,
+        filters: { genreName: deck.genreName, genreId: deck.genreId },
+        movieDeck: deck.movieIds,
+        createdAt: { ".sv": "timestamp" }, // ServerValue.TIMESTAMP
+      };
+    });
+    if (result.committed) return code;
+  }
+  throw new Error("Boş oda kodu bulunamadı");
+}
 
 /**
  * Bir filme yapılan her seçimde çalışır. Odanın iki oyuncusu da "like" dediyse

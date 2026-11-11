@@ -3,27 +3,23 @@ package com.enes.movyswipe.data.repository
 import android.util.Log
 import com.enes.movyswipe.data.ChatMessage
 import com.enes.movyswipe.data.JoinResult
-import com.enes.movyswipe.data.MatchmakingLogic
+import com.enes.movyswipe.data.QueueDeck
 import com.enes.movyswipe.data.Result
 import com.enes.movyswipe.data.RoomCodes
 import com.enes.movyswipe.data.RoomInfo
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.MutableData
 import com.google.firebase.database.ServerValue
-import com.google.firebase.database.Transaction
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.coroutines.resume
 
 /**
  * Realtime Database erişimi. Veri yapısı ve yetkiler için kök dizindeki
@@ -188,16 +184,51 @@ class FirebaseRepository @Inject constructor() {
         false
     }
 
+    // ---------------------------------------------------------------- Engelleme
+
+    /**
+     * Engeli sunucuya yazar. Eşleştirme (Cloud Function) iki yönde de bu listeye bakar ve
+     * kurallar engellenen kişinin aynı odada mesaj yazmasını reddeder.
+     */
+    suspend fun blockUser(me: String, blockedUserId: String): Boolean = try {
+        database.child("blocks").child(me).child(blockedUserId).setValue(true).await()
+        true
+    } catch (e: Exception) {
+        Log.w(TAG, "Engel sunucuya yazılamadı", e)
+        false
+    }
+
+    /** Cihazda tutulan (ör. eski sürümde eklenmiş) engelleri sunucuya taşır. */
+    suspend fun syncBlocks(me: String, blocked: Set<String>) {
+        if (blocked.isEmpty()) return
+        try {
+            database.child("blocks").child(me).updateChildren(blocked.associateWith { true }).await()
+        } catch (e: Exception) {
+            Log.w(TAG, "Engeller eşitlenemedi", e)
+        }
+    }
+
     // ---------------------------------------------------------------- Hızlı düello
 
     /**
-     * Kuyruğa katılır. Uygulama kapanır veya bağlantı koparsa sunucu kaydı otomatik siler,
+     * Kuyruğa katılır. Eşleştirmeyi sunucu (functions/index.js: pairFromQueue) yapar; odayı,
+     * daha uzun bekleyen tarafın buraya yazdığı desteyle kurar ve iki tarafın posta kutusuna
+     * oda kodunu yazar. Uygulama kapanır veya bağlantı koparsa sunucu kaydı otomatik siler,
      * böylece kuyrukta "hayalet" kullanıcı kalmaz.
      */
-    suspend fun joinQueue(userId: String) {
+    suspend fun joinQueue(userId: String, deck: QueueDeck) {
         val ref = database.child("queue").child(userId)
         ref.onDisconnect().removeValue().await()
-        ref.setValue(mapOf("ts" to ServerValue.TIMESTAMP)).await()
+        ref.setValue(
+            mapOf(
+                "ts" to ServerValue.TIMESTAMP,
+                "deck" to mapOf(
+                    "genreName" to deck.genreName,
+                    "genreId" to deck.genreId,
+                    "movieIds" to deck.movieIds.take(QueueDeck.MAX_SIZE)
+                )
+            )
+        ).await()
     }
 
     suspend fun leaveQueue(userId: String) {
@@ -214,48 +245,6 @@ class FirebaseRepository @Inject constructor() {
         s.children.mapNotNull { child ->
             child.key?.let { it to child.child("ts").getValue(Long::class.java) }
         }.toMap()
-    }
-
-    /**
-     * Kuyruktan kendimi ve bir rakibi TEK bir transaction ile çıkarır. Böylece aynı rakip
-     * iki farklı kişiyle eşleşemez. Başarılıysa ben odayı kuran (host) olurum.
-     * @return Rakip uid'si veya (rakip yoksa / başkası önce davrandıysa) null.
-     */
-    suspend fun claimOpponent(me: String, blocked: Set<String>): String? =
-        suspendCancellableCoroutine { cont ->
-            var chosen: String? = null
-            database.child("queue").runTransaction(object : Transaction.Handler {
-                override fun doTransaction(currentData: MutableData): Transaction.Result {
-                    val queue = currentData.children.mapNotNull { child ->
-                        child.key?.let { it to child.child("ts").getValue(Long::class.java) }
-                    }.toMap()
-                    val opponent = MatchmakingLogic.pickOpponent(queue, me, blocked)
-                    chosen = opponent
-                    if (opponent == null) {
-                        // Önbellek boş olabilir; değeri olmayan veride "success" dönmek
-                        // sunucudaki gerçek veriyle yeniden denenmesini sağlar.
-                        return if (currentData.value == null) Transaction.success(currentData)
-                        else Transaction.abort()
-                    }
-                    currentData.child(me).value = null
-                    currentData.child(opponent).value = null
-                    return Transaction.success(currentData)
-                }
-
-                override fun onComplete(error: DatabaseError?, committed: Boolean, snapshot: DataSnapshot?) {
-                    when {
-                        error != null -> {
-                            Log.w(TAG, "Eşleştirme transaction hatası", error.toException())
-                            if (cont.isActive) cont.resume(null)
-                        }
-                        cont.isActive -> cont.resume(if (committed) chosen else null)
-                    }
-                }
-            }, false)
-        }
-
-    suspend fun notifyOpponent(opponentId: String, roomCode: String) {
-        database.child("matchmaking").child(opponentId).child("assignedRoom").setValue(roomCode).await()
     }
 
     fun listenForAssignedRoom(userId: String): Flow<String?> =
