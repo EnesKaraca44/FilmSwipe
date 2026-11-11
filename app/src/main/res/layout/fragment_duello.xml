@@ -31,7 +31,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="⚔️ Düello"
+                android:text="@string/duel_title"
                 android:textColor="@color/text_white"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -43,7 +43,7 @@
                 android:background="@drawable/button_accent"
                 android:elevation="2dp"
                 android:padding="8dp"
-                android:text="👤 Partner hazır"
+                android:text="@string/duel_partner_ready"
                 android:textColor="@color/text_white"
                 android:textSize="14sp" />
 
@@ -76,6 +76,7 @@
                 android:layout_marginEnd="32dp"
                 android:background="@drawable/button_secondary"
                 android:elevation="8dp"
+                android:contentDescription="@string/duel_cd_pass"
                 android:text="❌"
                 android:textSize="24sp" />
 
@@ -86,6 +87,7 @@
                 android:layout_height="80dp"
                 android:background="@drawable/button_accent"
                 android:elevation="8dp"
+                android:contentDescription="@string/duel_cd_like"
                 android:text="❤️"
                 android:textSize="24sp" />
         </LinearLayout>
@@ -111,11 +113,19 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="16dp"
             android:alpha="0.8"
-            android:text="👆 Kaydır veya butonlara bas"
+            android:text="@string/duel_swipe_hint"
             android:textColor="@color/text_hint"
             android:textSize="12sp" />
 
     </RelativeLayout>
+
+    <!-- Oda veya filmler yüklenemezse: mesaj + "Tekrar dene". -->
+    <include
+        android:id="@+id/errorView"
+        layout="@layout/view_error_retry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
 
     <!-- ADIM 2: ProgressBar'ı, her şeyin üstünde ve ortada duracak şekilde buraya koyuyoruz. -->
     <!-- Başlangıçta görünür olacak. -->

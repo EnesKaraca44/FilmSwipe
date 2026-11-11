@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- fragment_sohbet.xml -->
+    <string name="chat_title">Film Hakkında Sohbet</string>
+    <string name="chat_back">Geri</string>
+    <string name="chat_safety_options">Güvenlik seçenekleri</string>
+    <string name="chat_message_hint">Mesajınızı yazın...</string>
+    <string name="chat_send">Gönder</string>
+    <string name="chat_empty_title">Sohbeti Başlatın!</string>
+    <string name="chat_empty_subtitle">Eşleştiniz film hakkında\nkonuşmaya başlayın</string>
+
+    <!-- Topluluk kuralları -->
+    <string name="chat_rules_title">Topluluk Kuralları</string>
+    <string name="chat_rules_message">Sohbete katılmadan önce lütfen kabul et:\n\n• Hakaret, taciz, nefret söylemi ve tehdit yasaktır.\n• Cinsel içerik, spam ve dolandırıcılık yasaktır.\n• Kişisel bilgilerini (telefon, adres vb.) paylaşma.\n\nKurallara uymayan kullanıcıları mesajlarına uzun basarak veya sağ üstteki menüden şikayet edebilir ve engelleyebilirsin. Şikayetler incelenir; kuralı ihlal eden hesaplar uygulamadan uzaklaştırılır.</string>
+    <string name="chat_rules_accept">Kabul Ediyorum</string>
+    <string name="chat_cancel">Vazgeç</string>
+
+    <!-- Güvenlik menüsü / şikayet / engelleme -->
+    <string name="chat_report_user">Kullanıcıyı şikayet et</string>
+    <string name="chat_block_user">Kullanıcıyı engelle</string>
+    <string name="chat_report_message">Mesajı şikayet et</string>
+    <string name="chat_partner_unavailable">Sohbet bilgisi yüklenemedi, biraz sonra tekrar dene.</string>
+    <string name="chat_report_reason_title">Şikayet nedeni</string>
+    <string name="chat_reason_harassment">Hakaret / taciz</string>
+    <string name="chat_reason_sexual">Cinsel içerik</string>
+    <string name="chat_reason_spam">Spam / dolandırıcılık</string>
+    <string name="chat_reason_hate">Nefret söylemi</string>
+    <string name="chat_reason_other">Diğer</string>
+    <string name="chat_block_confirm_message">Bu kullanıcının mesajlarını artık görmeyeceksin ve hızlı düelloda onunla eşleşmeyeceksin.</string>
+    <string name="chat_block">Engelle</string>
+    <string name="chat_unknown_user">Bilinmeyen</string>
+
+    <!-- SohbetViewModel bildirimleri -->
+    <string name="chat_sign_in_failed">Giriş yapılamadı. İnternet bağlantını kontrol et.</string>
+    <string name="chat_messages_load_failed">Mesajlar yüklenemedi.</string>
+    <string name="chat_message_too_long">Mesaj en fazla %1$d karakter olabilir.</string>
+    <string name="chat_rate_limited">Çok hızlı mesaj gönderiyorsun, birkaç saniye bekle.</string>
+    <string name="chat_send_failed">Mesaj gönderilemedi.</string>
+    <string name="chat_report_sent">Şikayetin alındı. İncelenecek.</string>
+    <string name="chat_report_failed">Şikayet gönderilemedi, tekrar dene.</string>
+    <string name="chat_user_blocked">Kullanıcı engellendi. Sana mesaj yazamayacak ve onunla eşleşmeyeceksin.</string>
+</resources>

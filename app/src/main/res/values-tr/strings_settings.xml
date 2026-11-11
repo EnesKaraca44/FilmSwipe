@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Ayarlar / Profilim ekranı -->
+    <string name="settings_back">Geri dön</string>
+    <string name="settings_title">Ayarlar  •</string>
+    <string name="settings_version">FilmSwipe v%1$s</string>
+    <string name="settings_user_placeholder">Kullanıcı  •</string>
+    <string name="settings_nickname_header">%1$s  •</string>
+    <string name="settings_anonymous_account">Anonim hesap · e-posta gerekmez</string>
+    <string name="settings_movie_buff_badge">●  Sinemasever</string>
+    <string name="settings_pro_badge">Pro</string>
+    <string name="settings_stat_duels">DÜELLO</string>
+    <string name="settings_stat_matches">EŞLEŞME</string>
+    <string name="settings_stat_compatibility">UYUM</string>
+    <string name="settings_compatibility_rate">%%%1$d</string>
+    <string name="settings_section_profile">PROFİL BİLGİLERİ</string>
+    <string name="settings_username_label">Kullanıcı Adı</string>
+    <string name="settings_username_hint">Kullanıcı adı</string>
+    <string name="settings_save_username">▣  Kaydet</string>
+    <string name="settings_username_info">Film özlerinde ve swipe eşleşmelerinde diğer kullanıcılar bu ad görünür.</string>
+    <string name="settings_section_preferences">UYGULAMA TERCİHLERİ</string>
+    <string name="settings_dark_theme">Koyu Tema</string>
+    <string name="settings_dark_theme_on">Sinematik gece modu aktif</string>
+    <string name="settings_dark_theme_off">Açık tema kullanılıyor</string>
+    <string name="settings_ad_privacy_options">♛  Reklam Gizlilik Seçenekleri</string>
+    <string name="settings_plus_title">Film Swipe Plus</string>
+    <string name="settings_plus_badge">PRO</string>
+    <string name="settings_plus_description">Tek seferlik ödemeyle tüm reklamları kaldır</string>
+    <string name="settings_remove_ads">Reklamları Kaldır →</string>
+    <string name="settings_ad_free_active">Reklamsız sürüm aktif ✓</string>
+    <string name="settings_privacy_policy">Gizlilik Politikası</string>
+    <string name="settings_terms_licenses">Kullanım Koşulları &amp; Lisanslar</string>
+    <string name="settings_tmdb_note">Film verileri ve posterler: TMDB\n\nThis product uses the TMDB API but is not endorsed or certified\nby TMDB.</string>
+    <string name="settings_sign_out_button">⇥  ÇIKIŞ YAP</string>
+    <string name="settings_nickname_length_error">Kullanıcı adı %1$d-%2$d karakter olmalıdır.</string>
+    <string name="settings_nickname_updated">Kullanıcı adı güncellendi!</string>
+    <string name="settings_sign_out_title">Çıkış Yap</string>
+    <string name="settings_sign_out_message">Çıkış yapmak istediğinden emin misin? İzleme listen, istatistiklerin ve reklamsız sürüm bu cihazda kalır; kullanıcı adın silinir ve yeni bir kimlikle devam edersin.</string>
+    <string name="settings_sign_out_confirm">Evet, Çıkış Yap</string>
+    <string name="settings_sign_out_cancel">Hayır</string>
+
+    <!-- Profil oluşturma ekranı -->
+    <string name="settings_create_profile_title">Profil Oluştur</string>
+    <string name="settings_avatar_description">Profil fotoğrafı</string>
+    <string name="settings_choose_photo">FOTOĞRAF SEÇ</string>
+    <string name="settings_name_label">Ad</string>
+    <string name="settings_name_hint">Adınızı girin</string>
+    <string name="settings_username_handle_hint">\@kullaniciadi</string>
+    <string name="settings_bio_label">Biyografi</string>
+    <string name="settings_bio_hint">Kendinizden kısaca bahsedin</string>
+    <string name="settings_save_profile">KAYDET</string>
+    <string name="settings_skip_profile">SONRA YAP</string>
+    <string name="settings_profile_saved">Profil kaydedildi!</string>
+
+    <!-- Satın alma -->
+    <string name="settings_purchase_completed">Teşekkürler! Reklamlar kaldırıldı.</string>
+    <string name="settings_purchase_pending">Ödemen onay bekliyor. Onaylanınca reklamlar kalkacak.</string>
+    <string name="settings_purchase_unavailable">Satın alma şu an kullanılamıyor. Lütfen daha sonra tekrar deneyin.</string>
+    <string name="settings_purchase_failed">Satın alma tamamlanamadı (kod %1$d).</string>
+
+    <!-- Rastgele takma ad üretici (sıfat + isim) -->
+    <string-array name="settings_nickname_adjectives">
+        <item>Hızlı</item>
+        <item>Gizemli</item>
+        <item>Neşeli</item>
+        <item>Cesur</item>
+        <item>Uykucu</item>
+        <item>Meraklı</item>
+    </string-array>
+    <string-array name="settings_nickname_nouns">
+        <item>Aslan</item>
+        <item>Kaplan</item>
+        <item>Kartal</item>
+        <item>Panda</item>
+        <item>Tilki</item>
+        <item>Gezgin</item>
+    </string-array>
+</resources>

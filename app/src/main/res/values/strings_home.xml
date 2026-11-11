@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Ana Menü (Home) -->
+    <string name="home_error_tap_to_retry">%1$s\n(Tap to retry)</string>
+    <string name="home_load_error">Couldn\'t load movies. Check your internet connection.</string>
+    <string name="home_no_overview">No overview available.</string>
+    <string name="home_added_to_watchlist">%1$s added to your list!</string>
+    <string name="home_add_failed">Couldn\'t add the movie.</string>
+    <string name="home_no_browser">No browser found.</string>
+    <string name="home_movie_poster">Movie poster</string>
+    <string name="home_genre_action">Action</string>
+    <string name="home_genre_drama">Drama</string>
+
+    <!-- Listem (Watchlist) -->
+    <string name="watchlist_title">Watchlist</string>
+    <string name="watchlist_subtitle">FilmSwipe Shared Archive • v%1$s</string>
+    <string name="watchlist_search_button">Search list</string>
+    <string name="watchlist_sort_button">Sort</string>
+    <string name="watchlist_search_hint">Search movies in your list</string>
+    <string name="watchlist_close_search">Close search</string>
+    <string name="watchlist_empty_title">No movies added yet</string>
+    <string name="watchlist_empty_message">Movies you match and everything you and your friends both liked will be listed here.</string>
+    <string name="watchlist_start_duel">Start a Duel &amp; Match Movies</string>
+    <string name="watchlist_stats_header">STATISTICS</string>
+    <string name="watchlist_stat_total">Total Movies</string>
+    <string name="watchlist_stat_this_month">This Month</string>
+    <string name="watchlist_stat_this_week">This Week</string>
+    <string name="watchlist_stat_hours_zero">0 hours</string>
+    <plurals name="watchlist_stat_hours_estimate">
+        <item quantity="one">≈%1$d hour</item>
+        <item quantity="other">≈%1$d hours</item>
+    </plurals>
+    <string name="watchlist_stat_added_today">+%1$d today</string>
+    <plurals name="watchlist_stat_streak">
+        <item quantity="one">Streak: %1$d day</item>
+        <item quantity="other">Streak: %1$d days</item>
+    </plurals>
+    <string name="watchlist_stats_up_to_date">Up to date this week</string>
+    <string name="watchlist_stats_last_added">Last added: %1$s</string>
+    <string name="watchlist_stats_no_data">No data yet</string>
+    <string name="watchlist_manage_header">LIST MANAGEMENT</string>
+    <string name="watchlist_clear_list">Clear List</string>
+    <string name="watchlist_clear_list_subtitle">Reset all saved movie data</string>
+    <string name="watchlist_share_list">Share List</string>
+    <string name="watchlist_share_list_subtitle">Create a link or story to share with friends</string>
+    <string name="watchlist_invite_to_room">Invite to a Movie Room</string>
+    <string name="watchlist_invite_to_room_subtitle">Create a room and share the code with your friend</string>
+    <string name="watchlist_remove_movie">Remove movie from list</string>
+    <string name="watchlist_added_ago">Added • %1$s</string>
+    <string name="watchlist_my_movies_count">MY MOVIES (%1$d)</string>
+    <string name="watchlist_results_count">RESULTS (%1$d/%2$d)</string>
+    <string name="watchlist_no_search_results">No movies match “%1$s”.</string>
+
+    <string name="watchlist_sort_newest">Recently added</string>
+    <string name="watchlist_sort_oldest">Oldest added</string>
+    <string name="watchlist_sort_title">Title (A-Z)</string>
+    <string name="watchlist_sort_rating">Highest rated</string>
+    <string name="watchlist_sort_release">Newest release</string>
+
+    <string name="watchlist_relative_today">Today</string>
+    <string name="watchlist_relative_yesterday">Yesterday</string>
+    <plurals name="watchlist_relative_days_ago">
+        <item quantity="one">%1$d day ago</item>
+        <item quantity="other">%1$d days ago</item>
+    </plurals>
+    <plurals name="watchlist_relative_weeks_ago">
+        <item quantity="one">%1$d week ago</item>
+        <item quantity="other">%1$d weeks ago</item>
+    </plurals>
+    <plurals name="watchlist_relative_months_ago">
+        <item quantity="one">%1$d month ago</item>
+        <item quantity="other">%1$d months ago</item>
+    </plurals>
+    <plurals name="watchlist_relative_years_ago">
+        <item quantity="one">%1$d year ago</item>
+        <item quantity="other">%1$d years ago</item>
+    </plurals>
+
+    <string name="watchlist_remove_title">Remove Movie</string>
+    <string name="watchlist_remove_message">Are you sure you want to remove \'%1$s\' from your watchlist?</string>
+    <string name="watchlist_remove_confirm">Yes, Remove</string>
+    <string name="watchlist_movie_removed">Movie removed.</string>
+    <string name="watchlist_no">No</string>
+    <string name="watchlist_cancel">Cancel</string>
+    <string name="watchlist_already_empty">Your list is already empty.</string>
+    <string name="watchlist_nothing_to_search">There are no movies in your list to search yet.</string>
+    <string name="watchlist_nothing_to_sort">There are no movies in your list to sort.</string>
+    <string name="watchlist_nothing_to_share">There are no movies in your list to share.</string>
+    <string name="watchlist_clear_message">Are you sure you want to delete all movies from your watchlist? This can\'t be undone.</string>
+    <string name="watchlist_clear_confirm">Yes, Delete</string>
+    <string name="watchlist_cleared">Watchlist cleared.</string>
+    <string name="watchlist_share_option_story">Create story image</string>
+    <string name="watchlist_share_option_text">Share as text and link</string>
+    <string name="watchlist_story_preparing">Preparing story image…</string>
+    <string name="watchlist_story_failed">Couldn\'t create the image. Try sharing as text.</string>
+    <string name="watchlist_share_image_text">My FilmSwipe Watchlist 🎬 %1$s</string>
+    <string name="watchlist_share_chooser_title">Share Your Watchlist</string>
+    <string name="watchlist_share_no_app">No app found to share with.</string>
+
+    <!-- Paylaşım metni ve hikaye görseli -->
+    <plurals name="watchlist_share_text_header">
+        <item quantity="one">🎬 My FilmSwipe Watchlist (%1$d movie)</item>
+        <item quantity="other">🎬 My FilmSwipe Watchlist (%1$d movies)</item>
+    </plurals>
+    <string name="watchlist_share_text_footer">Let\'s pick a movie together! Download FilmSwipe: %1$s</string>
+    <string name="watchlist_story_title">My Watchlist</string>
+    <plurals name="watchlist_story_subtitle">
+        <item quantity="one">%1$d movie • FilmSwipe Shared Archive</item>
+        <item quantity="other">%1$d movies • FilmSwipe Shared Archive</item>
+    </plurals>
+    <plurals name="watchlist_story_more">
+        <item quantity="one">+%1$d more movie</item>
+        <item quantity="other">+%1$d more movies</item>
+    </plurals>
+    <string name="watchlist_story_footer">Let\'s pick a movie together with FilmSwipe!</string>
+    <string name="watchlist_story_search_store">Search \"FilmSwipe\" on Google Play</string>
+</resources>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -24,7 +25,7 @@
             android:src="@drawable/placeholder_movie_poster"
             android:background="@drawable/poster_shadow"
             android:layout_marginEnd="16dp"
-            android:contentDescription="Film Posteri" />
+            android:contentDescription="@string/home_movie_poster" />
 
         <!-- Film Info -->
         <LinearLayout
@@ -66,7 +67,7 @@
                     android:id="@+id/textViewDialogRating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="8.5"
+                    tools:text="8.5"
                     android:textColor="#FFD700"
                     android:textSize="14sp"
                     android:textStyle="bold"
@@ -76,7 +77,7 @@
                     android:id="@+id/textViewDialogYear"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="(2023)"
+                    tools:text="(2023)"
                     android:textColor="#CCCCCC"
                     android:textSize="14sp" />
 
@@ -93,7 +94,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Aksiyon"
+                    android:text="@string/home_genre_action"
                     android:textColor="#FFFFFF"
                     android:textSize="10sp"
                     android:background="@drawable/genre_tag"
@@ -104,7 +105,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Drama"
+                    android:text="@string/home_genre_drama"
                     android:textColor="#FFFFFF"
                     android:textSize="10sp"
                     android:background="@drawable/genre_tag"
@@ -121,6 +122,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="✕"
+            android:contentDescription="@string/close"
             android:textColor="#CCCCCC"
             android:textSize="20sp"
             android:textStyle="bold"

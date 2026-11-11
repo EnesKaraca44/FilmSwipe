@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Listem ekranı ve alt menü — KOYU tema paleti. Açık tema: values/watchlist_colors.xml -->
+<resources>
+    <color name="wl_page_start">#1A1A1A</color>
+    <color name="wl_page_center">#252636</color>
+    <color name="wl_page_end">#0D1117</color>
+    <color name="wl_card">#1F2133</color>
+    <color name="wl_card_border">#32354E</color>
+    <color name="wl_header_button">#202235</color>
+    <color name="wl_empty_card">#222038</color>
+    <color name="wl_empty_card_border">#483B7E</color>
+    <color name="wl_divider">#2D3048</color>
+    <color name="wl_nav_background">#161722</color>
+
+    <color name="wl_text_primary">#F5F3FF</color>
+    <color name="wl_text_secondary">#D4D4E4</color>
+    <color name="wl_text_muted">#A2A4BA</color>
+    <color name="wl_label">#9496AD</color>
+
+    <color name="wl_purple">#7C3AED</color>
+    <color name="wl_purple_dark">#6D28D9</color>
+    <color name="wl_purple_bright">#A855F7</color>
+    <color name="wl_purple_light">#A78BFA</color>
+    <color name="wl_purple_surface">#2D235C</color>
+    <color name="wl_purple_surface_border">#54429B</color>
+    <color name="wl_indigo">#A5B4FC</color>
+    <color name="wl_pink">#F472B6</color>
+    <color name="wl_pink_surface">#3D1B33</color>
+    <color name="wl_green">#34D399</color>
+    <color name="wl_green_surface">#12362C</color>
+    <color name="wl_red">#F87171</color>
+    <color name="wl_red_surface">#3E1924</color>
+    <color name="wl_amber">#FBBF24</color>
+    <color name="wl_amber_surface">#3E2C14</color>
+    <color name="wl_gold">#F7BB18</color>
+    <color name="wl_neutral_surface">#25273E</color>
+    <color name="wl_ripple">#26FFFFFF</color>
+</resources>

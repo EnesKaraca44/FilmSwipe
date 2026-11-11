@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- Küçük ekranlarda / büyük yazı tipinde alttaki butonlar kesilmesin diye kaydırılabilir. -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/light_gradient_background"
+    android:fillViewport="true"
+    tools:context=".fragments.OdayaKatilFragment">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="24dp"
-    tools:context=".fragments.OdayaKatilFragment">
+    android:padding="24dp">
 
     <!-- Header -->
     <LinearLayout
@@ -24,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:text="🚪 Odaya Katıl"
+            android:text="@string/duel_join_title"
             android:textColor="@color/text_primary"
             android:textSize="28sp"
             android:textStyle="bold" />
@@ -34,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
             android:gravity="center"
-            android:text="Arkadaşından aldığın 6 haneli kodu gir"
+            android:text="@string/duel_join_subtitle"
             android:textColor="@color/text_secondary"
             android:textSize="16sp" />
 
@@ -49,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                android:text="Oda Kodu"
+                android:text="@string/duel_join_code_label"
                 android:textColor="@color/text_primary"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -63,7 +69,7 @@
                 android:background="@drawable/button_primary"
                 android:elevation="4dp"
                 android:gravity="center"
-                android:hint="K8F3T1"
+                android:hint="@string/duel_join_code_hint"
                 android:inputType="textCapCharacters"
                 android:letterSpacing="0.2"
                 android:maxLength="6"
@@ -85,7 +91,7 @@
                     android:layout_height="match_parent"
                     android:background="@drawable/button_secondary"
                     android:elevation="6dp"
-                    android:text="🎯 Katıl"
+                    android:text="@string/duel_join_button"
                     android:textColor="@color/text_white"
                     android:textSize="18sp"
                     android:textStyle="bold"
@@ -119,7 +125,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:text="💡 İpucu"
+            android:text="@string/duel_join_tip_title"
             android:textColor="@color/text_primary"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -130,7 +136,7 @@
             android:alpha="0.9"
             android:gravity="center"
             android:lineSpacingExtra="4dp"
-            android:text="Kod 6 haneli ve büyük harflerden oluşur\n(Örnek: K8F3T1)"
+            android:text="@string/duel_join_tip_body"
             android:textColor="@color/text_secondary"
             android:textSize="14sp" />
 
@@ -144,9 +150,11 @@
         android:layout_marginTop="48dp"
         android:background="@drawable/button_accent"
         android:elevation="6dp"
-        android:text="⬅️ Geri Dön"
+        android:text="@string/duel_join_back"
         android:textColor="@color/text_white"
         android:textSize="16sp"
         android:textStyle="bold" />
 
 </LinearLayout>
+
+</ScrollView>

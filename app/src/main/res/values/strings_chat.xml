@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- fragment_sohbet.xml -->
+    <string name="chat_title">Movie Chat</string>
+    <string name="chat_back">Back</string>
+    <string name="chat_safety_options">Safety options</string>
+    <string name="chat_message_hint">Type a message…</string>
+    <string name="chat_send">Send</string>
+    <string name="chat_empty_title">Start the conversation!</string>
+    <string name="chat_empty_subtitle">Start talking about\nthe movie you matched on</string>
+
+    <!-- Community rules -->
+    <string name="chat_rules_title">Community Guidelines</string>
+    <string name="chat_rules_message">Please accept before joining the chat:\n\n• Insults, harassment, hate speech and threats are not allowed.\n• Sexual content, spam and scams are not allowed.\n• Don\'t share personal information (phone number, address, etc.).\n\nYou can report and block users who break the rules by long-pressing their messages or from the menu in the top right. Reports are reviewed; accounts that violate the rules are removed from the app.</string>
+    <string name="chat_rules_accept">I Accept</string>
+    <string name="chat_cancel">Cancel</string>
+
+    <!-- Safety menu / report / block -->
+    <string name="chat_report_user">Report user</string>
+    <string name="chat_block_user">Block user</string>
+    <string name="chat_report_message">Report message</string>
+    <string name="chat_partner_unavailable">Couldn\'t load chat details. Try again in a moment.</string>
+    <string name="chat_report_reason_title">Reason for report</string>
+    <string name="chat_reason_harassment">Insults / harassment</string>
+    <string name="chat_reason_sexual">Sexual content</string>
+    <string name="chat_reason_spam">Spam / scam</string>
+    <string name="chat_reason_hate">Hate speech</string>
+    <string name="chat_reason_other">Other</string>
+    <string name="chat_block_confirm_message">You won\'t see this user\'s messages anymore and won\'t be matched with them in quick duels.</string>
+    <string name="chat_block">Block</string>
+    <string name="chat_unknown_user">Unknown</string>
+
+    <!-- SohbetViewModel toasts -->
+    <string name="chat_sign_in_failed">Couldn\'t sign in. Check your internet connection.</string>
+    <string name="chat_messages_load_failed">Couldn\'t load messages.</string>
+    <string name="chat_message_too_long">Messages can be at most %1$d characters.</string>
+    <string name="chat_rate_limited">You\'re sending messages too fast. Wait a few seconds.</string>
+    <string name="chat_send_failed">Couldn\'t send message.</string>
+    <string name="chat_report_sent">Your report was received and will be reviewed.</string>
+    <string name="chat_report_failed">Couldn\'t send report. Please try again.</string>
+    <string name="chat_user_blocked">User blocked. They can\'t message you and you won\'t be matched with them.</string>
+</resources>

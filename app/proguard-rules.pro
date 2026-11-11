@@ -53,8 +53,6 @@
 # ============================
 # 🔥 Firebase / Google Servisleri
 # ============================
--keep class com.google.firebase.** { *; }
--keep class com.google.android.gms.** { *; }
 -dontwarn com.google.firebase.**
 -dontwarn com.google.android.gms.**
 
@@ -77,11 +75,8 @@
 -keep interface com.enes.movyswipe.network.ApiService { *; }
 -keep class com.enes.movyswipe.network.** { *; }
 
-# Repository ve ViewModel'leri koru
--keep class com.enes.movyswipe.data.repository.** { *; }
--keep class com.enes.movyswipe.viewmodels.** { *; }
--keepclassmembers class com.enes.movyswipe.data.repository.** { *; }
--keepclassmembers class com.enes.movyswipe.viewmodels.** { *; }
+# Not: Kütüphaneler (Firebase, Play Services, Room, Billing, Lottie) kendi consumer
+# kurallarını getirir; tüm paketi 'keep' etmek R8 küçültmesini boşa çıkarıyordu.
 
 # OkHttp
 -dontwarn okhttp3.**
@@ -156,12 +151,8 @@
 
 # Kotlin Metadata (Reflection için gerekli)
 -keep class kotlin.Metadata { *; }
--keep class kotlin.reflect.** { *; }
 -dontwarn kotlin.reflect.**
 
-# Kotlin sealed class için
--keep class kotlin.** { *; }
--keepclassmembers class kotlin.** { *; }
 
 # Sealed class generic type koruması
 -keepattributes Signature
@@ -188,7 +179,6 @@
 # ============================
 # 💾 Room Database
 # ============================
--keep class androidx.room.** { *; }
 -keep class * extends androidx.room.RoomDatabase
 -keep @androidx.room.Entity class *
 -dontwarn androidx.room.**
@@ -219,17 +209,14 @@
 # ============================
 # 🎨 Lottie Animations
 # ============================
--keep class com.airbnb.lottie.** { *; }
 
 # ============================
 # 💳 Google Play Billing
 # ============================
--keep class com.android.billingclient.** { *; }
 
 # ============================
 # 📊 Google Play Services Ads
 # ============================
--keep class com.google.android.gms.ads.** { *; }
 
 # ============================
 # 🛡️ Genel Uyarıları Sustur
@@ -242,3 +229,10 @@
 # R8 optimizasyonu
 -allowaccessmodification
 -repackageclasses
+
+# ============================
+# Retrofit + suspend fonksiyonlar (R8 full mode)
+# ============================
+-keep,allowobfuscation,allowshrinking interface retrofit2.Call
+-keep,allowobfuscation,allowshrinking class retrofit2.Response
+-keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation

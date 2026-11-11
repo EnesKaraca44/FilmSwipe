@@ -4,294 +4,550 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/watchlist_gradient_background"
+    android:clipToPadding="false"
     android:fillViewport="true"
-    android:background="@drawable/light_gradient_background"
     tools:context=".fragments.IzlemeListesiFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp">
+        android:paddingHorizontal="16dp"
+        android:paddingTop="14dp"
+        android:paddingBottom="24dp">
 
-        <!-- Başlık -->
-        <TextView
-            android:layout_width="wrap_content"
+        <!-- ====== BAŞLIK ====== -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:text="İzleme Listesi"
-            android:textColor="@color/text_primary"
-            android:textSize="28sp"
-            android:textStyle="bold" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-        <!-- Boş Durum -->
-        <androidx.cardview.widget.CardView
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/watchlist_title"
+                        android:textColor="@color/wl_text_primary"
+                        android:textSize="23sp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="7dp"
+                        android:layout_height="7dp"
+                        android:layout_marginStart="7dp"
+                        android:layout_marginTop="3dp"
+                        android:background="@drawable/watchlist_title_dot" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvAltBaslik"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/wl_text_muted"
+                    android:textSize="11sp"
+                    tools:text="FilmSwipe Ortak Arşiv • v1.0.10" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/btnAra"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/watchlist_icon_circle"
+                android:contentDescription="@string/watchlist_search_button"
+                android:padding="10dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_wl_search"
+                app:tint="@color/wl_text_primary" />
+
+            <ImageButton
+                android:id="@+id/btnFiltrele"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/watchlist_icon_circle"
+                android:contentDescription="@string/watchlist_sort_button"
+                android:padding="10dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_wl_tune"
+                app:tint="@color/wl_text_primary" />
+        </LinearLayout>
+
+        <!-- ====== ARAMA ÇUBUĞU (arama butonuyla açılır) ====== -->
+        <LinearLayout
+            android:id="@+id/layoutArama"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/watchlist_search_bar"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="14dp"
+            android:paddingEnd="6dp"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_wl_search"
+                app:tint="@color/wl_text_muted" />
+
+            <EditText
+                android:id="@+id/etArama"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:hint="@string/watchlist_search_hint"
+                android:imeOptions="actionSearch"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textColor="@color/wl_text_primary"
+                android:textColorHint="@color/wl_text_muted"
+                android:textSize="14sp" />
+
+            <ImageButton
+                android:id="@+id/btnAramaKapat"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/watchlist_close_search"
+                android:padding="8dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_wl_close"
+                app:tint="@color/wl_text_muted" />
+        </LinearLayout>
+
+        <!-- ====== BOŞ DURUM KARTI ====== -->
+        <LinearLayout
             android:id="@+id/cardEmptyState"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginTop="18dp"
+            android:background="@drawable/watchlist_card_background"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="30dp"
+            android:paddingBottom="22dp"
             android:visibility="gone"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="10dp">
+            tools:visibility="visible">
+
+            <FrameLayout
+                android:layout_width="72dp"
+                android:layout_height="72dp">
+
+                <ImageView
+                    android:layout_width="66dp"
+                    android:layout_height="66dp"
+                    android:layout_gravity="bottom|start"
+                    android:background="@drawable/watchlist_empty_icon_bg"
+                    android:importantForAccessibility="no"
+                    android:padding="17dp"
+                    android:src="@drawable/ic_wl_film"
+                    app:tint="@color/wl_purple_light" />
+
+                <View
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="top|end"
+                    android:background="@drawable/watchlist_empty_icon_dot" />
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="@string/watchlist_empty_title"
+                android:textColor="@color/wl_text_primary"
+                android:textSize="19sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:lineSpacingExtra="3dp"
+                android:text="@string/watchlist_empty_message"
+                android:textColor="@color/wl_text_muted"
+                android:textSize="13sp" />
 
             <LinearLayout
+                android:id="@+id/btnDuelloBaslat"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/surface_light"
-                android:orientation="vertical"
+                android:layout_height="52dp"
+                android:layout_marginTop="22dp"
+                android:background="@drawable/watchlist_cta_button"
+                android:clickable="true"
+                android:focusable="true"
                 android:gravity="center"
-                android:padding="32dp">
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_wl_bolt"
+                    app:tint="@color/wl_cta_icon" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="📋"
-                    android:textSize="64sp"
-                    android:layout_marginBottom="16dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Henüz film eklenmemiş"
-                    android:textColor="@color/text_primary"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="8dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Eşleştiğiniz filmleri burada görebilirsiniz"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="14sp"
-                    android:gravity="center" />
-
+                    android:layout_marginStart="8dp"
+                    android:text="@string/watchlist_start_duel"
+                    android:textColor="@color/wl_on_accent"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        </LinearLayout>
 
-        <!-- Film Listesi -->
+        <!-- ====== FİLMLERİM ====== -->
+        <LinearLayout
+            android:id="@+id/layoutListeBaslik"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/tvListeBaslik"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:letterSpacing="0.06"
+                android:textColor="@color/wl_label"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                tools:text="FİLMLERİM (3)" />
+
+            <LinearLayout
+                android:id="@+id/btnSiralama"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingVertical="4dp"
+                android:paddingStart="6dp">
+
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_wl_sort"
+                    app:tint="@color/wl_purple_light" />
+
+                <TextView
+                    android:id="@+id/tvSiralama"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:textColor="@color/wl_purple_light"
+                    android:textSize="12sp"
+                    tools:text="En yeni eklenen" />
+            </LinearLayout>
+        </LinearLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewFilmler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:nestedScrollingEnabled="false"
-            tools:listitem="@layout/item_izleme_listesi_film" />
+            android:visibility="gone"
+            tools:itemCount="2"
+            tools:listitem="@layout/item_izleme_listesi_film"
+            tools:visibility="visible" />
 
-        <!-- İstatistikler -->
-        <androidx.cardview.widget.CardView
+        <TextView
+            android:id="@+id/tvSonucYok"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="10dp">
+            android:layout_marginTop="10dp"
+            android:background="@drawable/watchlist_stat_card"
+            android:gravity="center"
+            android:padding="20dp"
+            android:textColor="@color/wl_text_muted"
+            android:textSize="13sp"
+            android:visibility="gone"
+            tools:text="“matrix” ile eşleşen film yok." />
 
-            <LinearLayout
-                android:layout_width="match_parent"
+        <!-- ====== İSTATİSTİKLER ====== -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@color/surface_light"
+                android:layout_weight="1"
+                android:letterSpacing="0.06"
+                android:text="@string/watchlist_stats_header"
+                android:textColor="@color/wl_label"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvIstatistikDurum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/wl_purple_light"
+                android:textSize="12sp"
+                tools:text="Bu Hafta Güncel" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <!-- Toplam Film -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/watchlist_stat_card"
+                android:gravity="center_horizontal"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:paddingHorizontal="6dp"
+                android:paddingVertical="14dp">
+
+                <TextView
+                    android:id="@+id/tvToplamFilm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="@color/wl_indigo"
+                    android:textSize="26sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="İstatistikler"
-                    android:textColor="@color/text_primary"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="16dp" />
+                    android:maxLines="1"
+                    android:text="@string/watchlist_stat_total"
+                    android:textColor="@color/wl_text_secondary"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/tvToplamFilmAlt"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="12dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="center">
-
-                        <TextView
-                            android:id="@+id/tvToplamFilm"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textColor="@color/primary_medium"
-                            android:textSize="24sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Toplam Film"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="12sp" />
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="40dp"
-                        android:background="@color/bg_dark" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="center">
-
-                        <TextView
-                            android:id="@+id/tvBuAy"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textColor="@color/secondary_medium"
-                            android:textSize="24sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Bu Ay"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="12sp" />
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="40dp"
-                        android:background="@color/bg_dark" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="center">
-
-                        <TextView
-                            android:id="@+id/tvBuHafta"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textColor="@color/accent_medium"
-                            android:textSize="24sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Bu Hafta"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="12sp" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/watchlist_pill_neutral"
+                    android:maxLines="1"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="2dp"
+                    android:text="@string/watchlist_stat_hours_zero"
+                    android:textColor="@color/wl_text_muted"
+                    android:textSize="10sp" />
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
 
-        <!-- Aksiyonlar -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="10dp">
-
+            <!-- Bu Ay -->
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@color/surface_light"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/watchlist_stat_card"
+                android:gravity="center_horizontal"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:paddingHorizontal="6dp"
+                android:paddingVertical="14dp">
 
-                <LinearLayout
-                    android:id="@+id/rowListeyiTemizle"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/tvBuAy"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingVertical="12dp">
+                    android:text="0"
+                    android:textColor="@color/wl_pink"
+                    android:textSize="26sp"
+                    android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="🗑️"
-                        android:textSize="20sp"
-                        android:layout_marginEnd="12dp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Listeyi Temizle"
-                        android:textColor="@color/text_primary"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="→"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/bg_dark" />
-
-                <LinearLayout
-                    android:id="@+id/rowListeyiPaylas"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingVertical="12dp">
+                    android:maxLines="1"
+                    android:text="@string/watchlist_stat_this_month"
+                    android:textColor="@color/wl_text_secondary"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="📤"
-                        android:textSize="20sp"
-                        android:layout_marginEnd="12dp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Listeyi Paylaş"
-                        android:textColor="@color/text_primary"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="→"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
+                <TextView
+                    android:id="@+id/tvBuAyAlt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/watchlist_pill_pink"
+                    android:maxLines="1"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="2dp"
+                    tools:text="+0 bugün"
+                    android:textColor="@color/wl_pink"
+                    android:textSize="10sp" />
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+
+            <!-- Bu Hafta -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/watchlist_stat_card"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingHorizontal="6dp"
+                android:paddingVertical="14dp">
+
+                <TextView
+                    android:id="@+id/tvBuHafta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="@color/wl_green"
+                    android:textSize="26sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:text="@string/watchlist_stat_this_week"
+                    android:textColor="@color/wl_text_secondary"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvBuHaftaAlt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/watchlist_pill_green"
+                    android:maxLines="1"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="2dp"
+                    tools:text="Seri: 0 gün"
+                    android:textColor="@color/wl_green"
+                    android:textSize="10sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- ====== LİSTE YÖNETİMİ ====== -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:letterSpacing="0.06"
+            android:text="@string/watchlist_manage_header"
+            android:textColor="@color/wl_label"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <!-- Listeyi Temizle -->
+        <LinearLayout
+            android:id="@+id/rowListeyiTemizle"
+            style="@style/Widget.FilmSwipe.Watchlist.Row"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                style="@style/Widget.FilmSwipe.Watchlist.RowIcon"
+                android:background="@drawable/watchlist_row_icon_red"
+                android:src="@drawable/ic_wl_trash"
+                app:tint="@color/wl_red" />
+
+            <LinearLayout style="@style/Widget.FilmSwipe.Watchlist.RowTexts">
+
+                <TextView
+                    style="@style/Widget.FilmSwipe.Watchlist.RowTitle"
+                    android:text="@string/watchlist_clear_list" />
+
+                <TextView
+                    style="@style/Widget.FilmSwipe.Watchlist.RowSubtitle"
+                    android:text="@string/watchlist_clear_list_subtitle" />
+            </LinearLayout>
+
+            <ImageView style="@style/Widget.FilmSwipe.Watchlist.RowChevron" />
+        </LinearLayout>
+
+        <!-- Listeyi Paylaş -->
+        <LinearLayout
+            android:id="@+id/rowListeyiPaylas"
+            style="@style/Widget.FilmSwipe.Watchlist.Row"
+            android:layout_marginTop="8dp">
+
+            <ImageView
+                style="@style/Widget.FilmSwipe.Watchlist.RowIcon"
+                android:background="@drawable/watchlist_row_icon_amber"
+                android:src="@drawable/ic_wl_upload"
+                app:tint="@color/wl_amber" />
+
+            <LinearLayout style="@style/Widget.FilmSwipe.Watchlist.RowTexts">
+
+                <TextView
+                    style="@style/Widget.FilmSwipe.Watchlist.RowTitle"
+                    android:text="@string/watchlist_share_list" />
+
+                <TextView
+                    style="@style/Widget.FilmSwipe.Watchlist.RowSubtitle"
+                    android:text="@string/watchlist_share_list_subtitle" />
+            </LinearLayout>
+
+            <ImageView style="@style/Widget.FilmSwipe.Watchlist.RowChevron" />
+        </LinearLayout>
+
+        <!-- Film Odasına Davet Et -->
+        <LinearLayout
+            android:id="@+id/rowFilmOdasinaDavetEt"
+            style="@style/Widget.FilmSwipe.Watchlist.Row"
+            android:layout_marginTop="8dp">
+
+            <ImageView
+                style="@style/Widget.FilmSwipe.Watchlist.RowIcon"
+                android:background="@drawable/watchlist_row_icon_purple"
+                android:src="@drawable/ic_wl_person_add"
+                app:tint="@color/wl_purple_light" />
+
+            <LinearLayout style="@style/Widget.FilmSwipe.Watchlist.RowTexts">
+
+                <TextView
+                    style="@style/Widget.FilmSwipe.Watchlist.RowTitle"
+                    android:text="@string/watchlist_invite_to_room" />
+
+                <TextView
+                    style="@style/Widget.FilmSwipe.Watchlist.RowSubtitle"
+                    android:text="@string/watchlist_invite_to_room_subtitle" />
+            </LinearLayout>
+
+            <ImageView style="@style/Widget.FilmSwipe.Watchlist.RowChevron" />
+        </LinearLayout>
 
     </LinearLayout>
-
 </ScrollView>
-
-
-
-
-
-

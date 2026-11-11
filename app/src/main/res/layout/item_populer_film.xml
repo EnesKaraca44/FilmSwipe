@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="12dp"
+    android:layout_marginEnd="10dp"
     android:elevation="6dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="6dp">
@@ -17,19 +17,19 @@
         <!-- Film Poster Image -->
         <ImageView
             android:id="@+id/imageViewFilmPoster"
-            android:layout_width="120dp"
-            android:layout_height="160dp"
+            android:layout_width="105dp"
+            android:layout_height="140dp"
             android:scaleType="centerCrop"
             android:src="@drawable/placeholder_movie_poster"
             android:background="@drawable/poster_shadow"
-            android:contentDescription="Film Posteri" />
+            android:contentDescription="@string/home_movie_poster" />
 
         <!-- Film Info Overlay -->
         <LinearLayout
-            android:layout_width="120dp"
+            android:layout_width="105dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="8dp"
+            android:padding="6dp"
             android:background="@drawable/film_info_gradient">
 
             <!-- Film Title -->
@@ -39,12 +39,12 @@
                 android:layout_height="wrap_content"
                 android:text="@string/movie_name"
                 android:textColor="#FFFFFF"
-                android:textSize="12sp"
+                android:textSize="11sp"
                 android:textStyle="bold"
                 android:fontFamily="sans-serif-medium"
-                android:maxLines="2"
+                android:maxLines="1"
                 android:ellipsize="end"
-                android:layout_marginBottom="4dp" />
+                android:layout_marginBottom="2dp" />
 
             <!-- Rating -->
             <LinearLayout
@@ -57,8 +57,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="⭐"
-                    android:textSize="10sp"
-                    android:layout_marginEnd="4dp" />
+                    android:textSize="9sp"
+                    android:layout_marginEnd="3dp" />
 
                 <TextView
                     android:id="@+id/textViewFilmRating"
@@ -66,7 +66,7 @@
                     android:layout_height="wrap_content"
                     android:text="8.5"
                     android:textColor="#FFD700"
-                    android:textSize="11sp"
+                    android:textSize="10sp"
                     android:textStyle="bold"
                     android:fontFamily="sans-serif-medium" />
 
@@ -85,12 +85,12 @@
             android:textStyle="bold"
             android:fontFamily="sans-serif-medium"
             android:background="@drawable/popularity_badge"
-            android:paddingHorizontal="6dp"
+            android:paddingHorizontal="5dp"
             android:paddingVertical="2dp"
-            android:layout_margin="6dp"
+            android:layout_margin="5dp"
             android:layout_gravity="top|end"
-            android:layout_marginTop="-140dp"
-            android:layout_marginEnd="6dp" />
+            android:layout_marginTop="-130dp"
+            android:layout_marginEnd="5dp" />
 
     </LinearLayout>
 

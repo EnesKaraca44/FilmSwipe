@@ -12,18 +12,46 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="24dp"
-        android:gravity="center_vertical">
+        android:paddingHorizontal="24dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="24dp">
 
-        <!-- Başlık -->
+    <!-- Üst çubuk: Geri + Başlık -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btnGeri"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/filtre_back_button"
+            android:contentDescription="@string/duel_filter_back_cd"
+            android:padding="11dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_arrow_back"
+            app:tint="@color/bg_dark" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:text="Film Filtreleri"
+            android:layout_marginStart="14dp"
+            android:text="@string/duel_filter_title"
             android:textColor="@color/bg_dark"
             android:textSize="28sp"
             android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- İçerik: kalan alanda dikey ortalı (eski görünüm korunur) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="24dp"
+        android:orientation="vertical"
+        android:gravity="center_vertical">
 
         <!-- Film Türleri Kartı -->
         <androidx.cardview.widget.CardView
@@ -50,6 +78,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:importantForAccessibility="no"
                         android:text="🎬"
                         android:textSize="24sp"
                         android:layout_marginEnd="12dp" />
@@ -57,7 +86,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Film Türleri"
+                        android:text="@string/duel_filter_genres_title"
                         android:textColor="@color/text_white"
                         android:textSize="20sp"
                         android:textStyle="bold" />
@@ -88,6 +117,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:importantForAccessibility="no"
                                 android:text="💥"
                                 android:textSize="20sp"
                                 android:layout_marginEnd="8dp" />
@@ -96,7 +126,7 @@
                                 android:id="@+id/cbAksiyon"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Aksiyon"
+                                android:text="@string/duel_genre_action"
                                 android:textColor="@color/text_white"
                                 android:textSize="16sp" />
 
@@ -113,6 +143,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:importantForAccessibility="no"
                                 android:text="😂"
                                 android:textSize="20sp"
                                 android:layout_marginEnd="8dp" />
@@ -121,7 +152,7 @@
                                 android:id="@+id/cbKomedi"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Komedi"
+                                android:text="@string/duel_genre_comedy"
                                 android:textColor="@color/text_white"
                                 android:textSize="16sp" />
 
@@ -147,6 +178,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:importantForAccessibility="no"
                                 android:text="🎭"
                                 android:textSize="20sp"
                                 android:layout_marginEnd="8dp" />
@@ -155,7 +187,7 @@
                                 android:id="@+id/cbDram"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Dram"
+                                android:text="@string/duel_genre_drama"
                                 android:textColor="@color/text_white"
                                 android:textSize="16sp" />
 
@@ -172,6 +204,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:importantForAccessibility="no"
                                 android:text="🚀"
                                 android:textSize="20sp"
                                 android:layout_marginEnd="8dp" />
@@ -180,7 +213,7 @@
                                 android:id="@+id/cbBilimKurgu"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Bilim Kurgu"
+                                android:text="@string/duel_genre_scifi"
                                 android:textColor="@color/text_white"
                                 android:textSize="16sp" />
 
@@ -205,6 +238,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:importantForAccessibility="no"
                                 android:text="👻"
                                 android:textSize="20sp"
                                 android:layout_marginEnd="8dp" />
@@ -213,7 +247,7 @@
                                 android:id="@+id/cbKorku"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Korku"
+                                android:text="@string/duel_genre_horror"
                                 android:textColor="@color/text_white"
                                 android:textSize="16sp" />
 
@@ -230,6 +264,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:importantForAccessibility="no"
                                 android:text="💕"
                                 android:textSize="20sp"
                                 android:layout_marginEnd="8dp" />
@@ -238,7 +273,7 @@
                                 android:id="@+id/cbRomantik"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Romantik"
+                                android:text="@string/duel_genre_romance"
                                 android:textColor="@color/text_white"
                                 android:textSize="16sp" />
 
@@ -270,6 +305,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:importantForAccessibility="no"
                     android:text="📅"
                     android:textSize="24sp"
                     android:layout_marginEnd="12dp" />
@@ -283,8 +319,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Minimum Çıkış Yılı"
-                        android:textColor="@color/text_primary"
+                        android:text="@string/duel_filter_min_year_title"
+                        android:textColor="@color/text_white"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:layout_marginBottom="4dp" />
@@ -292,8 +328,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Hangi yıldan sonraki filmler?"
-                        android:textColor="@color/text_secondary"
+                        android:text="@string/duel_filter_min_year_subtitle"
+                        android:textColor="@color/text_hint"
                         android:textSize="14sp" />
 
                 </LinearLayout>
@@ -321,12 +357,13 @@
                 android:layout_height="60dp"
                 android:background="@drawable/button_primary"
                 android:elevation="8dp"
-                android:text="🚀 DÜELLOYU BAŞLAT"
+                android:text="@string/duel_filter_start"
                 android:textColor="@color/text_white"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
         </androidx.cardview.widget.CardView>
 
+    </LinearLayout>
     </LinearLayout>
 </ScrollView>

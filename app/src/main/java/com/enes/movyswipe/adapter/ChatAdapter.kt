@@ -1,66 +1,67 @@
 package com.enes.movyswipe.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.enes.movyswipe.R
 import com.enes.movyswipe.data.ChatMessage
 import com.enes.movyswipe.databinding.ItemMessageReceivedBinding
 import com.enes.movyswipe.databinding.ItemMessageSentBinding
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
-// --- DEĞİŞİKLİK 1: Constructor'a 'currentUserId'yi ekliyoruz ---
 class ChatAdapter : ListAdapter<ChatMessage, RecyclerView.ViewHolder>(DiffCallback()) {
 
     var currentUserId: String = ""
-    // Artık sabit bir 'currentUserId' değişkenine ihtiyacımız yok, çünkü constructor'dan geliyor.
+        set(value) {
+            if (field == value) return
+            field = value
+            @Suppress("NotifyDataSetChanged") // görünüm tipleri (gönderilen/alınan) değişir
+            notifyDataSetChanged()
+        }
 
-    // İki farklı ViewHolder'ımızı tanımlıyoruz. Biri gönderilen, diğeri alınan mesajlar için.
-    inner class SentMessageViewHolder(private val binding: ItemMessageSentBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(chatMessage: ChatMessage) {
-            binding.tvMessage.text = chatMessage.text
-            // Zaman damgasını okunabilir bir formata çeviriyoruz
-            if (chatMessage.timestamp is Long) {
-                binding.tvTime.text = formatTimestamp(chatMessage.timestamp)
+    /** Karşı tarafın mesajına uzun basınca (şikayet / engelle menüsü). */
+    var onReceivedMessageLongClick: (ChatMessage) -> Unit = {}
+
+    private val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+
+    inner class SentMessageViewHolder(private val binding: ItemMessageSentBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(message: ChatMessage) {
+            binding.tvMessage.text = message.text
+            binding.tvTime.text = message.timestampMillis?.let { timeFormat.format(Date(it)) }.orEmpty()
+        }
+    }
+
+    inner class ReceivedMessageViewHolder(private val binding: ItemMessageReceivedBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(message: ChatMessage) {
+            binding.tvMessage.text = message.text
+            binding.tvSenderNickname.text = displayNickname(binding.root.context, message.senderNickname)
+            binding.tvTime.text = message.timestampMillis?.let { timeFormat.format(Date(it)) }.orEmpty()
+            binding.root.setOnLongClickListener {
+                onReceivedMessageLongClick(message)
+                true
             }
         }
     }
 
-    inner class ReceivedMessageViewHolder(private val binding: ItemMessageReceivedBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(chatMessage: ChatMessage) {
-            binding.tvMessage.text = chatMessage.text
-            binding.tvSenderNickname.text = chatMessage.senderNickname
-            if (chatMessage.timestamp is Long) {
-                binding.tvTime.text = formatTimestamp(chatMessage.timestamp)
-            }
-        }
-    }
+    override fun getItemViewType(position: Int): Int =
+        if (getItem(position).senderId == currentUserId) VIEW_TYPE_SENT else VIEW_TYPE_RECEIVED
 
-    // Bu metot, her bir pozisyondaki mesajın tipini belirler (Gönderilen mi? Alınan mı?).
-    override fun getItemViewType(position: Int): Int {
-        val message = getItem(position)
-        // Artık 'currentUserId' constructor'dan gelen dinamik bir değer.
-        return if (message.senderId == currentUserId) {
-            VIEW_TYPE_SENT
-        } else {
-            VIEW_TYPE_RECEIVED
-        }
-    }
-
-    // Bu metot, belirlenen view tipine göre doğru XML layout'unu seçip ViewHolder oluşturur.
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
         return if (viewType == VIEW_TYPE_SENT) {
-            val binding = ItemMessageSentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            SentMessageViewHolder(binding)
-        } else { // viewType == VIEW_TYPE_RECEIVED
-            val binding = ItemMessageReceivedBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            ReceivedMessageViewHolder(binding)
+            SentMessageViewHolder(ItemMessageSentBinding.inflate(inflater, parent, false))
+        } else {
+            ReceivedMessageViewHolder(ItemMessageReceivedBinding.inflate(inflater, parent, false))
         }
     }
 
-    // Bu metot, oluşturulan ViewHolder'a doğru veriyi (mesaj içeriği) bağlar.
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val message = getItem(position)
         when (holder) {
@@ -69,26 +70,19 @@ class ChatAdapter : ListAdapter<ChatMessage, RecyclerView.ViewHolder>(DiffCallba
         }
     }
 
-    // Zaman damgasını (Long) "14:32" gibi bir String'e çeviren yardımcı fonksiyon.
-    private fun formatTimestamp(timestamp: Long): String {
-        val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
-        return sdf.format(Date(timestamp))
-    }
-
-    // DiffUtil, listenin verimli bir şekilde güncellenmesini sağlar.
     class DiffCallback : DiffUtil.ItemCallback<ChatMessage>() {
-        override fun areItemsTheSame(oldItem: ChatMessage, newItem: ChatMessage): Boolean {
-            // Mesajların timestamp'leri genellikle benzersizdir.
-            return oldItem.timestamp.toString() == newItem.timestamp.toString()
-        }
-
-        override fun areContentsTheSame(oldItem: ChatMessage, newItem: ChatMessage): Boolean {
-            return oldItem == newItem
-        }
+        // Eskiden zaman damgası kıyaslanıyordu; aynı milisaniyedeki mesajlar karışabiliyordu.
+        override fun areItemsTheSame(oldItem: ChatMessage, newItem: ChatMessage) = oldItem.id == newItem.id
+        override fun areContentsTheSame(oldItem: ChatMessage, newItem: ChatMessage) =
+            oldItem == newItem && oldItem.id == newItem.id
     }
 
     companion object {
         private const val VIEW_TYPE_SENT = 1
         private const val VIEW_TYPE_RECEIVED = 2
+
+        /** Takma ad boşsa veya ChatMessage'ın varsayılanıysa ("Bilinmeyen") yerelleştirilmiş yedek ad. */
+        fun displayNickname(context: Context, nickname: String): String =
+            if (nickname.isBlank() || nickname == "Bilinmeyen") context.getString(R.string.chat_unknown_user) else nickname
     }
 }

@@ -1,4 +1,3 @@
-set JAVA_HOME="C:\Program Files\Android\Android Studio1\jbr"
 @rem
 @rem Copyright 2015 the original author or authors.
 @rem

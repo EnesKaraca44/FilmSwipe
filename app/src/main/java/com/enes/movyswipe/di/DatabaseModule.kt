@@ -15,20 +15,16 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
 
+    /**
+     * Uygulamadaki TEK Room örneği. İleride şema değişirse migration yazılmalı;
+     * 'fallbackToDestructiveMigration' kullanıcıların izleme listesini sileceği için kaldırıldı.
+     */
     @Provides
     @Singleton
     fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {
-        return Room.databaseBuilder(
-            context,
-            AppDatabase::class.java,
-            "film_database"
-        )
-        .fallbackToDestructiveMigration()
-        .build()
+        return Room.databaseBuilder(context, AppDatabase::class.java, "film_database").build()
     }
 
     @Provides
-    fun provideWatchlistDao(appDatabase: AppDatabase): WatchlistDao {
-        return appDatabase.watchlistDao()
-    }
+    fun provideWatchlistDao(appDatabase: AppDatabase): WatchlistDao = appDatabase.watchlistDao()
 }

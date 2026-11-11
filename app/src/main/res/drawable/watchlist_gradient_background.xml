@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Listem sayfa zemini; renkler temaya göre (watchlist_colors.xml). -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient
+        android:angle="135"
+        android:startColor="@color/wl_page_start"
+        android:centerColor="@color/wl_page_center"
+        android:endColor="@color/wl_page_end"
+        android:type="linear" />
+</shape>

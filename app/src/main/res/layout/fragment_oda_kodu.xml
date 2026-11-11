@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:text="🏠 Oda Kuruldu!"
+                android:text="@string/duel_room_created_title"
                 android:textColor="@color/text_primary"
                 android:textSize="28sp"
                 android:textStyle="bold" />
@@ -43,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
-                android:text="Arkadaşına bu kodu göster"
+                android:text="@string/duel_room_show_code"
                 android:textColor="@color/text_secondary"
                 android:textSize="16sp" />
 
@@ -76,7 +76,7 @@
                 android:background="@drawable/button_secondary"
                 android:elevation="4dp"
                 android:paddingHorizontal="24dp"
-                android:text="📋 Kopyala"
+                android:text="@string/duel_room_copy"
                 android:textColor="@color/text_white"
                 android:textSize="14sp" />
 
@@ -93,7 +93,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:text="⏳ Partnerin bekleniyor..."
+                android:text="@string/duel_room_waiting_partner"
                 android:textColor="@color/text_primary"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -104,7 +104,7 @@
                 android:alpha="0.9"
                 android:gravity="center"
                 android:lineSpacingExtra="4dp"
-                android:text="Arkadaşın kodu girip odaya katıldığında\ndüello otomatik başlayacak"
+                android:text="@string/duel_room_auto_start"
                 android:textColor="@color/text_secondary"
                 android:textSize="14sp" />
 
@@ -118,12 +118,20 @@
             android:layout_marginTop="48dp"
             android:background="@drawable/button_accent"
             android:elevation="6dp"
-            android:text="❌ Odayı İptal Et"
+            android:text="@string/duel_room_cancel"
             android:textColor="@color/text_white"
             android:textSize="16sp"
             android:textStyle="bold" />
 
     </LinearLayout>
+
+    <!-- Oda kurulamazsa: mesaj + "Tekrar dene". -->
+    <include
+        android:id="@+id/errorView"
+        layout="@layout/view_error_retry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
 
     <!-- ADIM 2: ProgressBar'ı, her şeyin üstünde, ortada duracak şekilde buraya koyuyoruz. -->
     <!-- Başlangıçta görünür olacak. -->

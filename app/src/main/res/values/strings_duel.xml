@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Filter -->
+    <string name="duel_filter_back_cd">Go back</string>
+    <string name="duel_filter_title">Movie Filters</string>
+    <string name="duel_filter_genres_title">Movie Genres</string>
+    <string name="duel_genre_action">Action</string>
+    <string name="duel_genre_comedy">Comedy</string>
+    <string name="duel_genre_drama">Drama</string>
+    <string name="duel_genre_scifi">Sci-Fi</string>
+    <string name="duel_genre_horror">Horror</string>
+    <string name="duel_genre_romance">Romance</string>
+    <string name="duel_filter_min_year_title">Minimum Release Year</string>
+    <string name="duel_filter_min_year_subtitle">Movies released from which year on?</string>
+    <string name="duel_filter_all_years">All years</string>
+    <string name="duel_filter_start">🚀 START DUEL</string>
+
+    <!-- Room code (host) -->
+    <string name="duel_room_created_title">🏠 Room Created!</string>
+    <string name="duel_room_show_code">Show this code to your friend</string>
+    <string name="duel_room_copy">📋 Copy</string>
+    <string name="duel_room_waiting_partner">⏳ Waiting for your partner...</string>
+    <string name="duel_room_auto_start">The duel will start automatically\nonce your friend enters the code and joins</string>
+    <string name="duel_room_cancel">❌ Cancel Room</string>
+    <string name="duel_share_room_text">Join my movie duel on FilmSwipe! Room code: %1$s</string>
+    <string name="duel_share_room_chooser">Share room code</string>
+    <string name="duel_room_partner_joined">Your partner joined, the duel is starting!</string>
+    <string name="duel_error_sign_in">Couldn\'t sign in. Check your internet connection.</string>
+    <string name="duel_error_movie_list">Couldn\'t load the movie list. Check your internet connection.</string>
+    <string name="duel_error_no_movies_for_filters">No movies match these filters. Try broadening them.</string>
+    <string name="duel_error_create_room">Couldn\'t create the room.</string>
+
+    <!-- Join room -->
+    <string name="duel_join_title">🚪 Join Room</string>
+    <string name="duel_join_subtitle">Enter the 6-character code you got from your friend</string>
+    <string name="duel_join_code_label">Room Code</string>
+    <string name="duel_join_code_hint">K8F3T1</string>
+    <string name="duel_join_button">🎯 Join</string>
+    <string name="duel_join_tip_title">💡 Tip</string>
+    <string name="duel_join_tip_body">The code is 6 characters long and uses capital letters\n(Example: K8F3T1)</string>
+    <string name="duel_join_back">⬅️ Go Back</string>
+    <string name="duel_join_enter_code">Please enter a room code.</string>
+    <string name="duel_join_success">You joined the room!</string>
+    <string name="duel_join_error_invalid">The room code must be 6 characters.</string>
+    <string name="duel_join_error_not_found">No room found with this code.</string>
+    <string name="duel_join_error_full">This room is full or the duel has already started.</string>
+    <string name="duel_join_error_own_room">You can\'t join your own room; share the code with your friend.</string>
+    <string name="duel_join_error_connection">Connection error. Check your internet and try again.</string>
+
+    <!-- Quick duel -->
+    <string name="duel_quick_title">Quick Duel</string>
+    <string name="duel_quick_searching_partner">Looking for a partner...</string>
+    <string name="duel_quick_wait_time">⏰ Waiting time</string>
+    <string name="duel_quick_how_title">💡 How It Works</string>
+    <string name="duel_quick_how_body">• The system matches you with another user\n• You choose from popular movies\n• A quick and fun experience!</string>
+    <string name="duel_quick_retry">🔄 Try Again</string>
+    <string name="duel_quick_cancel">❌ Cancel</string>
+    <string name="duel_main_menu">🏠 Main Menu</string>
+    <plurals name="duel_quick_waiting_count">
+        <item quantity="one">%1$d person waiting for a match</item>
+        <item quantity="other">%1$d people waiting for a match</item>
+    </plurals>
+    <string name="duel_quick_status_searching">Searching for a match...</string>
+    <string name="duel_quick_status_found">Opponent found!</string>
+    <string name="duel_quick_error_server">Couldn\'t connect to the matchmaking server.</string>
+
+    <!-- Duel -->
+    <string name="duel_title">⚔️ Duel</string>
+    <string name="duel_partner_ready">👤 Partner ready</string>
+    <string name="duel_partner_offline">📶 Your partner lost connection...</string>
+    <string name="duel_partner_waiting">⏳ Waiting for your partner to finish...</string>
+    <string name="duel_genre_label">Genre: %1$s</string>
+    <string name="duel_cd_like">Like</string>
+    <string name="duel_cd_pass">Pass</string>
+    <string name="duel_swipe_hint">👆 Swipe or tap the buttons</string>
+    <string name="duel_partner_left_title">Your partner left</string>
+    <string name="duel_partner_left_message">Your partner left the room or lost connection. This duel can\'t continue.</string>
+    <string name="duel_partner_left_button">Back to main menu</string>
+    <string name="duel_error_movies_load">Couldn\'t load the movies. Check your internet connection.</string>
+    <string name="duel_error_room_not_found">Room not found.</string>
+    <string name="duel_error_room_load">Couldn\'t load the room.</string>
+    <string name="duel_card_year">📅 %1$s</string>
+    <string name="duel_card_rating">⭐ %1$s/10</string>
+    <string name="duel_unknown_year">Unknown</string>
+    <string name="duel_no_overview">No overview available.</string>
+    <string name="duel_card_genre_placeholder">🎭 Movie</string>
+    <string name="duel_cd_movie_poster">Movie poster</string>
+
+    <!-- Match -->
+    <string name="duel_match_title">🎊 Awesome! 🎊</string>
+    <string name="duel_match_message">You both liked the same movie!\nTime to watch it!</string>
+    <string name="duel_match_chat">💬 CHAT</string>
+    <string name="duel_match_add_list">⭐ ADD TO MY LIST</string>
+    <string name="duel_match_load_error">Couldn\'t load the matched movie. Check your internet connection.</string>
+    <string name="duel_match_added">Added to your watchlist!</string>
+    <string name="duel_match_not_loaded">Movie details haven\'t loaded yet, try again.</string>
+
+    <!-- No match -->
+    <string name="duel_no_match_title">No Match Found</string>
+    <string name="duel_no_match_message">Unfortunately, you didn\'t find a movie in common this time.\nMaybe try again with different filters?</string>
+    <plurals name="duel_no_match_checked_count">
+        <item quantity="one">%1$d movie checked</item>
+        <item quantity="other">%1$d movies checked</item>
+    </plurals>
+    <string name="duel_no_match_tips_title">💡 Suggestions</string>
+    <string name="duel_no_match_tips_body">• Choose broader genres\n• Lower the minimum year\n• Try with a different partner</string>
+    <string name="duel_no_match_try_again">🔄 Try Again</string>
+    <string name="duel_no_match_change_filters">⚙️ Change Filters</string>
+    <string name="duel_no_match_quick_duel">⚡ Try Quick Duel</string>
+
+    <!-- Shared error panel -->
+    <string name="duel_try_again">Try again</string>
+
+    <!-- Oda kodu panoya kopyalama -->
+    <string name="duel_room_code_clip_label">FilmSwipe room code</string>
+    <string name="duel_room_code_copied">Room code copied</string>
+</resources>

@@ -13,3 +13,15 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Derleme çıktıları ve yerel dosyalar
+/app/release/
+*.apk
+*.aab
+.kotlin/
+firebase-debug*.log
+database-debug.log
+ui-debug.log
+
+# Firebase test bağımlılıkları
+firebase-tests/node_modules/

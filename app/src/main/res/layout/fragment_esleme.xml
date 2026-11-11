@@ -21,6 +21,7 @@
         <!-- Başarı Animasyonu -->
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottieAnimationView"
+            android:importantForAccessibility="no"
             android:layout_width="250dp"
             android:layout_height="250dp"
             android:layout_marginBottom="24dp"
@@ -28,8 +29,17 @@
             app:lottie_loop="false"
             app:lottie_rawRes="@raw/match_animation" />
 
+        <!-- Eşleşen film yüklenemezse: mesaj + "Tekrar dene" (kart gizlenir). -->
+        <include
+            android:id="@+id/errorView"
+            layout="@layout/view_error_retry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp" />
+
         <!-- Film Bilgisi Kartı -->
         <androidx.cardview.widget.CardView
+            android:id="@+id/cardFilm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
@@ -47,6 +57,7 @@
                 <!-- Film Posteri -->
                 <ImageView
                     android:id="@+id/ivEslesenFilmPoster"
+                    android:contentDescription="@string/duel_cd_movie_poster"
                     android:layout_width="180dp"
                     android:layout_height="240dp"
                     android:layout_marginBottom="16dp"
@@ -110,7 +121,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:text="🎊 Harika! 🎊"
+                android:text="@string/duel_match_title"
                 android:textColor="@color/text_primary"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -121,7 +132,7 @@
                 android:alpha="0.9"
                 android:gravity="center"
                 android:lineSpacingExtra="4dp"
-                android:text="İkiniz de aynı filmi beğendiniz!\nBu filmi izleme zamanı!"
+                android:text="@string/duel_match_message"
                 android:textColor="@color/text_secondary"
                 android:textSize="16sp" />
 
@@ -148,7 +159,7 @@
                     android:layout_marginEnd="8dp"
                     android:background="@drawable/button_primary"
                     android:elevation="8dp"
-                    android:text="💬 SOHBET ET"
+                    android:text="@string/duel_match_chat"
                     android:textColor="@color/text_white"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -161,7 +172,7 @@
                     android:layout_marginStart="8dp"
                     android:background="@drawable/button_secondary"
                     android:elevation="8dp"
-                    android:text="⭐ LİSTEME EKLE"
+                    android:text="@string/duel_match_add_list"
                     android:textColor="@color/text_white"
                     android:textSize="16sp"
                     android:textStyle="bold" />

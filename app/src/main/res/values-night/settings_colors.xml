@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Profilim (Ayarlar) ekranı — KOYU tema paleti. Açık tema: values/settings_colors.xml -->
+<resources>
+    <color name="settings_page_background">#1A1A1A</color>
+    <color name="settings_card">#1F2133</color>
+    <color name="settings_profile_card">#241E3D</color>
+    <color name="settings_input">#171828</color>
+    <color name="settings_border">#32354E</color>
+    <color name="settings_divider">#2D3048</color>
+    <color name="settings_text_primary">#F5F3FF</color>
+    <color name="settings_muted">#A2A4BA</color>
+    <color name="settings_label">#9496AD</color>
+    <color name="settings_purple">#7C3AED</color>
+    <color name="settings_purple_light">#B18AFF</color>
+    <color name="settings_gold">#F7BB18</color>
+    <color name="settings_avatar_fill">#241E3D</color>
+    <color name="settings_avatar_stroke">#A66CFF</color>
+    <color name="settings_badge_fill">#352367</color>
+    <color name="settings_icon_circle">#2E284D</color>
+    <color name="settings_stat_fill">#171828</color>
+    <color name="settings_switch_off">#42445E</color>
+</resources>

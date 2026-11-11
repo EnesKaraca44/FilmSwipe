@@ -4,16 +4,16 @@
     <item
         android:id="@+id/anaMenuFragment"
         android:icon="@drawable/ic_home"
-        android:title="Ana Menü" />
+        android:title="@string/nav_home" />
 
     <item
         android:id="@+id/izlemeListesiFragment"
         android:icon="@drawable/ic_watchlist"
-        android:title="Listem" />
+        android:title="@string/nav_watchlist" />
 
     <item
         android:id="@+id/ayarlarFragment"
         android:icon="@drawable/ic_profile"
-        android:title="Profilim" />
+        android:title="@string/nav_profile" />
 
 </menu>

@@ -16,7 +16,7 @@ interface ApiService {
     suspend fun getDiscoverMovies(
 
         @Query("api_key") apiKey: String,
-        @Query("language") language: String = "tr-TR",
+        @Query("language") language: String = TmdbLanguage.current(),
         // Filtreleri (tür, yıl vb.) bir Map olarak alır.
         @QueryMap options: Map<String, String>
 
@@ -27,7 +27,7 @@ interface ApiService {
         // @Path, bu parametreyi URL'deki {movie_id} kısmına yerleştirir.
         @Path("movie_id") movieId: Int,
         @Query("api_key") apiKey: String,
-        @Query("language") language: String = "tr-TR"
+        @Query("language") language: String = TmdbLanguage.current()
     ): Response<Movie> // Geriye sadece tek bir "Movie" nesnesi döndürür.
 
 }
