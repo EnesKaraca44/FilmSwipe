@@ -105,7 +105,6 @@ class AyarlarFragment : Fragment() {
                 launch {
                     viewModel.nickname.collect { nickname ->
                         binding.tvProfilKullaniciAdi.text = "$nickname  •"
-                        binding.tvProfilEmail.text = viewModel.getEmailForNickname(nickname)
                     }
                 }
                 launch {

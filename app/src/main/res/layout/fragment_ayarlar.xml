@@ -109,12 +109,13 @@
                             android:textColor="@color/settings_text_primary"
                             android:textSize="16sp"
                             android:textStyle="bold" />
+                        <!-- Uygulama e-posta istemez; eskiden takma addan uydurulmuş bir adres gösteriliyordu. -->
                         <TextView
-                            android:id="@+id/tvProfilEmail"
+                            android:id="@+id/tvProfilHesap"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="kullanici@filmswipe.app"
+                            android:text="Anonim hesap · e-posta gerekmez"
                             android:textColor="@color/settings_muted"
                             android:textSize="11sp" />
                         <LinearLayout
