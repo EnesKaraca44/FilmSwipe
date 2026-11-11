@@ -496,7 +496,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
             android:gravity="center"
-            android:text="TMDB  ·  Official Partner API\n\nThis product uses the TMDB API but is not endorsed or certified\nby TMDB."
+            android:text="Film verileri ve posterler: TMDB\n\nThis product uses the TMDB API but is not endorsed or certified\nby TMDB."
             android:textColor="@color/settings_muted"
             android:textSize="10sp" />
 
